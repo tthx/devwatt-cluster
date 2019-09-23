@@ -1,0 +1,5 @@
+server.1=master:2888:3888
+server.2=worker-1:2888:3888
+server.3=worker-2:2888:3888
+server.4=worker-3:2888:3888
+server.5=worker-4:2888:3888

@@ -1,0 +1,77 @@
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.c b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.c
+index 0086b26cd47..ece270f27c8 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.c
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.c
+@@ -22,6 +22,19 @@
+ #include <poll.h>
+ #include "oom_listener.h"
+ 
++/*
++ Clean up allocated resources in a descriptor structure
++*/
++void cleanup(_oom_listener_descriptors *descriptors) {
++  close(descriptors->event_fd);
++  descriptors->event_fd = -1;
++  close(descriptors->event_control_fd);
++  descriptors->event_control_fd = -1;
++  close(descriptors->oom_control_fd);
++  descriptors->oom_control_fd = -1;
++  descriptors->watch_timeout = 1000;
++}
++
+ /*
+  * Print an error.
+ */
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.h b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.h
+index aa77cb66f58..b11f4f1e167 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.h
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/impl/oom_listener.h
+@@ -81,15 +81,7 @@ typedef struct _oom_listener_descriptors {
+ /*
+  Clean up allocated resources in a descriptor structure
+ */
+-inline void cleanup(_oom_listener_descriptors *descriptors) {
+-  close(descriptors->event_fd);
+-  descriptors->event_fd = -1;
+-  close(descriptors->event_control_fd);
+-  descriptors->event_control_fd = -1;
+-  close(descriptors->oom_control_fd);
+-  descriptors->oom_control_fd = -1;
+-  descriptors->watch_timeout = 1000;
+-}
++void cleanup(_oom_listener_descriptors *descriptors);
+ 
+ /*
+  * Enable an OOM listener on the memory cgroup cgroup
+diff --git a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/test/oom_listener_test_main.cc b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/test/oom_listener_test_main.cc
+index 421c21e0677..ead5b2bf049 100644
+--- a/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/test/oom_listener_test_main.cc
++++ b/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/native/oom-listener/test/oom_listener_test_main.cc
+@@ -36,6 +36,9 @@ extern "C" {
+ #define CGROUP_EVENT_CONTROL "cgroup.event_control"
+ #define CGROUP_LIMIT (5 * 1024 * 1024)
+ 
++#undef __WAIT_STATUS
++#define __WAIT_STATUS int*
++
+ // We try multiple cgroup directories
+ // We try first the official path to test
+ // in production
+@@ -253,7 +256,7 @@ TEST_F(OOMListenerTest, test_oom) {
+       ASSERT_EQ(0, kill(mem_hog_pid, SIGKILL));
+ 
+       // Verify that process was killed
+-      __WAIT_STATUS mem_hog_status = {};
++      __WAIT_STATUS mem_hog_status = NULL;
+       __pid_t exited0 = wait(mem_hog_status);
+       ASSERT_EQ(mem_hog_pid, exited0)
+         << "Wrong process exited";
+@@ -272,7 +275,7 @@ TEST_F(OOMListenerTest, test_oom) {
+                 << "Could not delete cgroup " << GetCGroup();
+ 
+       // Check that oom_listener exited on the deletion of the cgroup
+-      __WAIT_STATUS oom_listener_status = {};
++      __WAIT_STATUS oom_listener_status = NULL;
+       __pid_t exited1 = wait(oom_listener_status);
+       ASSERT_EQ(listener, exited1)
+         << "Wrong process exited";

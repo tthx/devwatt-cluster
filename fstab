@@ -1,0 +1,4 @@
+LABEL=cloudimg-rootfs	/	ext4	defaults	0 0
+LABEL=UEFI	/boot/efi	vfat	defaults	0 0
+tmpfs		/mnt/hdfs	tmpfs	rw,uid=hdfs,gid=hadoop,size=1G	0 0
+/dev/vdb	/data		ext4	defaults	0 2

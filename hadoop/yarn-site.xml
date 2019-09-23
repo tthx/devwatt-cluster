@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<configuration>
+  <!--
+  	Configurations for ResourceManager
+  -->
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>master</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.scheduler.class</name>
+    <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>1024</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>8192</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.nodes.exclude-path</name>
+    <value>/etc/hadoop/exclude</value>
+  </property>
+  <!--
+  	Configurations for NodeManager
+  -->
+  <property>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>12107</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.vmem-pmem-ratio</name>
+    <value>2.1</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.local-dirs</name>
+    <value>/var/yarn/local</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.log-dirs</name>
+    <value>/var/yarn/log</value>
+  </property>
+  <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.log.server.url</name>
+    <value>master:10020</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.log.retain-seconds</name>
+    <value>10800</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.remote-app-log-dir</name>
+    <value>/home/yarn/log</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.remote-app-log-dir-suffix</name>
+    <value>log</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.env-whitelist</name>
+    <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
+  </property>
+  <!--
+    Secure Container
+  -->
+  <property>
+    <name>yarn.nodemanager.container-executor.class</name>
+    <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.linux-container-executor.group</name>
+    <value>hadoop</value>
+  </property>
+  <!--
+  	Configurations for History Server
+  -->
+  <property>
+    <name>yarn.log-aggregation.retain-seconds</name>
+    <value>3600</value>
+  </property>
+  <property>
+    <name>yarn.log-aggregation.retain-check-interval-seconds</name>
+    <value>1800</value>
+  </property>
+  <!--
+    Timeline service v2
+  -->
+  <property>
+    <name>yarn.system-metrics-publisher.enabled</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>yarn.timeline-service.schema.prefix</name>
+    <value>prod</value>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hostname</name>
+    <value>master</value>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hbase.coprocessor.jar.hdfs.location</name>
+    <value>/home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar</value>
+  </property>
+  <property>
+    <name>yarn.timeline-service.version</name>
+    <value>2.0f</value>
+  </property>
+  <property>
+    <name>yarn.timeline-service.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle,timeline_collector</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services.timeline_collector.class</name>
+    <value>org.apache.hadoop.yarn.server.timelineservice.collector.PerNodeTimelineCollectorsAuxService</value>
+  </property>
+  <property>
+    <name>yarn.system-metrics-publisher.enabled</name>
+    <value>true</value>
+    <description>The setting that controls whether yarn system metrics is
+    published on the Timeline service or not by RM And NM.</description>
+  </property>
+  <property>
+    <name>yarn.rm.system-metrics-publisher.emit-container-events</name>
+    <value>true</value>
+    <description>The setting that controls whether yarn container events are
+    published to the timeline service or not by RM. This configuration setting
+    is for ATS V2.</description>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.cluster-id</name>
+    <value>tth_cluster</value>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hbase.configuration.file</name>
+    <value>file:/etc/hbase/hbase-site.xml</value>
+    <description>Optional URL to an hbase-site.xml configuration file to be
+    used to connect to the timeline-service hbase cluster. If empty or not
+    specified, then the HBase configuration will be loaded from the classpath.
+    When specified the values in the specified configuration file will override
+    those from the ones that are present on the classpath.
+    </description>
+  </property>
+</configuration>
