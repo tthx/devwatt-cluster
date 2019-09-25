@@ -12,8 +12,6 @@ sudo useradd mapred --create-home --groups hadoop --shell /bin/bash
 echo 'mapred:D@$#H0le99*'|sudo chpasswd
 sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash
 echo 'attu7372:D@$#H0le99*'|sudo chpasswd
-sudo chmod -R g-w /etc/hadoop /opt/hadoop-3.2.0
-sudo chmod -R o-w /etc/hadoop /opt/hadoop-3.2.0
 sudo mkdir -p /mnt/hdfs
 sudo chmod 755 /mnt/hdfs
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run 
@@ -23,6 +21,9 @@ sudo chown -R mapred:hadoop /var/mapred
 sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo chown -R hbase:hadoop /var/hbase
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.
+sudo chmod -R g-w /etc/hadoop /opt/hadoop-3.2.0
+sudo chmod -R o-w /etc/hadoop /opt/hadoop-3.2.0
+sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
 sudo chmod -R 6050 /opt/hadoop/bin/container-executor
 
