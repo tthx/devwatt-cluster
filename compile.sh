@@ -2,6 +2,7 @@
 x="${1:-"hadoop"}";
 shift 1;
 action="${@:-"clean package"}";
+hadoop-version="3.2.1";
 case "${x}" in
   "hadoop")
     unset CXXFLAGS;
@@ -17,7 +18,7 @@ case "${x}" in
     export JAVA_OPTS="-XX:+UseG1GC";
     export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
     export PATH="${JAVA_HOME}/bin:${PATH}";
-    mvn ${action} assembly:single -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=3.2.1;
+    mvn ${action} assembly:single -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop-version};
     ;;
   "spark")
     unset CXXFLAGS;
@@ -25,5 +26,5 @@ case "${x}" in
     export JAVA_OPTS="-XX:+UseG1GC";
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     export PATH="${JAVA_HOME}/bin:${PATH}";
-    ./dev/make-distribution.sh --name spark-2.4.4-bin-without-hadoop-scala-2.12 --tgz --r --pip -T 1C -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Psparkr -Phadoop-2.7 -Dhadoop.version=3.2.0 -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
+    ./dev/make-distribution.sh --name spark-2.4.4-bin-without-hadoop-scala-2.12 --tgz --r --pip -T 1C -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Psparkr -Phadoop-2.7 -Dhadoop.version=${hadoop-version} -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
 esac
