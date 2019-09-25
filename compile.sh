@@ -17,7 +17,7 @@ case "${x}" in
     export JAVA_OPTS="-XX:+UseG1GC";
     export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
     export PATH="${JAVA_HOME}/bin:${PATH}";
-    mvn ${action} assembly:single -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=3.2.0;
+    mvn ${action} assembly:single -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=3.2.1;
     ;;
   "spark")
     unset CXXFLAGS;
