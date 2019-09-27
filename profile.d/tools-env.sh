@@ -28,6 +28,7 @@ alias vi='vim';
 alias md='mkdir -p';
 alias cls='clear';
 alias more='less';
-alias python='python3';lias chrome='google-chrome-stable 2>/dev/null';
+alias python='python3';
+alias chrome='google-chrome-stable 2>/dev/null';
 alias sublime='/opt/sublime_text/sublime_text';
 alias docker-clean='docker stop $(docker container ls -a -q) && docker system prune -a -f --volumes';
