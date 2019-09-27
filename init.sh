@@ -21,8 +21,8 @@ sudo chown -R mapred:hadoop /var/mapred
 sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo chown -R hbase:hadoop /var/hbase
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.
-sudo chmod -R g-w /etc/hadoop /opt/hadoop-3.2.0
-sudo chmod -R o-w /etc/hadoop /opt/hadoop-3.2.0
+sudo chown -R root:root /etc/hadoop /etc/hbase /opt
+sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /opt
 sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
 sudo chmod -R 6050 /opt/hadoop/bin/container-executor
