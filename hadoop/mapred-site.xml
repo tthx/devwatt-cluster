@@ -18,39 +18,67 @@
 
 <configuration>
   <!--
-  	Configurations for MapReduce Applications
+  	Configurations for Map/Reduce Applications
   -->
   <property>
     <name>mapreduce.framework.name</name>
     <value>yarn</value>
+    <description>The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn. Default: local</description>
   </property>
   <property>
-    <name>mapreduce.map.memory.mb</name>
-    <value>1536</value>
-  </property>
-  <property>
-    <name>mapreduce.map.java.opts</name>
-    <value>-Xmx1024M</value>
-  </property>
-  <property>
-    <name>mapreduce.reduce.memory.mb</name>
-    <value>3072</value>
-  </property>
-  <property>
-    <name>mapreduce.reduce.java.opts</name>
-    <value>-Xmx2560M</value>
+    <name>mapreduce.job.heap.memory-mb.ratio</name>
+    <value>0.8</value>
+    <description>The ratio of heap-size to container-size. If no -Xmx is specified, it is calculated as (mapreduce.{map|reduce}.memory.mb * mapreduce.heap.memory-mb.ratio). If -Xmx is specified but not mapreduce.{map|reduce}.memory.mb, it is calculated as (heapSize / mapreduce.heap.memory-mb.ratio). Default: 0.8</description>
   </property>
   <property>
     <name>mapreduce.task.io.sort.mb</name>
-    <value>512</value>
+    <value>100</value>
+    <description>The total amount of buffer memory to use while sorting files, in megabytes. By default, gives each merge stream 1MB, which should minimize seeks. Default: 100</description>
   </property>
   <property>
     <name>mapreduce.task.io.sort.factor</name>
-    <value>100</value>
+    <value>10</value>
+    <description>The number of streams to merge at once while sorting files. This determines the number of open file handles. Default: 10</description>
   </property>
   <property>
     <name>mapreduce.reduce.shuffle.parallelcopies</name>
-    <value>50</value>
+    <value>5</value>
+    <description>The default number of parallel transfers run by reduce during the copy(shuffle) phase. Default: 5</description>
+  </property>
+  <!--
+    Map configuration
+  -->
+  <property>
+    <name>mapreduce.map.memory.mb</name>
+    <value>-1</value>
+    <description>The amount of memory to request from the scheduler for each map task. If this is not specified or is non-positive, it is inferred from mapreduce.map.java.opts and mapreduce.job.heap.memory-mb.ratio. If java-opts are also not specified, we set it to 1024. Default: -1</description>
+  </property>
+  <property>
+    <name>mapreduce.map.cpu.vcores</name>
+    <value>1</value>
+    <description>The number of virtual cores to request from the scheduler for each map task. Default: 1</description>
+  </property>
+  <property>
+    <name>mapreduce.map.java.opts</name>
+    <value>-XX:+UseG1GC</value>
+    <description>Java opts for the task processes. The following symbol, if present, will be interpolated: @taskid@ is replaced by current TaskID. Any other occurrences of '@' will go unchanged. For example, to enable verbose gc logging to a file named for the taskid in /tmp and to set the heap maximum to be a gigabyte, pass a 'value' of: -Xmx1024m -verbose:gc -Xloggc:/tmp/@taskid@.gc Usage of -Djava.library.path can cause programs to no longer function if hadoop native libraries are used. These values should instead be set as part of LD_LIBRARY_PATH in the map / reduce JVM env using the mapreduce.map.env and mapreduce.reduce.env config settings. If -Xmx is not set, it is inferred from mapreduce.{map|reduce}.memory.mb and mapreduce.job.heap.memory-mb.ratio.</description>
+  </property>
+  <!--
+    Reduce configuration
+  -->
+  <property>
+    <name>mapreduce.reduce.memory.mb</name>
+    <value>-1</value>
+    <description>The amount of memory to request from the scheduler for each reduce task. If this is not specified or is non-positive, it is inferred from mapreduce.reduce.java.opts and mapreduce.job.heap.memory-mb.ratio. If java-opts are also not specified, we set it to 1024. Default: -1</description>
+  </property>
+  <property>
+    <name>mapreduce.reduce.cpu.vcores</name>
+    <value>1</value>
+    <description>The number of virtual cores to request from the scheduler for each reduce task. Default: 1</description>
+  </property>
+  <property>
+    <name>mapreduce.reduce.java.opts</name>
+    <value>-XX:+UseG1GC</value>
   </property>
   <!--
   	Configurations for MapReduce JobHistory Server

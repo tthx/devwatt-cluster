@@ -36,6 +36,10 @@
     <name>yarn.resourcemanager.nodes.exclude-path</name>
     <value>/etc/hadoop/exclude</value>
   </property>
+  <property>
+    <name>yarn.webapp.ui2.enable</name>
+    <value>true</value>
+  </property>
   <!--
   	Configurations for NodeManager
   -->
