@@ -49,6 +49,11 @@
     <description>Path to allocation file. An allocation file is an XML manifest describing queues and their properties, in addition to certain policy defaults. This file must be in the XML format described in the next section. If a relative path is given, the file is searched for on the classpath (which typically includes the Hadoop conf directory). Defaults to fair-scheduler.xml.</description>
   </property>
   <property>
+    <name>yarn.scheduler.fair.preemption</name>
+    <value>true</value>
+    <description>Whether to use preemption. Defaults to false.</description>
+  </property>
+  <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
     <value>1024</value>
     <description>The minimum allocation for every container request at the RM in MBs. Memory requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have less memory than this value will be shut down by the resource manager. Default: 1024</description>
