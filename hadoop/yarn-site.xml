@@ -20,17 +20,45 @@
     <name>yarn.resourcemanager.hostname</name>
     <value>master</value>
   </property>
+  <!--
+    Capacity Scheduler
   <property>
     <name>yarn.resourcemanager.scheduler.class</name>
     <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value>
+    <description>The class to use as the resource scheduler. Default:  org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</description>
+  </property>
+  -->
+  <!--
+    Fair Scheduler
+  -->
+  <property>
+    <name>yarn.resourcemanager.scheduler.class</name>
+    <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.fair.allocation.file</name>
+    <value>fair-scheduler.xml</value>
+    <description>Path to allocation file. An allocation file is an XML manifest describing queues and their properties, in addition to certain policy defaults. This file must be in the XML format described in the next section. If a relative path is given, the file is searched for on the classpath (which typically includes the Hadoop conf directory). Defaults to fair-scheduler.xml.</description>
   </property>
   <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
     <value>1024</value>
+    <description>The minimum allocation for every container request at the RM in MBs. Memory requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have less memory than this value will be shut down by the resource manager. Default: 1024</description>
   </property>
   <property>
     <name>yarn.scheduler.maximum-allocation-mb</name>
     <value>8192</value>
+    <description>The maximum allocation for every container request at the RM in MBs. Memory requests higher than this will throw an InvalidResourceRequestException. Default: 8192</description>
+  </property>
+  <property>
+    <name>yarn.scheduler.minimum-allocation-vcores</name>
+    <value>1</value>
+    <description>The minimum allocation for every container request at the RM in terms of virtual CPU cores. Requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have fewer virtual cores than this value will be shut down by the resource manager. Default: 1</description>
+  </property>
+  <property>
+    <name>yarn.scheduler.maximum-allocation-vcores</name>
+    <value>4</value>
+    <description>The maximum allocation for every container request at the RM in terms of virtual CPU cores. Requests higher than this will throw an InvalidResourceRequestException. Default: 4</description>
   </property>
   <property>
     <name>yarn.resourcemanager.nodes.exclude-path</name>
