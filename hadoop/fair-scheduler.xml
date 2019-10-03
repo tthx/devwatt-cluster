@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <allocations>
   <defaultQueueSchedulingPolicy>fair</defaultQueueSchedulingPolicy>
-  <queue name="bench">
+  <queue name="default">
     <weight>90</weight>
   </queue>
-  <queue name="test">
+  <queue name="admin">
     <weight>10</weight>
   </queue>
 
   <queuePlacementPolicy>
     <rule name="specified" create="false" />
     <rule name="primaryGroup" create="false" />
-    <rule name="default" queue="bench"/>
+    <rule name="default" queue="default"/>
   </queuePlacementPolicy>
 </allocations>
