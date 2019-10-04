@@ -69,7 +69,6 @@
   <property>
     <name>mapreduce.reduce.memory.mb</name>
     <value>-1</value>
-    <description>The amount of memory to request from the scheduler for each reduce task. If this is not specified or is non-positive, it is inferred from mapreduce.reduce.java.opts and mapreduce.job.heap.memory-mb.ratio. If java-opts are also not specified, we set it to 1024. Default: -1</description>
   </property>
   <property>
     <name>mapreduce.reduce.cpu.vcores</name>

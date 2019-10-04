@@ -107,6 +107,7 @@
   <property>
     <name>yarn.nodemanager.log.retain-seconds</name>
     <value>10800</value>
+    <description>Time in seconds to retain user logs. Only applicable if log aggregation is disabled. Default: 10800</description>
   </property>
   <property>
     <name>yarn.nodemanager.aux-services</name>
@@ -150,6 +151,19 @@
     <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn .timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
   </property>
   <!--
+    Configurations for History Server
+  -->
+  <property>
+    <name>yarn.log-aggregation.retain-seconds</name>
+    <value>259200</value>
+    <description>How long to keep aggregation logs before deleting them. -1 disables. Be careful set this too small and you will spam the name node. Default: -1</description>
+  </property>
+  <property>
+    <name>yarn.log-aggregation.retain-check-interval-seconds</name>
+    <value>3600</value>
+    <description>How long to wait between aggregated log retention checks. If set to 0 or a negative value then the value is computed as one-tenth of the aggregated log retention time. Be careful set this too small and you will spam the name node. Default: -1</description>
+  </property>
+  <!--
     Secure Container
   -->
   <property>
@@ -163,17 +177,6 @@
   <property>
     <name>yarn.nodemanager.linux-container-executor.group</name>
     <value>hadoop</value>
-  </property>
-  <!--
-  	Configurations for History Server
-  -->
-  <property>
-    <name>yarn.log-aggregation.retain-seconds</name>
-    <value>3600</value>
-  </property>
-  <property>
-    <name>yarn.log-aggregation.retain-check-interval-seconds</name>
-    <value>1800</value>
   </property>
   <!--
     Timeline service v2
