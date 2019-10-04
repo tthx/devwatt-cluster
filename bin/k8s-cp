@@ -1,0 +1,8 @@
+#!/bin/bash
+user="${3:-"ubuntu"}";
+nodes="${4:-"master worker-1 worker-2 worker-3 worker-4"}";
+for i in ${nodes};
+do
+  echo "-- node: ${i} --";
+	scp -r "${1}" "${user}@${i}:${2}";
+done

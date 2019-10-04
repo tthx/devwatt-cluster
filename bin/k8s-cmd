@@ -1,0 +1,8 @@
+#!/bin/bash
+user="${2:-"ubuntu"}";
+nodes="${3:-"master worker-1 worker-2 worker-3 worker-4"}";
+for i in ${nodes};
+do
+  echo "-- node: ${i} --";
+	ssh -2XY4Cc aes128-ctr "${user}@${i}" "${1}";
+done
