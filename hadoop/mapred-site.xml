@@ -105,5 +105,6 @@
   <property>
     <name>mapreduce.job.emit-timeline-data</name>
     <value>true</value>
+    <description>Specifies if the Application Master should emit timeline data to the timeline server. Individual jobs can override this value. Default: false</description>
   </property>
 </configuration>

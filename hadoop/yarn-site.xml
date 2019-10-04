@@ -105,24 +105,8 @@
     <value>/var/yarn/log</value>
   </property>
   <property>
-    <name>yarn.log-aggregation-enable</name>
-    <value>true</value>
-  </property>
-  <property>
-    <name>yarn.log.server.url</name>
-    <value>master:10020</value>
-  </property>
-  <property>
     <name>yarn.nodemanager.log.retain-seconds</name>
     <value>10800</value>
-  </property>
-  <property>
-    <name>yarn.nodemanager.remote-app-log-dir</name>
-    <value>/home/yarn/log</value>
-  </property>
-  <property>
-    <name>yarn.nodemanager.remote-app-log-dir-suffix</name>
-    <value>log</value>
   </property>
   <property>
     <name>yarn.nodemanager.aux-services</name>
@@ -131,6 +115,39 @@
   <property>
     <name>yarn.nodemanager.env-whitelist</name>
     <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
+  </property>
+  <!--
+    Log aggregation
+  -->
+  <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+    <description>Whether to enable log aggregation. Log aggregation collects each container's logs and moves these logs onto a file-system, for e.g. HDFS, after the application completes. Users can configure the "yarn.nodemanager.remote-app-log-dir" and "yarn.nodemanager.remote-app-log-dir-suffix" properties to determine where these logs are moved to. Users can access the logs via the Application Timeline Server. Default: false</description>
+  </property>
+  <property>
+    <name>yarn.nodemanager.remote-app-log-dir</name>
+    <value>/home/yarn/log</value>
+    <description>Where to aggregate logs to. Default: /tmp/logs</description>
+  </property>
+  <property>
+    <name>yarn.nodemanager.remote-app-log-dir-suffix</name>
+    <value>logs</value>
+    <description>The remote log dir will be created at {yarn.nodemanager.remote-app-log-dir}/${user}/{thisParam}. Default: logs</description>
+  </property>
+  <property>
+    <name>yarn.log.server.url</name>
+    <value>master:10020</value>
+    <description>URL for log aggregation server</description>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hostname</name>
+    <value>master</value>
+    <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
+  </property>
+  <property>
+    <name>yarn.log.server.web-service.url</name>
+    <value>master:8188/ws/v2/applicationlog</value>
+    <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn .timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
   </property>
   <!--
     Secure Container
@@ -162,42 +179,53 @@
     Timeline service v2
   -->
   <property>
-    <name>yarn.system-metrics-publisher.enabled</name>
-    <value>false</value>
-  </property>
-  <property>
-    <name>yarn.timeline-service.schema.prefix</name>
-    <value>prod</value>
-  </property>
-  <property>
-    <name>yarn.timeline-service.hostname</name>
-    <value>master</value>
-  </property>
-  <property>
-    <name>yarn.timeline-service.hbase.coprocessor.jar.hdfs.location</name>
-    <value>/home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar</value>
+    <name>yarn.timeline-service.enabled</name>
+    <value>true</value>
+    <description>Indicate to clients whether Timeline service is enabled or not. If enabled, the TimelineClient library used by applications will post entities and events to the Timeline server. Defaults to false.</description>
   </property>
   <property>
     <name>yarn.timeline-service.version</name>
     <value>2.0f</value>
-  </property>
-  <property>
-    <name>yarn.timeline-service.enabled</name>
-    <value>true</value>
-  </property>
-  <property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle,timeline_collector</value>
-  </property>
-  <property>
-    <name>yarn.nodemanager.aux-services.timeline_collector.class</name>
-    <value>org.apache.hadoop.yarn.server.timelineservice.collector.PerNodeTimelineCollectorsAuxService</value>
+    <description>Indicate what is the current version of the running timeline service. For example, if “yarn.timeline-service.version” is 1.5, and “yarn.timeline-service.enabled” is true, it means the cluster will and must bring up the timeline service v.1.5 (and nothing else). On the client side, if the client uses the same version of timeline service, it must succeed. If the client chooses to use a smaller version in spite of this, then depending on how robust the compatibility story is between versions, the results may vary. Defaults to 1.0f.</description>
   </property>
   <property>
     <name>yarn.system-metrics-publisher.enabled</name>
     <value>true</value>
-    <description>The setting that controls whether yarn system metrics is
-    published on the Timeline service or not by RM And NM.</description>
+    <description>The setting that controls whether yarn system metrics is published on the Timeline service or not by RM And NM. Defaults to false.</description>
+  </property>
+  <property>
+    <name>yarn.timeline-service.schema.prefix</name>
+    <value>prod</value>
+    <description>The schema prefix for hbase tables. Defaults to “prod.”.</description>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hostname</name>
+    <value>master</value>
+    <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hbase.configuration.file</name>
+    <value>file:/etc/hbase/hbase-site.xml</value>
+    <description>Optional URL to an hbase-site.xml configuration file to be
+    used to connect to the timeline-service hbase cluster. If empty or not
+    specified, then the HBase configuration will be loaded from the classpath.
+    When specified the values in the specified configuration file will override
+    those from the ones that are present on the classpath.
+    </description>
+  </property>
+  <property>
+    <name>yarn.timeline-service.hbase.coprocessor.jar.hdfs.location</name>
+    <value>/home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar</value>
+    <description>The default hdfs location for flowrun coprocessor jar.</description>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle,timeline_collector</value>
+    <description>A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers</description>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services.timeline_collector.class</name>
+    <value>org.apache.hadoop.yarn.server.timelineservice.collector.PerNodeTimelineCollectorsAuxService</value>
   </property>
   <property>
     <name>yarn.rm.system-metrics-publisher.emit-container-events</name>
@@ -209,15 +237,5 @@
   <property>
     <name>yarn.resourcemanager.cluster-id</name>
     <value>tth_cluster</value>
-  </property>
-  <property>
-    <name>yarn.timeline-service.hbase.configuration.file</name>
-    <value>file:/etc/hbase/hbase-site.xml</value>
-    <description>Optional URL to an hbase-site.xml configuration file to be
-    used to connect to the timeline-service hbase cluster. If empty or not
-    specified, then the HBase configuration will be loaded from the classpath.
-    When specified the values in the specified configuration file will override
-    those from the ones that are present on the classpath.
-    </description>
   </property>
 </configuration>
