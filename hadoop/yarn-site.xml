@@ -140,16 +140,6 @@
     <value>master:10020</value>
     <description>URL for log aggregation server</description>
   </property>
-  <property>
-    <name>yarn.timeline-service.hostname</name>
-    <value>master</value>
-    <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
-  </property>
-  <property>
-    <name>yarn.log.server.web-service.url</name>
-    <value>master:8188/ws/v2/applicationlog</value>
-    <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn .timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
-  </property>
   <!--
     Configurations for History Server
   -->
@@ -181,6 +171,11 @@
   <!--
     Timeline service v2
   -->
+  <property>
+    <name>yarn.timeline-service.hostname</name>
+    <value>master</value>
+    <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
+  </property>
   <property>
     <name>yarn.timeline-service.enabled</name>
     <value>true</value>
@@ -235,7 +230,12 @@
     <value>true</value>
     <description>The setting that controls whether yarn container events are
     published to the timeline service or not by RM. This configuration setting
-    is for ATS V2.</description>
+    is for ATS V2. Default: false</description>
+  </property>
+  <property>
+    <name>yarn.log.server.web-service.url</name>
+    <value>master:8188/ws/v2/applicationlog</value>
+    <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn .timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
   </property>
   <property>
     <name>yarn.resourcemanager.cluster-id</name>
