@@ -1,6 +1,7 @@
 #!/bin/bash
 case "${1}" in
   "start")
+    k8s-cmd "sudo rm -rf /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/*"
     k8s-cmd "zkServer.sh start" zookeeper
     k8s-cmd "start-dfs.sh" hdfs master
     k8s-cmd "start-hbase.sh" hbase master
