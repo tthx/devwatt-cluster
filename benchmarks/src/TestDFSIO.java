@@ -58,6 +58,7 @@ import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.apache.hadoop.hdfs.DFSConfigKeys;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -415,8 +416,12 @@ public class TestDFSIO implements Tool {
         out = fs.create(filePath, FsPermission.getFileDefault(),
             EnumSet.of(CreateFlag.CREATE, CreateFlag.OVERWRITE,
                 CreateFlag.valueOf(blockStoragePolicy)),
-            bufferSize, (short) getConf().getInt("dfs.replication", 3),
-            getConf().getLong("dfs.blocksize", 134217728), null);
+            bufferSize,
+            (short) getConf().getInt(DFSConfigKeys.DFS_REPLICATION_KEY,
+                DFSConfigKeys.DFS_REPLICATION_DEFAULT),
+            getConf().getLongBytes(DFSConfigKeys.DFS_BLOCK_SIZE_KEY,
+                DFSConfigKeys.DFS_BLOCK_SIZE_DEFAULT),
+            null);
       } else
         out = fs.create(filePath, true, bufferSize);
       if (compressionCodec != null)
