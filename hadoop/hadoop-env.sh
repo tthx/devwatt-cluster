@@ -152,7 +152,7 @@ esac
 export HADOOP_CLASSPATH="$(find ${HADOOP_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
 
 # Should HADOOP_CLASSPATH be first in the official CLASSPATH?
-export HADOOP_USER_CLASSPATH_FIRST="yes"
+# export HADOOP_USER_CLASSPATH_FIRST="yes"
 
 # If HADOOP_USE_CLIENT_CLASSLOADER is set, the classpath along
 # with the main jar are handled by a separate isolated
