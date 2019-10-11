@@ -149,10 +149,10 @@ esac
 # Similarly, end users should utilize ${HOME}/.hadooprc .
 # This variable should ideally only be used as a short-cut,
 # interactive way for temporary additions on the command line.
-# export HADOOP_CLASSPATH="/some/cool/path/on/your/machine"
+export HADOOP_CLASSPATH="$(find ${HADOOP_HOME}/. -name '*.jar' | xargs echo | tr ' ' ':')"
 
 # Should HADOOP_CLASSPATH be first in the official CLASSPATH?
-# export HADOOP_USER_CLASSPATH_FIRST="yes"
+export HADOOP_USER_CLASSPATH_FIRST="yes"
 
 # If HADOOP_USE_CLIENT_CLASSLOADER is set, the classpath along
 # with the main jar are handled by a separate isolated
