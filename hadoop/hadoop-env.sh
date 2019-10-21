@@ -52,7 +52,7 @@
 # The java implementation to use. By default, this environment
 # variable is REQUIRED on ALL platforms except OS X!
 # export JAVA_HOME=
-export JAVA_HOME=/opt/jdk1.8.0_221
+export JAVA_HOME=/opt/jdk1.8.0_231
 export JAVA_OPTS="-XX:+UseG1GC"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 

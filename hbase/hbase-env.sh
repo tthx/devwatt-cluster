@@ -26,7 +26,7 @@
 
 # The java implementation to use.  Java 1.8+ required.
 # export JAVA_HOME=/usr/java/jdk1.8.0/
-export JAVA_HOME=/opt/jdk1.8.0_221
+export JAVA_HOME=/opt/jdk1.8.0_231
 export PATH=$JAVA_HOME/bin:$PATH
 
 # Extra Java CLASSPATH elements.  Optional.
