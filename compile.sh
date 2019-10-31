@@ -25,6 +25,8 @@ case "${x}" in
   hbase)
     mvn ${action} assembly:single -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     ;;
+  hive)
+    ;;
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     ./dev/change-scala-version.sh 2.12;
