@@ -27,6 +27,7 @@ case "${x}" in
     ;;
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
-    ./dev/make-distribution.sh --name spark-2.4.4-bin-without-hadoop-scala-2.12 --tgz --r --pip -T 1C -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Psparkr -Phadoop-2.7 -Dhadoop.version=${hadoop_version} -Phadoop-provided -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
+    ./dev/change-scala-version.sh 2.12;
+    ./dev/make-distribution.sh --name spark-2.4.4-bin-without-hadoop-scala-2.12 --tgz --r --pip -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Psparkr -Phadoop-2.7 -Dhadoop.version=${hadoop_version} -Phadoop-provided -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
     ;;
 esac
