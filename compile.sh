@@ -1,7 +1,7 @@
 #!/bin/bash
 x="${1:-"hadoop"}";
 shift 1;
-action="${@:-"clean package"}";
+action="${*:-"clean package"}";
 hadoop_version="3.2.1";
 unset CXXFLAGS;
 export JAVA_HOME="/opt/jdk1.8.0_231";
@@ -30,6 +30,6 @@ case "${x}" in
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     ./dev/change-scala-version.sh 2.12;
-    ./dev/make-distribution.sh --name spark-2.4.4-bin-without-hadoop-scala-2.12 --tgz --r --pip -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Psparkr -Phadoop-2.7 -Dhadoop.version=${hadoop_version} -Phadoop-provided -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
+    ./dev/make-distribution.sh --name without-hadoop-scala-2.12 --tgz --pip --r -Psparkr -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Phadoop-3.1 -Dhadoop.version=${hadoop_version} -Pyarn -Phive -Phive-thriftserver -Pmesos -Pkubernetes -Phadoop-provided -Phive-provided -Porc-provided -Pparquet-provided;
     ;;
 esac
