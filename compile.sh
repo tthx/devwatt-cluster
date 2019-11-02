@@ -26,6 +26,8 @@ case "${x}" in
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     ;;
   hive)
+    export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
+    mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version};
     ;;
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
