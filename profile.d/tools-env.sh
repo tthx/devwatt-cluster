@@ -1,5 +1,5 @@
 export CXX="g++";
-export CXXFLAGS="-g -std=c++17 -Wall -pedantic";
+export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
 export M2_HOME="/opt/maven";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
