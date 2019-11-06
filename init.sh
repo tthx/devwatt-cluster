@@ -1,7 +1,10 @@
 #!/bin/bash
 sudo addgroup hadoop
+sudo adduser ubuntu hadoop
 sudo useradd zookeeper --create-home --groups hadoop --shell /bin/bash
 echo 'zookeeper:D@$#H0le99*'|sudo chpasswd
+sudo useradd hive --create-home --groups hadoop --shell /bin/bash
+echo 'hive:D@$#H0le99*'|sudo chpasswd
 sudo useradd hbase --create-home --groups hadoop --shell /bin/bash
 echo 'hbase:D@$#H0le99*'|sudo chpasswd
 sudo useradd hdfs --create-home --groups hadoop --shell /bin/bash
@@ -27,11 +30,13 @@ sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
 sudo chmod -R 6050 /opt/hadoop/bin/container-executor
 
-hdfs dfs -mkdir -p /home/yarn/log /home/mapred /home/hive /home/attu7372 /home/hbase/coprocessor /tmp
+hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp
+hdfs dfs -chown -R ubuntu /home/ubuntu
 hdfs dfs -chown -R yarn /home/yarn
 hdfs dfs -chown -R mapred /home/mapred
 hdfs dfs -chown -R hive /home/hive
 hdfs dfs -chown -R attu7372 /home/attu7372
 hdfs dfs -chown -R hbase /home/hbase
 hdfs dfs -chmod 1777 /home/yarn/log /tmp
+hdfs dfs -chmod g+w /home/hive/warehouse
 hdfs dfs -put /opt/hadoop/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-3.2.1.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar

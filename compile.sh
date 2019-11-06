@@ -32,6 +32,8 @@ case "${x}" in
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     export SPARK_DIST_CLASSPATH="$(hadoop classpath)";
+    hdfs dfs -mkdir -p /home/ubuntu/src/spark-2.4.4/examples/src/main/resources;
+    hdfs dfs -put examples/src/main/resources/* /home/ubuntu/src/spark-2.4.4/examples/src/main/resources/.;
     ./dev/change-scala-version.sh 2.12;
     ./dev/make-distribution.sh --name without-hadoop-scala-2.12 --tgz --pip --r -T 1C -Psparkr -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version=2.12.10 -Phadoop-3.1 -Dhadoop.version=${hadoop_version} -Pyarn -Phive -Phive-thriftserver -Pmesos -Pkubernetes -Phadoop-provided; #-Phive-provided -Porc-provided -Pparquet-provided;
     ;;
