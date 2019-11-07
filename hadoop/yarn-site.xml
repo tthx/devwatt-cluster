@@ -147,7 +147,7 @@
   </property>
   <property>
     <name>yarn.log.server.url</name>
-    <value>master:10020</value>
+    <value>http://master:19888/jobhistory/logs</value>
     <description>URL for log aggregation server</description>
   </property>
   <!--
