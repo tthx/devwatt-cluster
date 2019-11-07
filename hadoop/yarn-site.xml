@@ -25,6 +25,11 @@
     <value>/etc/hadoop/exclude</value>
   </property>
   <property>
+    <name>yarn.webapp.api-service.enable</name>
+    <value>true</value>
+    <description>Enable services rest api on ResourceManager.</description>
+  </property>
+  <property>
     <name>yarn.webapp.ui2.enable</name>
     <value>true</value>
   </property>
