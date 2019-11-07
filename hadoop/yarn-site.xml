@@ -248,9 +248,14 @@
     is for ATS V2. Default: false</description>
   </property>
   <property>
+    <name>yarn.timeline-service.read.allowed.users</name>
+    <value>attu7372,hbase,hdfs,hive,mapred,ubuntu,yarn,zookeeper hadoop</value>
+    <description>Comma separated list of user, followed by space, then comma separated list of groups. It will allow this list of users and groups to read the data and reject everyone else. Default value is set to none. If authorization is enabled, then this configuration is mandatory.</description>
+  </property>
+  <property>
     <name>yarn.log.server.web-service.url</name>
-    <value>master:8188/ws/v2/applicationlog</value>
-    <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn .timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
+    <value>http://master:8188/ws/v2/applicationlog</value>
+    <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn.timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
   </property>
   <property>
     <name>yarn.resourcemanager.cluster-id</name>
