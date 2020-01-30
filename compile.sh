@@ -4,7 +4,7 @@ shift 1;
 action="${*:-"clean package"}";
 hadoop_version="3.2.1";
 unset CXXFLAGS;
-export JAVA_HOME="/opt/jdk1.8.0_231";
+export JAVA_HOME="/opt/jdk1.8.0_241";
 export JAVA_OPTS="-XX:+UseG1GC";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
 export PATH="${JAVA_HOME}/bin:${PATH}";
