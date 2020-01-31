@@ -37,6 +37,6 @@ hdfs dfs -chown -R mapred /home/mapred
 hdfs dfs -chown -R hive /home/hive
 hdfs dfs -chown -R attu7372 /home/attu7372
 hdfs dfs -chown -R hbase /home/hbase
-hdfs dfs -chmod 1777 /home/yarn/log /tmp
+hdfs dfs -chmod 1777 /home/yarn/log /home/hive/warehouse /tmp
 hdfs dfs -chmod g+w /home/hive/warehouse
 hdfs dfs -put /opt/hadoop/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-3.2.1.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
