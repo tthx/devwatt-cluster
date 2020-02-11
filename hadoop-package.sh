@@ -6,3 +6,4 @@ k8s-cmd "sudo ln -sf /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3 /usr/lib/
 k8s-cmd "sudo ln -sf /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3 /usr/lib/liblapack.so"
 k8s-cmd "sudo ln -sf /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3 /usr/lib/liblapack.so.3"
 k8s-cmd "sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/."
+k8s-cmd "sudo rm -f /opt/hive/lib/guava-19.0.jar /opt/metastore/lib/guava-19.0.jar"

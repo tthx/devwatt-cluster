@@ -21,12 +21,6 @@
   </property>
 
   <property>
-    <name>hive.log4j.file</name>
-    <value></value>
-    <description>Log4j configuration file. If unset will look for metastore-log4j2.properties in $METASTORE_HOME/conf</description>
-  </property>
-
-  <property>
     <name>hive.stats.autogather</name>
     <value>true</value>
     <description>Whether to automatically gather basic statistics during insert commands.</description>
