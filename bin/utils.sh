@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-function pid_is_running() {
+function pid_is_running {
   declare pid="$1"
   ps -p "${pid}" >/dev/null 2>&1
 }
@@ -14,7 +14,7 @@ function pid_is_running() {
 # If an old process is running on the pid found in the :pidfile:, exit 1. Otherwise,
 # remove the stale :pidfile: if it exists.
 #
-function pid_guard() {
+function pid_guard {
   declare pidfile="$1" name="$2"
 
   echo "------------ STARTING $(basename "$0") at $(date) --------------" | tee /dev/stderr
@@ -46,7 +46,7 @@ function pid_guard() {
 # Note that this should be run in a subshell, so that the current
 # shell does not exit.
 #
-function wait_pid_death() {
+function wait_pid_death {
   declare pid="$1" timeout="$2"
 
   local countdown
@@ -80,7 +80,7 @@ function wait_pid_death() {
 # Monit default timeout for start/stop is 30s
 # Append 'with timeout {n} seconds' to monit start/stop program configs
 #
-function kill_and_wait() {
+function kill_and_wait {
   declare pidfile="$1" timeout="${2:-25}" sigkill_on_timeout="${3:-1}"
 
   if [ ! -f "${pidfile}" ]; then
@@ -122,7 +122,8 @@ function kill_and_wait() {
   fi
 }
 
-running_in_container() {
+function running_in_container {
   # look for a non-root cgroup
   grep --quiet --invert-match ':/$' /proc/self/cgroup
 }
+

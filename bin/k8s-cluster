@@ -10,9 +10,10 @@ case "${1}" in
     k8s-cmd "mapred --daemon start historyserver" mapred master;
     k8s-cmd "start-yarn.sh" yarn master;
     k8s-cmd "yarn --daemon start timelinereader" yarn master;
-    k8s-cmd "metastore_ctl start" ubuntu master;
+    k8s-cmd "metastore_ctl start" hive master;
     ;;
   "stop")
+    k8s-cmd "metastore_ctl stop" hive master;
     k8s-cmd "yarn --daemon stop timelinereader" yarn master;
     k8s-cmd "stop-yarn.sh" yarn master;
     k8s-cmd "mapred --daemon stop historyserver" mapred master;

@@ -3,31 +3,25 @@
 set -eu
 
 SERVICE="metastore";
-USER="hive";
-GROUP="hadoop";
 BIN_DIR="/opt/${SERVICE}/bin"
 RUN_DIR="/var/${SERVICE}/run";
 LOG_DIR="/var/${SERVICE}/log";
 mkdir -p "${RUN_DIR}" "${LOG_DIR}";
-chown "${USER}":"${GROUP}" "${RUN_DIR} ${LOG_DIR}";
 
 PIDFILE="${RUN_DIR}/${SERVICE}.pid";
 
 source ${BIN_DIR}/utils.sh;
 exec 1>> "${LOG_DIR}/${SERVICE}.stdout.log";
 exec 2>> "${LOG_DIR}/${SERVICE}.stderr.log";
-chown "${USER}":"${GROUP}" \
-  "${LOG_DIR}/${SERVICE}.stdout.log" \
-  "${LOG_DIR}/${SERVICE}.stderr.log";
 
 case "${1}" in
   start)
     pid_guard ${PIDFILE} "${SERVICE}";
     echo $$ > ${PIDFILE};
 
-    exec chpst -u "${USER}":"${GROUP}" "start-${SERVICE}" \
-      >>  ${LOG_DIR}/${PROGNAME}.stdout.log \
-      2>> ${LOG_DIR}/${PROGNAME}.stderr.log;
+    exec "start-${SERVICE}" \
+      >>  ${LOG_DIR}/${SERVICE}.stdout.log \
+      2>> ${LOG_DIR}/${SERVICE}.stderr.log;
     ;;
 
   stop)
