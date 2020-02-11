@@ -16,11 +16,10 @@ exec 2>> "${LOG_DIR}/${SERVICE}.stderr.log";
 case "${1}" in
   "start")
     pid_guard "${PIDFILE}" "${SERVICE}";
-    echo "${$}" > "${PIDFILE}";
-
-    exec "start-${SERVICE}" \
+    "start-${SERVICE}" \
       >>  "${LOG_DIR}/${SERVICE}.stdout.log" \
-      2>> "${LOG_DIR}/${SERVICE}.stderr.log";
+      2>> "${LOG_DIR}/${SERVICE}.stderr.log" & disown;
+    echo "${!}" > "${PIDFILE}";
     ;;
 
   "stop")
