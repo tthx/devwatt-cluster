@@ -21,12 +21,6 @@
   </property>
 
   <property>
-    <name>hive.stats.autogather</name>
-    <value>true</value>
-    <description>Whether to automatically gather basic statistics during insert commands.</description>
-  </property>
-
-  <property>
     <name>javax.jdo.option.ConnectionURL</name>
     <value>jdbc:postgresql://master/metastore</value>
     <description>Connection URL for the JDBC driver</description>
