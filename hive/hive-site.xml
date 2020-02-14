@@ -36,7 +36,7 @@
   <property>
     <name>hive.zookeeper.client.port</name>
     <value>2181</value>
-    <description>The port at which the clients will connect</description>
+    <description>The port of ZooKeeper servers to talk to. This is only needed for read/write locks. Default: 2181</description>
   </property>
   
 </configuration>
