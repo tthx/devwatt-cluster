@@ -20,19 +20,23 @@
     <name>yarn.resourcemanager.hostname</name>
     <value>master</value>
   </property>
+
   <property>
     <name>yarn.resourcemanager.nodes.exclude-path</name>
     <value>/etc/hadoop/exclude</value>
   </property>
+
   <property>
     <name>yarn.webapp.api-service.enable</name>
     <value>true</value>
     <description>Enable services rest api on ResourceManager.</description>
   </property>
+
   <property>
     <name>yarn.webapp.ui2.enable</name>
-    <value>true</value>
+    <value>false</value>
   </property>
+
   <!--
     Capacity Scheduler
   <property>
@@ -41,6 +45,7 @@
     <description>The class to use as the resource scheduler. Default:  org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</description>
   </property>
   -->
+
   <!--
     Fair Scheduler
   -->
@@ -48,46 +53,55 @@
     <name>yarn.resourcemanager.scheduler.class</name>
     <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
   </property>
+
   <property>
     <name>yarn.scheduler.fair.allocation.file</name>
     <value>fair-scheduler.xml</value>
     <description>Path to allocation file. An allocation file is an XML manifest describing queues and their properties, in addition to certain policy defaults. This file must be in the XML format described in the next section. If a relative path is given, the file is searched for on the classpath (which typically includes the Hadoop conf directory). Defaults to fair-scheduler.xml.</description>
   </property>
+
   <property>
     <name>yarn.scheduler.fair.preemption</name>
     <value>true</value>
     <description>Whether to use preemption. Defaults to false.</description>
   </property>
+
   <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
     <value>1024</value>
     <description>The minimum allocation for every container request at the RM in MBs. Memory requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have less memory than this value will be shut down by the resource manager. Default: 1024</description>
   </property>
+
   <property>
     <name>yarn.scheduler.maximum-allocation-mb</name>
     <value>8192</value>
     <description>The maximum allocation for every container request at the RM in MBs. Memory requests higher than this will throw an InvalidResourceRequestException. Default: 8192</description>
   </property>
+
   <property>
     <name>yarn.scheduler.minimum-allocation-vcores</name>
     <value>1</value>
     <description>The minimum allocation for every container request at the RM in terms of virtual CPU cores. Requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have fewer virtual cores than this value will be shut down by the resource manager. Default: 1</description>
   </property>
+
   <property>
     <name>yarn.scheduler.maximum-allocation-vcores</name>
     <value>4</value>
     <description>The maximum allocation for every container request at the RM in terms of virtual CPU cores. Requests higher than this will throw an InvalidResourceRequestException. Default: 4</description>
   </property>
+
   <property>
     <name>yarn.scheduler.fair.user-as-default-queue</name>
     <value>false</value>
     <description>Whether to use the username associated with the allocation as the default queue name, in the event that a queue name is not specified. If this is set to “false” or unset, all jobs have a shared default queue, named “default”. Defaults to true. If a queue placement policy is given in the allocations file, this property is ignored.</description>
   </property>
+
   <property>
     <name>yarn.scheduler.fair.allow-undeclared-pools</name>
     <value>false</value>
     <description>If this is true, new queues can be created at application submission time, whether because they are specified as the application’s queue by the submitter or because they are placed there by the user-as-default-queue property. If this is false, any time an app would be placed in a queue that is not specified in the allocations file, it is placed in the “default” queue instead. Defaults to true. If a queue placement policy is given in the allocations file, this property is ignored.</description>
   </property>
+
   <!--
   	Configurations for NodeManager
   -->
@@ -96,42 +110,51 @@
     <value>true</value>
     <description>Enable auto-detection of node capabilities such as memory and CPU. Default: false</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.resource.cpu-vcores</name>
     <value>-1</value>
     <description>Number of vcores that can be allocated for containers. This is used by the RM scheduler when allocating resources for containers. This is not used to limit the number of CPUs used by YARN containers. If it is set to -1 and yarn.nodemanager.resource.detect-hardware-capabilities is true, it is automatically determined from the hardware in case of Windows and Linux. In other cases, number of vcores is 8 by default. Default: -1</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.resource.memory-mb</name>
     <value>-1</value>
     <description>Amount of physical memory, in MB, that can be allocated for containers. If set to -1 and yarn.nodemanager.resource.detect-hardware-capabilities is true, it is automatically calculated(in case of Windows and Linux). In other cases, the default is 8192MB. Default: -1</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.vmem-pmem-ratio</name>
     <value>2.1</value>
     <description>Ratio between virtual memory to physical memory when setting memory limits for containers. Container allocations are expressed in terms of physical memory, and virtual memory usage is allowed to exceed this allocation by this ratio. Default: -1</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.local-dirs</name>
     <value>/var/yarn/local</value>
   </property>
+
   <property>
     <name>yarn.nodemanager.log-dirs</name>
     <value>/var/yarn/log</value>
   </property>
+
   <property>
     <name>yarn.nodemanager.log.retain-seconds</name>
     <value>10800</value>
     <description>Time in seconds to retain user logs. Only applicable if log aggregation is disabled. Default: 10800</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle</value>
   </property>
+
   <property>
     <name>yarn.nodemanager.env-whitelist</name>
     <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
   </property>
+
   <!--
     Log aggregation
   -->
@@ -140,21 +163,25 @@
     <value>true</value>
     <description>Whether to enable log aggregation. Log aggregation collects each container's logs and moves these logs onto a file-system, for e.g. HDFS, after the application completes. Users can configure the "yarn.nodemanager.remote-app-log-dir" and "yarn.nodemanager.remote-app-log-dir-suffix" properties to determine where these logs are moved to. Users can access the logs via the Application Timeline Server. Default: false</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.remote-app-log-dir</name>
     <value>/home/yarn/log</value>
     <description>Where to aggregate logs to. Default: /tmp/logs</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.remote-app-log-dir-suffix</name>
     <value>logs</value>
     <description>The remote log dir will be created at {yarn.nodemanager.remote-app-log-dir}/${user}/{thisParam}. Default: logs</description>
   </property>
+
   <property>
     <name>yarn.log.server.url</name>
     <value>http://master:19888/jobhistory/logs</value>
     <description>URL for log aggregation server</description>
   </property>
+
   <!--
     Configurations for History Server
   -->
@@ -163,11 +190,13 @@
     <value>259200</value>
     <description>How long to keep aggregation logs before deleting them. -1 disables. Be careful set this too small and you will spam the name node. Default: -1</description>
   </property>
+
   <property>
     <name>yarn.log-aggregation.retain-check-interval-seconds</name>
     <value>3600</value>
     <description>How long to wait between aggregated log retention checks. If set to 0 or a negative value then the value is computed as one-tenth of the aggregated log retention time. Be careful set this too small and you will spam the name node. Default: -1</description>
   </property>
+
   <!--
     Secure Container
   -->
@@ -175,14 +204,17 @@
     <name>yarn.nodemanager.container-executor.class</name>
     <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
   </property>
+
   <property>
     <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
     <value>false</value>
   </property>
+
   <property>
     <name>yarn.nodemanager.linux-container-executor.group</name>
     <value>hadoop</value>
   </property>
+
   <!--
     Timeline service v2
   -->
@@ -191,31 +223,37 @@
     <value>master</value>
     <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
   </property>
+
   <property>
     <name>yarn.timeline-service.enabled</name>
     <value>true</value>
     <description>Indicate to clients whether Timeline service is enabled or not. If enabled, the TimelineClient library used by applications will post entities and events to the Timeline server. Defaults to false.</description>
   </property>
+
   <property>
     <name>yarn.timeline-service.version</name>
     <value>2.0f</value>
     <description>Indicate what is the current version of the running timeline service. For example, if “yarn.timeline-service.version” is 1.5, and “yarn.timeline-service.enabled” is true, it means the cluster will and must bring up the timeline service v.1.5 (and nothing else). On the client side, if the client uses the same version of timeline service, it must succeed. If the client chooses to use a smaller version in spite of this, then depending on how robust the compatibility story is between versions, the results may vary. Defaults to 1.0f.</description>
   </property>
+
   <property>
     <name>yarn.system-metrics-publisher.enabled</name>
     <value>true</value>
     <description>The setting that controls whether yarn system metrics is published on the Timeline service or not by RM And NM. Defaults to false.</description>
   </property>
+
   <property>
     <name>yarn.timeline-service.schema.prefix</name>
     <value>prod</value>
     <description>The schema prefix for hbase tables. Defaults to “prod.”.</description>
   </property>
+
   <property>
     <name>yarn.timeline-service.hostname</name>
     <value>master</value>
     <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
   </property>
+
   <property>
     <name>yarn.timeline-service.hbase.configuration.file</name>
     <value>file:/etc/hbase/hbase-site.xml</value>
@@ -226,20 +264,24 @@
     those from the ones that are present on the classpath.
     </description>
   </property>
+
   <property>
     <name>yarn.timeline-service.hbase.coprocessor.jar.hdfs.location</name>
     <value>/home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar</value>
     <description>The default hdfs location for flowrun coprocessor jar.</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle,timeline_collector</value>
     <description>A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers</description>
   </property>
+
   <property>
     <name>yarn.nodemanager.aux-services.timeline_collector.class</name>
     <value>org.apache.hadoop.yarn.server.timelineservice.collector.PerNodeTimelineCollectorsAuxService</value>
   </property>
+
   <property>
     <name>yarn.rm.system-metrics-publisher.emit-container-events</name>
     <value>true</value>
@@ -247,16 +289,19 @@
     published to the timeline service or not by RM. This configuration setting
     is for ATS V2. Default: false</description>
   </property>
+
   <property>
     <name>yarn.timeline-service.read.allowed.users</name>
     <value>attu7372,hbase,hdfs,hive,mapred,ubuntu,yarn,zookeeper hadoop</value>
     <description>Comma separated list of user, followed by space, then comma separated list of groups. It will allow this list of users and groups to read the data and reject everyone else. Default value is set to none. If authorization is enabled, then this configuration is mandatory.</description>
   </property>
+
   <property>
     <name>yarn.log.server.web-service.url</name>
     <value>http://master:8188/ws/v2/applicationlog</value>
     <description>TimelineService v.2 supports serving aggregated logs of historical apps. To enable this, configure “yarn.log.server.web-service.url” to “${yarn.timeline-service.hostname}:8188/ws/v2/applicationlog”</description>
   </property>
+
   <property>
     <name>yarn.resourcemanager.cluster-id</name>
     <value>tth_cluster</value>

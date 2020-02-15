@@ -2,7 +2,7 @@
 case "${1}" in
   "start")
     echo "Cleaning logs: {...";
-    k8s-cmd "sudo rm -rf /var/metastore/log/* /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/*";
+    k8s-cmd "sudo rm -rf /var/hive/log/* /var/metastore/log/* /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/*";
     echo "... }: Logs cleaned.";
     k8s-cmd "zkServer.sh start" zookeeper;
     k8s-cmd "start-dfs.sh" hdfs master;

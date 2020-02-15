@@ -31,6 +31,8 @@ sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
 sudo chmod -R 6050 /opt/hadoop/bin/container-executor
+sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/.
+sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/.
 
 hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse /home/hive/scratch /home/attu7372 /home/hbase/coprocessor /tmp
 hdfs dfs -chown -R ubuntu /home/ubuntu

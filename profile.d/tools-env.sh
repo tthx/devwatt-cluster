@@ -12,15 +12,13 @@ export JMETER_HOME="/opt/jmeter";
 export PATH="${JMETER_HOME}/bin:${PATH}";
 export SCALA_HOME="/opt/scala";
 export PATH="${SCALA_HOME}/bin:${PATH}";
-export SPARK_HOME="/opt/spark";
-export PATH="${SPARK_HOME}/bin:${PATH}";
 export SBT_HOME="/opt/sbt";
 export SBT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080";
 export PATH="${SBT_HOME}/bin:${PATH}";
 export GOROOT="/opt/go";
 export PATH="${GOROOT}/bin:${PATH}";
 export NODEJS="/opt/nodejs";
-export PATH="${NODEJS}:${PATH}";
+export PATH="${NODEJS}/bin:${PATH}";
 
 alias h='history';
 alias dir='ls -laF';
@@ -34,3 +32,4 @@ alias firefox='/usr/bin/firefox 2>/dev/null';
 alias sublime='/opt/sublime_text/sublime_text';
 alias docker-clean='docker stop $(docker container ls -a -q) && docker system prune -a -f --volumes';
 alias python='/usr/bin/python3'
+alias clear-logs='journalctl --vacuum-time=1d';
