@@ -27,10 +27,10 @@ sudo chown -R hive:hadoop /var/hive /var/metastore
 sudo chmod 775 /var/hive/tmp
 sudo chown -R root:root /etc/hadoop /etc/hbase /opt
 sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /opt
-sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.
+sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
-sudo chmod -R 6050 /opt/hadoop/bin/container-executor
+sudo chmod 6050 /opt/hadoop/bin/container-executor
 sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/.
 sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/.
 
