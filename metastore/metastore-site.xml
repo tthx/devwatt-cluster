@@ -3,55 +3,7 @@
 <configuration>
 
   <property>
-    <name>hive.metastore.warehouse.dir</name>
-    <value>/home/hive/warehouse</value>
-    <description>URI of the default location for tables in the default catalog and database.</description>
-  </property>
-   
-  <property>
-    <name>datanucleus.schema.autoCreateAll</name>
-    <value>false</value>
-    <description>Auto creates the necessary schema in the RDBMS at startup if one does not exist. Set this to false after creating it once. To enable auto create also set hive.metastore.schema.verification=false. Auto creation is not recommended in production; run schematool instead.</description>
-  </property>
-
-  <property>
-    <name>hive.metastore.schema.verification</name>
-    <value>true</value>
-    <description>Enforce metastore schema version consistency. When set to true: verify that version information stored in the RDBMS is compatible with the version of the Metastore jar. Also disable automatic schema migration. Users are required to manually migrate the schema after upgrade, which ensures proper schema migration. This setting is strongly recommended in production. When set to false: warn if the version information stored in RDBMS doesn't match the version of the Metastore jar and allow auto schema migration.</description>
-  </property>
-
-  <property>
-    <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:postgresql://master/metastore</value>
-    <description>Connection URL for the JDBC driver</description>
-  </property>
-   
-  <property>
-    <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>org.postgresql.Driver</value>
-    <description>JDBC driver class</description>
-  </property>
-   
-  <property>
-    <name>javax.jdo.option.ConnectionUserName</name>
-    <value>hive</value>
-    <description>User name to connect to the RDBMS with</description>
-  </property>
-   
-  <property>
-    <name>javax.jdo.option.ConnectionPassword</name>
-    <value>D@$#H0le99*</value>
-    <description>Password to connect to the RDBMS with. The Metastore uses Hadoop's CredentialProvider API so this does not have to be stored in clear text in your configuration file.</description>
-  </property>
-   
-  <property>
-    <name>metastore.try.direct.sql.ddl</name>
-    <value>false</value>
-    <description>When using Postgres you should set the configuration parameter metastore.try.direct.sql.ddl (previously hive.metastore.try.direct.sql.ddl) to false, to avoid failures in certain operations.</description>
-  </property>
-
-  <property>
-    <name>hive.metastore.uris</name>
+    <name>metastore.thrift.uris</name>
     <value>thrift://master:9083</value>
     <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
   </property>
@@ -70,12 +22,6 @@
   <property>
     <name>metastore.expression.proxy</name>
     <value>org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</value>
-  </property>
-
-  <property>
-    <name>hive.metastore.rawstore.impl</name>
-    <value>org.apache.hadoop.hive.metastore.cache.CachedStore</value>
-    <description>As of Hive 3.0 there are two implementations. The default implementation (org.apache.hadoop.hive.metastore.ObjectStore) queries the database directly. HIVE-16520 introduced a new CachedStore (full class name is org.apache.hadoop.hive.metastore.cache.CachedStore) that caches retrieved objects in memory on the Metastore.</description>
   </property>
 
 </configuration>
