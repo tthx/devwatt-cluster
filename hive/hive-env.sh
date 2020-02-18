@@ -52,3 +52,18 @@
 
 # Folder containing extra libraries required for hive compilation/execution can be controlled by:
 # export HIVE_AUX_JARS_PATH=
+
+export JAVA_HOME="/opt/jdk1.8.0_241"
+export JAVA_OPTS="-XX:+UseG1GC"
+export PATH="${JAVA_HOME}/bin:${PATH}"
+
+export HADOOP_HOME="/opt/hadoop-3.2.0"
+export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}"
+export HADOOP_CONF_DIR="/etc/hive/hadoop"
+export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
+if [[ -n "${LD_LIBRARY_PATH}" ]];
+then
+  export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}"
+else
+  export LD_LIBRARY_PATH="${HADOOP_COMMON_LIB_NATIVE_DIR}"
+fi

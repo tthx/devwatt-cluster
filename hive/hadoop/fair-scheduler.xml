@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<allocations>
+  <defaultQueueSchedulingPolicy>fair</defaultQueueSchedulingPolicy>
+  <queue name="default">
+    <weight>100</weight>
+  </queue>
+
+  <queuePlacementPolicy>
+    <rule name="default" />
+  </queuePlacementPolicy>
+</allocations>
