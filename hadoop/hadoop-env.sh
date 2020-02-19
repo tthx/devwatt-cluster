@@ -60,6 +60,7 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 # this location based upon its execution path.
 # export HADOOP_HOME=
 export HADOOP_HOME="/opt/hadoop"
+export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin"
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
 if [[ -n "${LD_LIBRARY_PATH}" ]];
 then

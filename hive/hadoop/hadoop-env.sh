@@ -52,10 +52,22 @@
 # The java implementation to use. By default, this environment
 # variable is REQUIRED on ALL platforms except OS X!
 # export JAVA_HOME=
+export JAVA_HOME="/opt/jdk1.8.0_241"
+export JAVA_OPTS="-XX:+UseG1GC"
+export PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Location of Hadoop.  By default, Hadoop will attempt to determine
 # this location based upon its execution path.
 # export HADOOP_HOME=
+export HADOOP_HOME="/opt/hadoop-3.2.0"
+export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin"
+export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
+if [[ -n "${LD_LIBRARY_PATH}" ]];
+then
+  export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}"
+else
+  export LD_LIBRARY_PATH="${HADOOP_COMMON_LIB_NATIVE_DIR}"
+fi
 
 # Location of Hadoop's configuration information.  i.e., where this
 # file is living. If this is not defined, Hadoop will attempt to
@@ -66,6 +78,7 @@
 # --config) may react strangely otherwise.
 #
 # export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+export HADOOP_CONF_DIR="/etc/hive/hadoop"
 
 # The maximum amount of heap to use (Java -Xmx).  If no unit
 # is provided, it will be converted to MB.  Daemons will
