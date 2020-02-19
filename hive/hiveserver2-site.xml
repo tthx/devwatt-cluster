@@ -38,12 +38,6 @@
   </property>
 
   <property>
-    <name>hive.server2.logging.operation.verbose</name>
-    <value>false</value>
-    <description>When true, HiveServer2 operation logs available for clients will be verbose. Replaced in Hive 1.2.0 by hive.server2.logging.operation.level. Default: false.</description>
-  </property>
-
-  <property>
     <name>hive.server2.logging.operation.level</name>
     <value>EXECUTION</value>
     <description>HiveServer2 operation logging mode available to clients to be set at session level.
@@ -82,6 +76,7 @@
     <description>The maximum number of past queries to show in HiveServer2 Web UI. Default: 25</description>
   </property>
 
+  <!-- For Hive 4.x
   <property>
     <name>hive.server2.webui.explain.output</name>
     <value>true</value>
@@ -106,5 +101,6 @@
     <value>true</value>
     <description>Set this to true to to display statistics and log file for MapReduce tasks in the WebUI. Only works when hive.server2.webui.show.graph and hive.server2.webui.explain.output set to true. Default: false</description>
   </property>
-  
+  -->
+
 </configuration>

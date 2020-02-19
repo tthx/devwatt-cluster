@@ -25,6 +25,10 @@ case "${x}" in
     hadoop_version="3.2.1";
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     ;;
+  tez)
+    hadoop_version="3.2.0";
+    mvn clean package -Dhadoop.version=${hadoop_version} -Phadoop28 -P\!hadoop27  -DskipTests -Dmaven.javadoc.skip=true;
+    ;;
   hive)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     hadoop_version="3.2.0";

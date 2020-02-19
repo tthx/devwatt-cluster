@@ -11,8 +11,10 @@ case "${1}" in
     k8s-cmd "start-yarn.sh" yarn master;
     k8s-cmd "yarn --daemon start timelinereader" yarn master;
     k8s-cmd "metastore_ctl start" hive master;
+    k8s-cmd "hiveserver2_ctl start" hive master;
     ;;
   "stop")
+    k8s-cmd "hiveserver2_ctl stop" hive master;
     k8s-cmd "metastore_ctl stop" hive master;
     k8s-cmd "yarn --daemon stop timelinereader" yarn master;
     k8s-cmd "stop-yarn.sh" yarn master;

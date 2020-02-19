@@ -17,7 +17,7 @@ sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash
 echo 'attu7372:D@$#H0le99*'|sudo chpasswd
 sudo mkdir -p /mnt/hdfs
 sudo chmod 755 /mnt/hdfs
-sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /etc/hbase /var/spark/log /var/spark/run /etc/hive /var/hive/run /var/hive/log /var/hive/tmp /etc/metastore /var/metastore/run /var/metastore/log
+sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /etc/hbase /var/spark/log /var/spark/run /etc/hive /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /etc/metastore /var/metastore/run /var/metastore/log
 sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs
 sudo chown -R yarn:hadoop /var/yarn
 sudo chown -R mapred:hadoop /var/mapred

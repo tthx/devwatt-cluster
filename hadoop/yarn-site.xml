@@ -255,6 +255,20 @@
   </property>
 
   <property>
+    <name>yarn.timeline-service.http-cross-origin.enabled</name>
+    <value>true</value>
+    <description>Enables cross-origin support (CORS) for web services where
+    cross-origin web response headers are needed. For example, javascript making
+    a web services request to the timeline server.</description>
+  </property>
+
+  <property>
+    <name>yarn.resourcemanager.system-metrics-publisher.enabled</name>
+    <value>true</value>
+    <description>Publish YARN information to Timeline Server</description>
+  </property>
+
+  <property>
     <name>yarn.timeline-service.hbase.configuration.file</name>
     <value>file:/etc/hbase/hbase-site.xml</value>
     <description>Optional URL to an hbase-site.xml configuration file to be
@@ -273,8 +287,13 @@
 
   <property>
     <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle,timeline_collector</value>
+    <value>tez_shuffle,mapreduce_shuffle,timeline_collector</value>
     <description>A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers</description>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.aux-services.tez_shuffle.class</name>
+    <value>org.apache.tez.auxservices.ShuffleHandler</value>
   </property>
 
   <property>

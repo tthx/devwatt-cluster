@@ -28,6 +28,12 @@
   </property>
 
   <property>
+    <name>hive.log.explain.output</name>
+    <value>false</value>
+    <description>When enabled, will log EXPLAIN EXTENDED output for the query at log4j INFO level and in HiveServer2 WebUI / Drilldown / Query Plan. From Hive 3.1.0 onwards, this configuration property only logs to the log4j INFO. To log the EXPLAIN EXTENDED output in WebUI / Drilldown / Query Plan from Hive 3.1.0 onwards, use hive.server2.webui.explain.output.</description>
+  </property>
+
+  <property>
     <name>hive.stats.autogather</name>
     <value>true</value>
     <description>Whether to automatically gather basic statistics during insert commands.</description>
