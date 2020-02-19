@@ -31,7 +31,7 @@ sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.
 sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
 sudo chmod 6050 /opt/hadoop/bin/container-executor
-# For Hive
+# For Hive 3.1.2
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.2.0/etc/hadoop/.
 sudo chmod 644 /opt/hadoop-3.2.0/etc/hadoop/container-executor.cfg
 sudo chown root:hadoop /opt/hadoop-3.2.0/bin/container-executor
