@@ -68,4 +68,23 @@
 # - MKL_NUM_THREADS=1        Disable multi-threading of Intel MKL
 # - OPENBLAS_NUM_THREADS=1   Disable multi-threading of OpenBLAS
 
+
+export JAVA_HOME="/opt/jdk1.8.0_241"
+export JAVA_OPTS="-XX:+UseG1GC"
+export PATH="${JAVA_HOME}/bin:${PATH}"
+
+export HADOOP_HOME="/opt/hadoop"
+export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}"
+export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
+if [[ -n "${LD_LIBRARY_PATH}" ]];
+then
+  export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}"
+else
+  export LD_LIBRARY_PATH="${HADOOP_COMMON_LIB_NATIVE_DIR}"
+fi
+export HADOOP_CONF_DIR="/etc/hadoop"
+
+export SPARK_HOME="/opt/spark"
+export PATH="${SPARK_HOME}/bin:${PATH}"
+export SPARK_CONF_DIR="/etc/spark"
 export PYSPARK_PYTHON=/usr/bin/python3

@@ -67,3 +67,12 @@ then
 else
   export LD_LIBRARY_PATH="${HADOOP_COMMON_LIB_NATIVE_DIR}"
 fi
+
+export TEZ_HOME="/opt/tez"
+export TEZ_CONF_DIR="/etc/tez"
+if [[ -n "${HADOOP_CLASSPATH}" ]];
+then
+  export HADOOP_CLASSPATH+=":${TEZ_CONF_DIR}:$(find ${TEZ_HOME}/ -path $TEZ_HOME/aux -prune -o -name '*.jar' | xargs echo | tr ' ' ':')"
+else
+  export HADOOP_CLASSPATH="${TEZ_CONF_DIR}:$(find ${TEZ_HOME}/ -path $TEZ_HOME/aux -prune -o -name '*.jar' | xargs echo | tr ' ' ':')"
+fi

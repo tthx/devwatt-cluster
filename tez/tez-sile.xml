@@ -6,10 +6,16 @@
   </property>
 
   <property>
+    <name>tez.use.cluster.hadoop-libs</name>
+    <value>false</value>
+  </property>
+
+  <property>
     <name>tez.am.shuffle.auxiliary-service.id</name>
     <value>tez_shuffle</value>
   </property>
 
+  <!-- Tez UI
   <property>
     <name>tez.history.logging.service.class</name>
     <value>org.apache.tez.dag.history.logging.ats.ATSHistoryLoggingService</value>
@@ -21,5 +27,6 @@
     <value>http://master:9999/tez-ui/</value>
     <description>URL for where the Tez UI is hosted</description>
   </property>
+  -->
 
 </configuration>

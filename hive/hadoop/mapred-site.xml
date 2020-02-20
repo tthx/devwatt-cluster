@@ -22,7 +22,7 @@
   -->
   <property>
     <name>mapreduce.framework.name</name>
-    <value>yarn</value>
+    <value>yarn-tez</value>
     <description>The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn. Default: local</description>
   </property>
   <property>

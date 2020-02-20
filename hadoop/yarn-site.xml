@@ -146,11 +146,6 @@
   </property>
 
   <property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
-  </property>
-
-  <property>
     <name>yarn.nodemanager.env-whitelist</name>
     <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
   </property>
@@ -287,13 +282,18 @@
 
   <property>
     <name>yarn.nodemanager.aux-services</name>
-    <value>tez_shuffle,mapreduce_shuffle,timeline_collector</value>
+    <value>tez_shuffle,timeline_collector,mapreduce_shuffle</value>
     <description>A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers</description>
   </property>
 
   <property>
     <name>yarn.nodemanager.aux-services.tez_shuffle.class</name>
     <value>org.apache.tez.auxservices.ShuffleHandler</value>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.aux-services.tez_shuffle.classpath</name>
+    <value>/opt/tez/aux/tez-aux-services-0.9.2.jar</value>
   </property>
 
   <property>
