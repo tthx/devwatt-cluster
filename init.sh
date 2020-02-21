@@ -43,7 +43,7 @@ hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse
 hdfs dfs -chown -R ubuntu /home/ubuntu
 hdfs dfs -chown -R yarn /home/yarn
 hdfs dfs -chown -R mapred /home/mapred
-hdfs dfs -chown -R hive /home/hive
+hdfs dfs -chown -R hive /home/hive /tmp/hive
 hdfs dfs -chown -R attu7372 /home/attu7372
 hdfs dfs -chown -R hbase /home/hbase
 hdfs dfs -chmod 1777 /home/yarn/log /home/hive/warehouse /home/hive/scratch /tmp
