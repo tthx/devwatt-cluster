@@ -58,7 +58,7 @@
 
   <property>
     <name>hive.server2.logging.operation.level</name>
-    <value>EXECUTION</value>
+    <value>VERBOSE</value>
     <description>HiveServer2 operation logging mode available to clients to be set at session level.
 
     For this to work, hive.server2.logging.operation.enabled should be set to true. The allowed values are:

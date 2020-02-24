@@ -1,11 +1,5 @@
 <configuration>
 
-  <property>
-    <name>hive.log.explain.output</name>
-    <value>false</value>
-    <description>When enabled, will log EXPLAIN EXTENDED output for the query at log4j INFO level and in HiveServer2 WebUI / Drilldown / Query Plan. From Hive 3.1.0 onwards, this configuration property only logs to the log4j INFO. To log the EXPLAIN EXTENDED output in WebUI / Drilldown / Query Plan from Hive 3.1.0 onwards, use hive.server2.webui.explain.output.</description>
-  </property>
-
   <!-- Engine -->
   <property>
     <name>hive.execution.engine</name>
@@ -223,9 +217,21 @@
   <!-- Tez -->
 
   <property>
+    <name>hive.tez.log.level</name>
+    <value>TRACE</value>
+    <description>The log level to use for tasks executing as part of the DAG. Used only if hive.tez.java.opts is used to configure Java options. Default: INFO</description>
+  </property>
+
+  <property>
     <name>hive.jar.directory</name>
-    <value>/opt/hive/lib</value>
+    <value></value>
     <description>This is the location that Hive in Tez mode will look for to find a site-wide installed Hive instance. See hive.user.install.directory for the default behavior. Default: null</description>
+  </property>
+
+  <property>
+    <name>hive.user.install.directory</name>
+    <value>hdfs:///home/hive/lib</value>
+    <description>If Hive (in Tez mode only) cannot find a usable Hive jar in hive.jar.directory, it will upload the Hive jar to <hive.user.install.directory>/<user_name> and use it to run queries. Default: hdfs:///user/</description>
   </property>
 
   <property>
@@ -256,6 +262,12 @@
     <name>hive.tez.exec.inplace.progress</name>
     <value>true</value>
     <description>Updates Tez job execution progress in-place in the terminal when Hive CLI is used. Default: true</description>
+  </property>
+
+  <property>
+    <name>hive.log.explain.output</name>
+    <value>false</value>
+    <description>When enabled, will log EXPLAIN EXTENDED output for the query at log4j INFO level and in HiveServer2 WebUI / Drilldown / Query Plan. From Hive 3.1.0 onwards, this configuration property only logs to the log4j INFO. To log the EXPLAIN EXTENDED output in WebUI / Drilldown / Query Plan from Hive 3.1.0 onwards, use hive.server2.webui.explain.output.</description>
   </property>
 
   <property>
