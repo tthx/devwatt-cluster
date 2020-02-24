@@ -231,7 +231,7 @@
   <property>
     <name>hive.user.install.directory</name>
     <value>hdfs:///home/hive/lib</value>
-    <description>If Hive (in Tez mode only) cannot find a usable Hive jar in hive.jar.directory, it will upload the Hive jar to <hive.user.install.directory>/<user_name> and use it to run queries. Default: hdfs:///user/</description>
+    <description>If Hive (in Tez mode only) cannot find a usable Hive jar in hive.jar.directory, it will upload the Hive jar to ${hive.user.install.directory}/${user_name} and use it to run queries. Default: hdfs:///user/</description>
   </property>
 
   <property>
