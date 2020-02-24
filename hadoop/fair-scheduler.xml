@@ -2,10 +2,15 @@
 <allocations>
   <defaultQueueSchedulingPolicy>fair</defaultQueueSchedulingPolicy>
   <queue name="default">
-    <weight>100</weight>
+    <weight>10</weight>
+  </queue>
+
+  <queue name="hive">
+    <weight>90</weight>
   </queue>
 
   <queuePlacementPolicy>
+    <rule name="specified" />
     <rule name="default" />
   </queuePlacementPolicy>
 </allocations>
