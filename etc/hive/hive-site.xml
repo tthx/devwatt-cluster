@@ -224,13 +224,13 @@
 
   <property>
     <name>hive.jar.directory</name>
-    <value></value>
-    <description>This is the location that Hive in Tez mode will look for to find a site-wide installed Hive instance. See hive.user.install.directory for the default behavior. Default: null</description>
+    <value>/home/hive/lib</value>
+    <description>This is the location that Hive in Tez mode will look for to find a site-wide installed Hive instance. See hive.user.install.directory for the default behavior. Default: (empty)</description>
   </property>
 
   <property>
     <name>hive.user.install.directory</name>
-    <value>${fs.defaultFS}/home/hive/lib</value>
+    <value>/home/hive/install</value>
     <description>If Hive (in Tez mode only) cannot find a usable Hive jar in hive.jar.directory, it will upload the Hive jar to ${hive.user.install.directory}/${user_name} and use it to run queries. Default: hdfs:///user/</description>
   </property>
 
