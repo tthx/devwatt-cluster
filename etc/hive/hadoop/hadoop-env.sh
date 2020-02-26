@@ -152,9 +152,9 @@ esac
 # interactive way for temporary additions on the command line.
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
-  export HADOOP_CLASSPATH+=":${HADOOP_CONF_DIR}:$(find ${HADOOP_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH+=":${HADOOP_CONF_DIR}/*:$(find ${HADOOP_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH="${HADOOP_CONF_DIR}:$(find ${HADOOP_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH="${HADOOP_CONF_DIR}/*:$(find ${HADOOP_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
 fi
 
 # Should HADOOP_CLASSPATH be first in the official CLASSPATH?
