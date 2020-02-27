@@ -32,11 +32,6 @@
     <description>Enable services rest api on ResourceManager.</description>
   </property>
 
-  <property>
-    <name>yarn.webapp.ui2.enable</name>
-    <value>false</value>
-  </property>
-
   <!--
     Capacity Scheduler
   <property>
@@ -211,6 +206,35 @@
   </property>
 
   <!--
+    UI2
+  -->
+  <property>
+    <name>yarn.webapp.ui2.enable</name>
+    <value>true</value>
+    <description>In the server side it indicates whether the new YARN-UI v2 is enabled or not. Defaults to false.</description>
+  </property>
+
+  <property>
+    <name>yarn.timeline-service.http-cross-origin.enabled</name>
+    <value>true</value>
+    <description>Enables cross-origin support (CORS) for web services where
+    cross-origin web response headers are needed. For example, javascript making
+    a web services request to the timeline server.</description>
+  </property>
+
+  <property>
+    <name>yarn.resourcemanager.webapp.cross-origin.enabled</name>
+    <value>true</value>
+    <description>Enable CORS support for Resource Manager.</description>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.webapp.cross-origin.enabled</name>
+    <value>true</value>
+    <description>Enable CORS support for Node Manager.</description>
+  </property>
+
+  <!--
     Timeline service v2
   -->
   <property>
@@ -247,14 +271,6 @@
     <name>yarn.timeline-service.hostname</name>
     <value>master</value>
     <description>The hostname of the Timeline service web application. Defaults to 0.0.0.0</description>
-  </property>
-
-  <property>
-    <name>yarn.timeline-service.http-cross-origin.enabled</name>
-    <value>true</value>
-    <description>Enables cross-origin support (CORS) for web services where
-    cross-origin web response headers are needed. For example, javascript making
-    a web services request to the timeline server.</description>
   </property>
 
   <property>

@@ -32,11 +32,6 @@
     <description>Enable services rest api on ResourceManager.</description>
   </property>
 
-  <property>
-    <name>yarn.webapp.ui2.enable</name>
-    <value>false</value>
-  </property>
-
   <!--
     Capacity Scheduler
   <property>
