@@ -51,7 +51,7 @@
 
   <property>
     <name>yarn.scheduler.fair.allocation.file</name>
-    <value>fair-scheduler.xml</value>
+    <value>file:///etc/hadoop/fair-scheduler.xml</value>
     <description>Path to allocation file. An allocation file is an XML manifest describing queues and their properties, in addition to certain policy defaults. This file must be in the XML format described in the next section. If a relative path is given, the file is searched for on the classpath (which typically includes the Hadoop conf directory). Defaults to fair-scheduler.xml.</description>
   </property>
 
