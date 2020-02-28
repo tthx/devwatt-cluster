@@ -41,7 +41,7 @@ sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/.
 sudo cp ~ubuntu/src/devwatt-cluster/bin/utils.sh ~ubuntu/src/devwatt-cluster/bin/metastore_ctl ${METASTORE_HOME}/bin/.
 sudo cp ~ubuntu/src/devwatt-cluster/bin/utils.sh ~ubuntu/src/devwatt-cluster/bin/hiveserver2_ctl ${HIVE_HOME}/bin/.
 
-hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse /home/hive/scratch /home/hive/lib /home/hive/jars /home/attu7372 /home/hbase/coprocessor /tmp
+hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse /home/hive/scratch /home/hive/lib /home/hive/jars /home/attu7372 /home/hbase/coprocessor /tmp /tmp/hive
 hdfs dfs -chown -R ubuntu /home/ubuntu
 hdfs dfs -chown -R yarn /home/yarn
 hdfs dfs -chown -R mapred /home/mapred
@@ -60,7 +60,7 @@ hdfs dfs -chmod -R g+r,o+r /home/hive/lib /home/hive/install
 
 hdfs dfs -mkdir -p /home/yarn/tez
 hdfs dfs -rm -f /home/yarn/tez/tez-0.9.2.tar.gz
-hdfs dfs -put ~ubuntu/src/tez-0.9.2.tar.gz /home/yarn/tez/.
+hdfs dfs -put /tmp/tez-0.9.2.tar.gz /home/yarn/tez/.
 hdfs dfs -chown -R yarn /home/yarn/tez
 hdfs dfs -chmod -R g+r,o+r /home/yarn/tez
 

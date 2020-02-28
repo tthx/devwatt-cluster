@@ -4,7 +4,7 @@
 
   <property>
     <name>hive.metastore.warehouse.dir</name>
-    <value>/home/hive/warehouse</value>
+    <value>hdfs://master:9000/home/hive/warehouse</value>
     <description>URI of the default location for tables in the default catalog and database.</description>
   </property>
 

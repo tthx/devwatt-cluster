@@ -1,0 +1,13 @@
+CREATE TABLE u_data (
+  userid INT,
+  movieid INT,
+  rating INT,
+  unixtime STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+STORED AS TEXTFILE;
+
+LOAD DATA LOCAL INPATH '/tmp/u.data'
+OVERWRITE INTO TABLE u_data;
+
+SELECT COUNT(*) FROM u_data;
