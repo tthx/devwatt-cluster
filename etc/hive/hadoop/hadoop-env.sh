@@ -59,7 +59,8 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 # Location of Hadoop.  By default, Hadoop will attempt to determine
 # this location based upon its execution path.
 # export HADOOP_HOME=
-export HADOOP_HOME="/opt/hadoop-3.2.0"
+HADOOP4HIVE="3.1.3"
+export HADOOP_HOME="/opt/hadoop-${HADOOP4HIVE}"
 export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}"
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
 if [[ -n "${LD_LIBRARY_PATH}" ]];
