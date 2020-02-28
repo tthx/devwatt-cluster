@@ -57,7 +57,7 @@ export JAVA_HOME="/opt/jdk1.8.0_241"
 export JAVA_OPTS="-XX:+UseG1GC"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
-HADOOP4HIVE="3.1.3"
+HADOOP4HIVE="3.1.2"
 export HADOOP_HOME="/opt/hadoop-${HADOOP4HIVE}"
 export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}"
 export HADOOP_CONF_DIR="/etc/hive/hadoop"

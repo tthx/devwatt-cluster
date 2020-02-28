@@ -26,12 +26,12 @@ case "${x}" in
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     ;;
   tez)
-    hadoop_version="3.1.3";
+    hadoop_version="3.1.2";
     mvn clean package -Dhadoop.version=${hadoop_version} -Phadoop28 -P\!hadoop27  -DskipTests -Dmaven.javadoc.skip=true;
     ;;
   hive)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
-    hadoop_version="3.1.3";
+    hadoop_version="3.1.2";
     mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version};
     ;;
   spark)
