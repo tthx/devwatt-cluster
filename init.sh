@@ -32,10 +32,10 @@ sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg
 sudo chown root:hadoop /opt/hadoop/bin/container-executor
 sudo chmod 6050 /opt/hadoop/bin/container-executor
 # For Hive 3.1.2
-sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.3/etc/hadoop/.
-sudo chmod 644 /opt/hadoop-3.1.3/etc/hadoop/container-executor.cfg
-sudo chown root:hadoop /opt/hadoop-3.1.3/bin/container-executor
-sudo chmod 6050 /opt/hadoop-3.1.3/bin/container-executor
+sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/.
+sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg
+sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor
+sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
 sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/.
 sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/.
 sudo cp ~ubuntu/src/devwatt-cluster/bin/utils.sh ~ubuntu/src/devwatt-cluster/bin/metastore_ctl ${METASTORE_HOME}/bin/.
