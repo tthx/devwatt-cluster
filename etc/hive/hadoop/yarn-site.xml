@@ -13,9 +13,8 @@
   limitations under the License. See accompanying LICENSE file.
 -->
 <configuration>
-  <!--
-  	Configurations for ResourceManager
-  -->
+
+  <!-- Configurations for ResourceManager -->
   <property>
     <name>yarn.resourcemanager.hostname</name>
     <value>master</value>
@@ -41,9 +40,7 @@
   </property>
   -->
 
-  <!--
-    Fair Scheduler
-  -->
+  <!-- Fair Scheduler -->
   <property>
     <name>yarn.resourcemanager.scheduler.class</name>
     <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
@@ -97,9 +94,7 @@
     <description>If this is true, new queues can be created at application submission time, whether because they are specified as the application’s queue by the submitter or because they are placed there by the user-as-default-queue property. If this is false, any time an app would be placed in a queue that is not specified in the allocations file, it is placed in the “default” queue instead. Defaults to true. If a queue placement policy is given in the allocations file, this property is ignored.</description>
   </property>
 
-  <!--
-  	Configurations for NodeManager
-  -->
+  <!-- Configurations for NodeManager -->
   <property>
     <name>yarn.nodemanager.resource.detect-hardware-capabilities</name>
     <value>true</value>
@@ -145,9 +140,7 @@
     <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
   </property>
 
-  <!--
-    Log aggregation
-  -->
+  <!-- Log aggregation -->
   <property>
     <name>yarn.log-aggregation-enable</name>
     <value>true</value>
@@ -172,9 +165,7 @@
     <description>URL for log aggregation server</description>
   </property>
 
-  <!--
-    Configurations for History Server
-  -->
+  <!-- Configurations for History Server -->
   <property>
     <name>yarn.log-aggregation.retain-seconds</name>
     <value>259200</value>
@@ -187,9 +178,7 @@
     <description>How long to wait between aggregated log retention checks. If set to 0 or a negative value then the value is computed as one-tenth of the aggregated log retention time. Be careful set this too small and you will spam the name node. Default: -1</description>
   </property>
 
-  <!--
-    Secure Container
-  -->
+  <!-- Secure Container -->
   <property>
     <name>yarn.nodemanager.container-executor.class</name>
     <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
@@ -205,9 +194,7 @@
     <value>hadoop</value>
   </property>
 
-  <!--
-    UI2
-  -->
+  <!-- UI2 -->
   <property>
     <name>yarn.webapp.ui2.enable</name>
     <value>true</value>
@@ -234,9 +221,7 @@
     <description>Enable CORS support for Node Manager.</description>
   </property>
 
-  <!--
-    Timeline service v2
-  -->
+  <!-- Timeline service v2 -->
   <property>
     <name>yarn.timeline-service.hostname</name>
     <value>master</value>
@@ -281,7 +266,7 @@
 
   <property>
     <name>yarn.timeline-service.hbase.configuration.file</name>
-    <value>file:/etc/hbase/hbase-site.xml</value>
+    <value>/etc/hbase/hbase-site.xml</value>
     <description>Optional URL to an hbase-site.xml configuration file to be
     used to connect to the timeline-service hbase cluster. If empty or not
     specified, then the HBase configuration will be loaded from the classpath.
@@ -309,7 +294,7 @@
 
   <property>
     <name>yarn.nodemanager.aux-services.tez_shuffle.classpath</name>
-    <value>/opt/tez/aux/tez-aux-services-0.9.2.jar</value>
+    <value>/opt/tez/tez-aux-services-0.9.2.jar</value>
   </property>
 
   <property>
@@ -341,4 +326,5 @@
     <name>yarn.resourcemanager.cluster-id</name>
     <value>tth_cluster</value>
   </property>
+
 </configuration>
