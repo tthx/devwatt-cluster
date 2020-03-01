@@ -23,6 +23,7 @@
   <property>
     <name>tez.am.shuffle.auxiliary-service.id</name>
     <value>tez_shuffle</value>
+    <description>A Tez specific shuffle handler allows Tez DAGs to shuffle data in a way that takes advantage of the new features in Tez. In particular, the Tez shuffle handler allows DAGs to shuffle data more efficiently for Tez’s new data movements types and runtime optimizations, such as auto-reduce parallelism. Long running Tez sessions will be able to clean up intermediate data for completed queries and Tez applications can decide to clean up completed intermediate data for running applications.</description>
   </property>
 
   <!-- Tez UI
