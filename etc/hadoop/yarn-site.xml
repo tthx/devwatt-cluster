@@ -266,7 +266,7 @@
 
   <property>
     <name>yarn.timeline-service.hbase.configuration.file</name>
-    <value>/etc/hbase/hbase-site.xml</value>
+    <value>file:///etc/hbase/hbase-site.xml</value>
     <description>Optional URL to an hbase-site.xml configuration file to be
     used to connect to the timeline-service hbase cluster. If empty or not
     specified, then the HBase configuration will be loaded from the classpath.
