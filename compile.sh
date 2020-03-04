@@ -28,11 +28,20 @@ case "${x}" in
   tez)
     hadoop_version="3.1.2";
     mvn clean package -Dhadoop.version=${hadoop_version} -Phadoop28 -P\!hadoop27  -DskipTests -Dmaven.javadoc.skip=true;
+    if [[ ${?} -eq 0 ]];
+    then
+      cp ./tez-dist/target/tez-*.tar.gz ./tez-dist/target/tez-*-minimal.tar.gz ./tez-plugins/tez-aux-services/target/tez-aux-services-*.jar ~/src/.;
+    fi
     ;;
   hive)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     hadoop_version="3.1.2";
     mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version};
+    if [[ ${?} -eq 0 ]];
+    then
+      cp ./standalone-metastore/target/apache-hive-metastore-*-bin.tar.gz
+./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
+    fi
     ;;
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";

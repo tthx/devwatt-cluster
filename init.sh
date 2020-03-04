@@ -49,8 +49,12 @@ hdfs dfs -chown -R hive /home/hive /tmp/hive
 hdfs dfs -chown -R attu7372 /home/attu7372
 hdfs dfs -chown -R hbase /home/hbase
 hdfs dfs -chmod 1777 /home/yarn/log /home/hive/warehouse /home/hive/scratch /tmp
-hdfs dfs -put /opt/hadoop/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-3.2.1.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
+
+hdfs dfs -mkdir -p /home/hbase/coprocessor/
+hdfs dfs -rm -f /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
+hdfs dfs -put ${HADOOP_HOME}/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-3.2.1.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -chown hbase /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
+hdfs dfs -chmod -R g+r,o+r /home/hbase/coprocessor/
 
 hdfs dfs -mkdir -p /home/hive/lib /home/hive/install
 hdfs dfs -rm -f /home/hive/lib/hive-exec-3.1.2.jar
