@@ -11,3 +11,10 @@ LOAD DATA LOCAL INPATH '/tmp/u.data'
 OVERWRITE INTO TABLE u_data;
 
 SELECT COUNT(*) FROM u_data;
+
+CREATE TABLE u_data_orc 
+STORED AS ORC
+AS
+SELECT * FROM u_data;
+
+SELECT COUNT(*) FROM u_data_orc;
