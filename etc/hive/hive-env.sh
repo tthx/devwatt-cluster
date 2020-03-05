@@ -74,7 +74,7 @@ export TEZ_CONF_DIR="/etc/tez"
 
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
-  export HADOOP_CLASSPATH+=":$(find ${HADOOP_CONF_DIR}/ ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ ${TEZ_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH+=":$(find ${HADOOP_CONF_DIR}/ ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH=":$(find ${HADOOP_CONF_DIR}/ ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ ${TEZ_HOME}/ -name '*.jar' | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH=":$(find ${HADOOP_CONF_DIR}/ ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 fi
