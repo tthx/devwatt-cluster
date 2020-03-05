@@ -52,18 +52,18 @@ hdfs dfs -chmod 1777 /home/yarn/log /home/hive/warehouse /home/hive/scratch /tmp
 
 hdfs dfs -mkdir -p /home/hbase/coprocessor/
 hdfs dfs -rm -f /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
-hdfs dfs -put ${HADOOP_HOME}/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-3.2.1.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
+hdfs dfs -put ${HADOOP_HOME}/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-*.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -chown hbase /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -chmod -R g+r,o+r /home/hbase/coprocessor/
 
 hdfs dfs -mkdir -p /home/hive/lib /home/hive/install
-hdfs dfs -rm -f /home/hive/lib/hive-exec-3.1.2.jar
-hdfs dfs -put ${HIVE_HOME}/lib/hive-exec-3.1.2.jar /home/hive/lib
+hdfs dfs -rm -f /home/hive/lib/hive-exec-*.jar
+hdfs dfs -put ${HIVE_HOME}/lib/hive-exec-*.jar /home/hive/lib
 hdfs dfs -chown -R hive /home/hive/lib /home/hive/install
 hdfs dfs -chmod -R g+r,o+r /home/hive/lib /home/hive/install
 
 hdfs dfs -mkdir -p /home/yarn/tez
-hdfs dfs -rm -f /home/yarn/tez/tez-0.9.2.tar.gz
+hdfs dfs -rm -f /home/yarn/tez/tez-*.tar.gz
 hdfs dfs -put /tmp/tez-0.9.2.tar.gz /home/yarn/tez/.
 hdfs dfs -chown -R yarn /home/yarn/tez
 hdfs dfs -chmod -R g+r,o+r /home/yarn/tez
