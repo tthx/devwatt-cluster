@@ -213,7 +213,7 @@
   <!-- Scratch directory -->
   <property>
     <name>hive.exec.scratchdir</name>
-    <value>/home/hive/scratch</value>
+    <value>hdfs://master:9000/home/hive/scratch</value>
     <description>HDFS root scratch directory for Hive jobs, which gets created with write all (733) permission. For each connecting user, an HDFS scratch directory ${hive.exec.scratchdir}/${username} is created with ${hive.scratch.dir.permission}. This directory is used by Hive to store the plans for different map/reduce stages for the query as well as to stored the intermediate outputs of these stages. Default: /tmp/hive</description>
   </property>
 
