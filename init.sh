@@ -60,7 +60,7 @@ hdfs dfs -mkdir -p /home/hive/lib /home/hive/install
 hdfs dfs -rm -f /home/hive/lib/hive-exec-*.jar
 hdfs dfs -put ${HIVE_HOME}/lib/hive-exec-*.jar /home/hive/lib
 hdfs dfs -chown -R hive /home/hive/lib /home/hive/install
-hdfs dfs -chmod -R g+r,o+r /home/hive/lib /home/hive/install
+hdfs dfs -chmod -R 1777 /home/hive/lib /home/hive/install
 
 hdfs dfs -mkdir -p /home/yarn/tez
 hdfs dfs -rm -f /home/yarn/tez/tez-*.tar.gz
