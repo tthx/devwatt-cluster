@@ -3,7 +3,7 @@
   <!-- Query and DDL Execution -->
   <property>
     <name>hive.execution.engine</name>
-    <value>tez</value>
+    <value>mr</value>
     <description>Chooses execution engine. Options are: mr (Map Reduce, default), tez (Tez execution, for Hadoop 2 only), or spark (Spark execution, for Hive 1.1.0 onward).
 
     While mr remains the default engine for historical reasons, it is itself a historical engine and is deprecated in the Hive 2 line (HIVE-12300). It may be removed without further warning.
