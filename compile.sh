@@ -28,6 +28,10 @@ case "${x}" in
     ;;
   hbase)
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
+    if [[ ${?} -eq 0 ]];
+    then
+      cp ./hbase-assembly/target/hbase-*-bin.tar.gz ./hbase-assembly/target/hbase-*-client-bin.tar.gz ~/src/.;
+    fi
     ;;
   tez)
     mvn clean package -Dhadoop.version=${hadoop_version} -Phadoop28 -P\!hadoop27  -DskipTests -Dmaven.javadoc.skip=true;

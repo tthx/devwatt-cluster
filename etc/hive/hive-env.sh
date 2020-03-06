@@ -57,24 +57,9 @@ export JAVA_HOME="/opt/jdk1.8.0_241"
 export JAVA_OPTS="-XX:+UseG1GC"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
-HADOOP4HIVE="3.1.2"
-export HADOOP_HOME="/opt/hadoop-${HADOOP4HIVE}"
-export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}"
-export HADOOP_CONF_DIR="/etc/hive/hadoop"
-export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
-if [[ -n "${LD_LIBRARY_PATH}" ]];
-then
-  export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}"
-else
-  export LD_LIBRARY_PATH="${HADOOP_COMMON_LIB_NATIVE_DIR}"
-fi
-
-export TEZ_HOME="/opt/tez"
-export TEZ_CONF_DIR="/etc/tez"
-
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
-  export HADOOP_CLASSPATH+=":$(find ${HADOOP_CONF_DIR}/ ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH+=":$(find ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH=":$(find ${HADOOP_CONF_DIR}/ ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH=":$(find $${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 fi
