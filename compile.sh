@@ -2,6 +2,7 @@
 x="${1:-"hadoop"}";
 shift 1;
 action="${*:-"clean package"}";
+hadoop_version="3.1.2";
 unset CXXFLAGS;
 export JAVA_HOME="/opt/jdk1.8.0_241";
 export JAVA_OPTS="-XX:+UseG1GC";
@@ -26,11 +27,9 @@ case "${x}" in
     fi
     ;;
   hbase)
-    hadoop_version="3.2.1";
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     ;;
   tez)
-    hadoop_version="3.1.2";
     mvn clean package -Dhadoop.version=${hadoop_version} -Phadoop28 -P\!hadoop27  -DskipTests -Dmaven.javadoc.skip=true;
     if [[ ${?} -eq 0 ]];
     then
@@ -39,7 +38,6 @@ case "${x}" in
     ;;
   hive)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
-    hadoop_version="3.1.2";
     mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version};
     if [[ ${?} -eq 0 ]];
     then
@@ -52,7 +50,6 @@ case "${x}" in
     export SPARK_DIST_CLASSPATH="$(hadoop classpath)";
     scala_major_version="2.12";
     scala_minor_version="10";
-    hadoop_version="3.2.1";
     spark_version="2.4.5";
     hdfs dfs -mkdir -p /home/${USER}/src/spark-${spark_version}/examples/src/main/resources;
     hdfs dfs -put examples/src/main/resources/* /home/${USER}/src/spark-${spark_version}/examples/src/main/resources/.;

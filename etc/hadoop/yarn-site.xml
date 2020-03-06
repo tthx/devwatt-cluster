@@ -324,7 +324,7 @@
 
   <property>
     <name>yarn.resourcemanager.cluster-id</name>
-    <value>tth_cluster</value>
+    <value>tthx</value>
   </property>
 
 </configuration>
