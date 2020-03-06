@@ -33,7 +33,7 @@
 
   <property>
     <name>hive.server2.tez.initialize.default.sessions</name>
-    <value>true</value>
+    <value>false</value>
     <description>This flag is used in HiveServer 2 to enable a user to use HiveServer 2 without turning on Tez for HiveServer 2. The user could potentially want to run queries over Tez without the pool of sessions. Default: false</description>
   </property>
 
@@ -67,6 +67,22 @@
     EXECUTION: Log completion of tasks.
     PERFORMANCE: Execution + Performance logs.
     VERBOSE: All logs. Default: EXECUTION.</description>
+  </property>
+
+  <!-- Authentication/Security Configuration -->
+  <property>
+    <name>hive.server2.authentication</name>
+    <value>NONE</value>
+    <description>Client authentication types.
+
+    NONE: no authentication check – plain SASL transport
+    LDAP: LDAP/AD based authentication
+    KERBEROS: Kerberos/GSSAPI authentication
+    CUSTOM: Custom authentication provider (use with property hive.server2.custom.authentication.class)
+    PAM: Pluggable authentication module (added in Hive 0.13.0 with HIVE-6466)
+    NOSASL:  Raw transport (added in Hive 0.13.0)
+
+    Default: NONE.</description>
   </property>
 
   <!-- Impersonation -->

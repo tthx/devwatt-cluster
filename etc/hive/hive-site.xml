@@ -19,6 +19,18 @@
   </property>
   
   <property>
+    <name>hive.tez.container.size</name>
+    <value>2048</value>
+    <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
+  </property>
+  
+  <property>
+    <name>hive.tez.java.opts</name>
+    <value>-XX:+UseG1GC</value>
+    <description>If this is not specified, the MapReduce java opts settings (mapreduce.map.java.opts) are used by default. Default: (empty)</description>
+  </property>
+  
+  <property>
     <name>hive.jar.directory</name>
     <value>hdfs://master:9000/home/hive/lib</value>
     <description>This is the location that Hive in Tez mode will look for to find a site-wide installed Hive instance. See hive.user.install.directory for the default behavior. Default: (empty)</description>
