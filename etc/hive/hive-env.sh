@@ -61,5 +61,5 @@ if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
   export HADOOP_CLASSPATH+=":$(find ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH=":$(find $${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH=":$(find ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 fi
