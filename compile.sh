@@ -55,6 +55,7 @@ case "${x}" in
     scala_major_version="2.12";
     scala_minor_version="10";
     spark_version="2.4.5";
+    hdfs dfs rm -r -f /home/${USER}/src/spark-${spark_version};
     hdfs dfs -mkdir -p /home/${USER}/src/spark-${spark_version}/examples/src/main/resources;
     hdfs dfs -put examples/src/main/resources/* /home/${USER}/src/spark-${spark_version}/examples/src/main/resources/.;
     ./dev/change-scala-version.sh "${scala_major_version}";
