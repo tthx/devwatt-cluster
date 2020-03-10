@@ -25,7 +25,6 @@
   </property>
 
   <!-- Queues -->
-  <!--
   <property>
     <name>hive.server2.tez.default.queues</name>
     <value>hive</value>
@@ -43,7 +42,7 @@
     <value>1</value>
     <description>A positive integer that determines the number of Tez sessions that should be launched on each of the queues specified by hive.server2.tez.default.queues. Determines the parallelism on each queue. Default: 1.</description>
   </property>
-  -->
+
   <!-- Logging -->
   <property>
     <name>hive.server2.logging.operation.enabled</name>
@@ -110,6 +109,13 @@
     <name>hive.server2.webui.max.historic.queries</name>
     <value>25</value>
     <description>The maximum number of past queries to show in HiveServer2 Web UI. Default: 25</description>
+  </property>
+
+  <!-- Metrics -->
+  <property>
+    <name>hive.server2.metrics.enabled</name>
+    <value>true</value>
+    <description>Enable metrics on HiveServer2. (For other HiveServer2 configuration properties, see the HiveServer2 section.) Default: false</description>
   </property>
 
   <!-- For Hive 4.x

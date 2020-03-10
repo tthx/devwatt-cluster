@@ -240,9 +240,23 @@
 
   <!-- Statistics -->
   <property>
+    <name>hive.stats.dbclass</name>
+    <value>jdbc:postgres</value>
+    <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
+
+    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:<database> (where <database> can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
+  </property>
+
+  <property>
     <name>hive.stats.autogather</name>
     <value>true</value>
     <description>Whether to automatically gather basic statistics during insert commands. Default: true</description>
+  </property>
+
+  <property>
+    <name>hive.stats.column.autogather</name>
+    <value>true</value>
+    <description>Extends statistics autogathering to also collect column level statistics. Default: false</description>
   </property>
 
   <property>
@@ -324,10 +338,69 @@
     <description>When enabled, will log EXPLAIN EXTENDED output for the query at log4j INFO level and in HiveServer2 WebUI / Drilldown / Query Plan. From Hive 3.1.0 onwards, this configuration property only logs to the log4j INFO. To log the EXPLAIN EXTENDED output in WebUI / Drilldown / Query Plan from Hive 3.1.0 onwards, use hive.server2.webui.explain.output.</description>
   </property>
 
+  <!-- Transaction -->
+  <property>
+    <name>hive.txn.manager</name>
+    <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+    <description>Set this to org.apache.hadoop.hive.ql.lockmgr.DbTxnManager as part of turning on Hive transactions. The default DummyTxnManager replicates pre-Hive-0.13 behavior and provides no transactions.
+
+    Turning on Hive transactions also requires appropriate settings for hive.compactor.initiator.on, hive.compactor.worker.threads, hive.support.concurrency, hive.enforce.bucketing (Hive 0.x and 1.x only), and hive.exec.dynamic.partition.mode. Default: org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager</description>
+  </property>
+
+  <!-- Compactor -->
+  <property>
+    <name>hive.compactor.initiator.on</name>
+    <value>true</value>
+    <description>Whether to run the initiator and cleaner threads on this metastore instance. Set this to true on one instance of the Thrift metastore service as part of turning on Hive transactions. For a complete list of parameters required for turning on transactions, see hive.txn.manager.
+
+    It's critical that this is enabled on exactly one metastore service instance (not enforced yet). Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.compactor.worker.threads</name>
+    <value>1</value>
+    <description>How many compactor worker threads to run on this metastore instance. Set this to a positive number on one or more instances of the Thrift metastore service as part of turning on Hive transactions. For a complete list of parameters required for turning on transactions, see hive.txn.manager.
+
+    Worker threads spawn MapReduce jobs to do compactions. They do not do the compactions themselves. Increasing the number of worker threads will decrease the time it takes tables or partitions to be compacted once they are determined to need compaction. It will also increase the background load on the Hadoop cluster as more MapReduce jobs will be running in the background. Default: 0</description>
+  </property>
+
+  <!-- Locking -->
+  <property>
+    <name>hive.support.concurrency</name>
+    <value>true</value>
+    <description>Whether Hive supports concurrency or not. A ZooKeeper instance must be up and running for the default Hive lock manager to support read-write locks.
+
+    Set to true to support INSERT ... VALUES, UPDATE, and DELETE transactions (Hive 0.14.0 and later). For a complete list of parameters required for turning on Hive transactions, see hive.txn.manager. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.lock.mapred.only.operation</name>
+    <value>true</value>
+    <description>This configuration property is to control whether or not only do lock on queries that need to execute at least one mapred job. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.zookeeper.quorum</name>
+    <value>master,worker-1,worker-2,worker-3,worker-4</value>
+    <description>The list of ZooKeeper servers to talk to. This is only needed for read/write locks. Default: (empty)</description>
+  </property>
+
   <property>
     <name>hive.zookeeper.client.port</name>
     <value>2181</value>
     <description>The port of ZooKeeper servers to talk to. This is only needed for read/write locks. Default: 2181</description>
+  </property>
+
+  <property>
+    <name>hive.zookeeper.namespace</name>
+    <value>hive</value>
+    <description>The parent node under which all ZooKeeper nodes are created. Default: hive_zookeeper_namespace</description>
+  </property>
+
+  <property>
+    <name>hive.zookeeper.clean.extra.nodes</name>
+    <value>true</value>
+    <description>Clean extra nodes at the end of the session. Default: false</description>
   </property>
   
 </configuration>

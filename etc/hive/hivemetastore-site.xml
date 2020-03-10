@@ -61,4 +61,11 @@
     <description>As of Hive 3.0 there are two implementations. The default implementation (org.apache.hadoop.hive.metastore.ObjectStore) queries the database directly. HIVE-16520 introduced a new CachedStore (full class name is org.apache.hadoop.hive.metastore.cache.CachedStore) that caches retrieved objects in memory on the Metastore.</description>
   </property>
 
+  <!-- Metrics -->
+  <property>
+    <name>hive.metastore.metrics.enabled</name>
+    <value>true</value>
+    <description>Enable metrics on the Hive Metastore Service. (For other metastore configuration properties, see the Metastore and Hive Metastore Security sections.) Default: false</description>
+  </property>
+
 </configuration>
