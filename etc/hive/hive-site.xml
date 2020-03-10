@@ -275,10 +275,22 @@
     <value>hdfs://master:9000/home/hive/install</value>
     <description>If Hive (in Tez mode only) cannot find a usable Hive jar in hive.jar.directory, it will upload the Hive jar to ${hive.user.install.directory}/${user_name} and use it to run queries. Default: hdfs:///user/</description>
   </property>
+  
+  <property>
+    <name>hive.tez.container.size</name>
+    <value>2048</value>
+    <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
+  </property>
+  
+  <property>
+    <name>hive.tez.java.opts</name>
+    <value>-XX:+UseG1GC</value>
+    <description>If this is not specified, the MapReduce java opts settings (mapreduce.map.java.opts) are used by default. Default: (empty)</description>
+  </property>
 
   <property>
     <name>hive.prewarm.enabled</name>
-    <value>false</value>
+    <value>true</value>
     <description>Enables container prewarm for Tez (0.13.0 to 1.2.x) or Tez/Spark (1.3.0+). This is for Hadoop 2 only. Default: false</description>
   </property>
 
