@@ -244,7 +244,7 @@
     <value>jdbc:postgres</value>
     <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
 
-    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:<database> (where <database> can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
+    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:"database" (where "database" can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
   </property>
 
   <property>
