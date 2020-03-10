@@ -56,8 +56,14 @@
   </property>
 
   <property>
-    <name>mapreduce.output.fileoutputformat.compress.type</name>  
+    <name>mapreduce.output.fileoutputformat.compress</name>  
     <value>true</value>
+    <description> Should the job outputs be compressed? Default: false</description>
+  </property>
+
+  <property>
+    <name>mapreduce.output.fileoutputformat.compress.type</name>  
+    <value>BLOCK</value>
     <description>If the job outputs are to compressed as SequenceFiles, how should they be compressed? Should be one of NONE, RECORD or BLOCK. Default: RECORD</description>
   </property>
 

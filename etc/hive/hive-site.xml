@@ -3,12 +3,211 @@
   <!-- Query and DDL Execution -->
   <property>
     <name>hive.execution.engine</name>
-    <value>mr</value>
+    <value>tez</value>
     <description>Chooses execution engine. Options are: mr (Map Reduce, default), tez (Tez execution, for Hadoop 2 only), or spark (Spark execution, for Hive 1.1.0 onward).
 
     While mr remains the default engine for historical reasons, it is itself a historical engine and is deprecated in the Hive 2 line (HIVE-12300). It may be removed without further warning.
 
     See Hive on Tez and Hive on Spark for more information, and see the Tez section and the Spark section below for their configuration properties. Default: mr</description>
+  </property>
+
+  <property>
+    <name>hive.execution.mode</name>
+    <value>container</value>
+    <description>Chooses whether query fragments will run in container or in llap. Valid settings: container: launch containers; llap: utilize llap nodes during execution of tasks. Default: container</description>
+  </property>
+
+  <property>
+    <name>hive.groupby.skewindata</name>
+    <value>true</value>
+    <description>Whether there is skew in data to optimize group by queries. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.skewjoin</name>
+    <value>true</value>
+    <description>Whether to enable skew join optimization.  (Also see hive.optimize.skewjoin.compiletime.) Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.skewjoin.compiletime</name>
+    <value>true</value>
+    <description>Whether to create a separate plan for skewed keys for the tables in the join. This is based on the skewed keys stored in the metadata. At compile time, the plan is broken into different joins: one for the skewed keys, and the other for the remaining keys. And then, a union is performed for the two joins generated above. So unless the same skewed key is present in both the joined tables, the join for the skewed key will be performed as a map-side join.
+
+    The main difference between this paramater and hive.optimize.skewjoin is that this parameter uses the skew information stored in the metastore to optimize the plan at compile time itself. If there is no skew information in the metadata, this parameter will not have any effect.
+    Both hive.optimize.skewjoin.compiletime and hive.optimize.skewjoin should be set to true. (Ideally, hive.optimize.skewjoin should be renamed as hive.optimize.skewjoin.runtime, but for backward compatibility that has not been done.)
+
+    If the skew information is correctly stored in the metadata, hive.optimize.skewjoin.compiletime will change the query plan to take care of it, and hive.optimize.skewjoin will be a no-op. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.union.remove</name>
+    <value>true</value>
+    <description>Whether to remove the union and push the operators between union and the filesink above union. This avoids an extra scan of the output by union. This is independently useful for union queries, and especially useful when hive.optimize.skewjoin.compiletime is set to true, since an extra union is inserted.
+
+    The merge is triggered if either of hive.merge.mapfiles or hive.merge.mapredfiles is set to true. If the user has set hive.merge.mapfiles to true and hive.merge.mapredfiles to false, the idea was that the number of reducers are few, so the number of files anyway is small. However, with this optimization, we are increasing the number of files possibly by a big margin. So, we merge aggresively. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.merge.mapfiles</name>
+    <value>true</value>
+    <description>Merge small files at the end of a map-only job. Default: true</description>
+  </property>
+
+  <property>
+    <name>hive.merge.mapredfiles</name>
+    <value>true</value>
+    <description>Merge small files at the end of a map-only job. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.mapred.supports.subdirectories</name>
+    <value>true</value>
+    <description>Whether the version of Hadoop which is running supports sub-directories for tables/partitions. Many Hive optimizations can be applied if the Hadoop version supports sub-directories for tables/partitions. This support was added by MAPREDUCE-1501. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.script.auto.progress</name>
+    <value>true</value>
+    <description>Whether Hive Tranform/Map/Reduce Clause should automatically send progress information to TaskTracker to avoid the task getting killed because of inactivity. Hive sends progress information when the script is outputting to stderr. This option removes the need of periodically producing stderr messages, but users should be cautious because this may prevent infinite loops in the scripts to be killed by TaskTracker. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.exec.compress.output</name>
+    <value>true</value>
+    <description>This controls whether the final outputs of a query (to a local/hdfs file or a Hive table) is compressed. The compression codec and other options are determined from Hadoop configuration variables mapred.output.compress*. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.exec.compress.intermediate</name>
+    <value>true</value>
+    <description>This controls whether intermediate files produced by Hive between multiple map-reduce jobs are compressed. The compression codec and other options are determined from Hadoop configuration variables mapred.output.compress*. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.exec.parallel</name>
+    <value>true</value>
+    <description>Whether to execute jobs in parallel.  Applies to MapReduce jobs that can run in parallel, for example jobs processing different source tables before a join.  As of Hive 0.14, also applies to move tasks that can run in parallel, for example moving files to insert targets during multi-insert. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.auto.convert.join</name>
+    <value>true</value>
+    <description>Whether Hive enables the optimization about converting common join into mapjoin based on the input file size. (Note that hive-default.xml.template incorrectly gives the default as false in Hive 0.11.0 through 0.13.1.) Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.correlation</name>
+    <value>true</value>
+    <description>Exploit intra-query correlations. For details see the Correlation Optimizer design document. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.limittranspose</name>
+    <value>true</value>
+    <description>Whether to push a limit through left/right outer join or union. If the value is true and the size of the outer input is reduced enough (as specified in hive.optimize.limittranspose.reductionpercentage and hive.optimize.limittranspose.reductiontuples), the limit is pushed to the outer input or union; to remain semantically correct, the limit is kept on top of the join or the union too. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.filter.stats.reduction</name>
+    <value>true</value>
+    <description>Whether to simplify comparison expressions in filter operators using column stats. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.cbo.enable</name>
+    <value>true</value>
+    <description>When true, the cost based optimizer, which uses the Calcite framework, will be enabled. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.cbo.returnpath.hiveop</name>
+    <value>true</value>
+    <description>When true, this optimization to CBO Logical plan will add rule to introduce not null filtering on join keys. Controls Calcite plan to Hive operator conversion. Overrides hive.optimize.remove.identity.project when set to false. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.exec.dynamic.partition</name>
+    <value>true</value>
+    <description>Whether or not to allow dynamic partitions in DML/DDL. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.limit.optimize.enable</name>
+    <value>true</value>
+    <description>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.optimize.sampling.orderby</name>
+    <value>true</value>
+    <description>Uses sampling on order-by clause for parallel execution. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.exec.temporary.table.storage</name>
+    <value>memory</value>
+    <description>Expects one of [memory, ssd, default].
+
+    Define the storage policy for temporary tables. Choices between memory, ssd and default. See HDFS Storage Types and Storage Policies. Default: default</description>
+  </property>
+
+  <!-- File format -->
+  <property>
+    <name>hive.default.fileformat</name>
+    <value>ORC</value>
+    <description>Default file format for CREATE TABLE statement. Options are TextFile, SequenceFile, RCfile, ORC, and Parquet.
+
+    Users can explicitly say CREATE TABLE ... STORED AS TEXTFILE|SEQUENCEFILE|RCFILE|ORC|AVRO|INPUTFORMAT...OUTPUTFORMAT... to override. (RCFILE was added in Hive 0.6.0, ORC in 0.11.0, AVRO in 0.14.0, and Parquet in 2.3.0) See Row Format, Storage Format, and SerDe for details. Default: TextFile</description>
+  </property>
+
+  <property>
+    <name>hive.default.fileformat.managed</name>
+    <value>ORC</value>
+    <description>Default file format for CREATE TABLE statement applied to managed tables only. External tables will be created with format specified by hive.default.fileformat. Options are none, TextFile, SequenceFile, RCfile, ORC, and Parquet (as of Hive 2.3.0). Leaving this null will result in using hive.default.fileformat for all native tables. For non-native tables the file format is determined by the storage handler, as shown below (see the StorageHandlers section for more information on managed/external and native/non-native terminology). Default: none</description>
+  </property>
+
+  <property>
+    <name>hive.exec.orc.default.compress</name>
+    <value>SNAPPY</value>
+    <description>Define the default compression codec for ORC file. Default: ZLIB</description>
+  </property>
+
+  <property>
+    <name>hive.orc.splits.include.file.footer</name>
+    <value>true</value>
+    <description>If turned on, splits generated by ORC will include metadata about the stripes in the file. This data is read remotely (from the client or HiveServer2 machine) and sent to all the tasks. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.exec.orc.zerocopy</name>
+    <value>true</value>
+    <description>Use zerocopy reads with ORC. (This requires Hadoop 2.3 or later.). Default: false</description>
+  </property>
+
+  <!-- Vectorization -->
+  <property>
+    <name>hive.vectorized.execution.enabled</name>
+    <value>true</value>
+    <description>This flag should be set to true to enable vectorized mode of query execution. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.vectorized.execution.mapjoin.minmax.enabled</name>
+    <value>true</value>
+    <description>This flag should be set to true to enable vector map join hash tables to use min / max filtering for integer join queries using MapJoin. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.vectorized.execution.mapjoin.native.fast.hashtable.enabled</name>
+    <value>true</value>
+    <description>This flag should be set to true to enable use of native fast vector map join hash tables in queries using MapJoin. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.vectorized.use.vector.serde.deserialize</name>
+    <value>true</value>
+    <description>This flag should be set to true to enable vectorizing rows using vector deserialize. Default: false</description>
   </property>
 
   <!-- Scratch directory -->
@@ -17,19 +216,60 @@
     <value>hdfs://master:9000/home/hive/scratch</value>
     <description>HDFS root scratch directory for Hive jobs, which gets created with write all (733) permission. For each connecting user, an HDFS scratch directory ${hive.exec.scratchdir}/${username} is created with ${hive.scratch.dir.permission}. This directory is used by Hive to store the plans for different map/reduce stages for the query as well as to stored the intermediate outputs of these stages. Default: /tmp/hive</description>
   </property>
-  
+
   <property>
-    <name>hive.tez.container.size</name>
-    <value>2048</value>
-    <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
+    <name>hive.scratch.dir.permission</name>
+    <value>700</value>
+    <description>The permission for the user-specific scratch directories that get created in the root scratch directory. Default: 700</description>
   </property>
   
   <property>
-    <name>hive.tez.java.opts</name>
-    <value>-XX:+UseG1GC</value>
-    <description>If this is not specified, the MapReduce java opts settings (mapreduce.map.java.opts) are used by default. Default: (empty)</description>
+    <name>hive.scratchdir.lock</name>
+    <value>false</value>
+    <description>When true, holds a lock file in the scratch directory. If a Hive process dies and accidentally leaves a dangling scratchdir behind, the cleardanglingscratchdir tool will remove it.
+
+    When false, does not create a lock file and therefore the cleardanglingscratchdir tool cannot remove any dangling scratch directories. Default: false.</description>
   </property>
-  
+
+  <property>
+    <name>hive.start.cleanup.scratchdir</name>
+    <value>false</value>
+    <description>To clean up the Hive scratch directory while starting the Hive server (or HiveServer2). This is not an option for a multi-user environment since it will accidentally remove the scratch directory in use. Default: false</description>
+  </property>
+
+  <!-- Index -->
+  <property>
+    <name>hive.optimize.index.filter</name>
+    <value>true</value>
+    <description>Whether to enable automatic use of indexes. Default: false</description>
+  </property>
+
+  <!-- Statistics -->
+  <property>
+    <name>hive.stats.autogather</name>
+    <value>true</value>
+    <description>Whether to automatically gather basic statistics during insert commands. Default: true</description>
+  </property>
+
+  <property>
+    <name>hive.stats.collect.tablekeys</name>
+    <value>true</value>
+    <description>Whether join and group by keys on tables are derived and maintained in the QueryPlan. This is useful to identify how tables are accessed and to determine if they should be bucketed. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.stats.collect.scancols</name>
+    <value>true</value>
+    <description>Whether column accesses are tracked in the QueryPlan. This is useful to identify how tables are accessed and to determine if there are wasted columns that can be trimmed. Default: false</description>
+  </property>
+
+  <!-- Tez -->
+  <property>
+    <name>hive.tez.log.level</name>
+    <value>DEBUG</value>
+    <description>The log level to use for tasks executing as part of the DAG. Used only if hive.tez.java.opts is used to configure Java options. Default: INFO</description>
+  </property>
+
   <property>
     <name>hive.jar.directory</name>
     <value>hdfs://master:9000/home/hive/lib</value>
@@ -42,4 +282,46 @@
     <description>If Hive (in Tez mode only) cannot find a usable Hive jar in hive.jar.directory, it will upload the Hive jar to ${hive.user.install.directory}/${user_name} and use it to run queries. Default: hdfs:///user/</description>
   </property>
 
+  <property>
+    <name>hive.prewarm.enabled</name>
+    <value>false</value>
+    <description>Enables container prewarm for Tez (0.13.0 to 1.2.x) or Tez/Spark (1.3.0+). This is for Hadoop 2 only. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.convert.join.bucket.mapjoin.tez</name>
+    <value>true</value>
+    <description>Whether joins can be automatically converted to bucket map joins in Hive when Tez is used as the execution engine (hive.execution.engine is set to "tez"). Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.tez.auto.reducer.parallelism</name>
+    <value>true</value>
+    <description>Turn on Tez' auto reducer parallelism feature. When enabled, Hive will still estimate data sizes and set parallelism estimates. Tez will sample source vertices' output sizes and adjust the estimates at runtime as necessary. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.tez.exec.print.summary</name>
+    <value>true</value>
+    <description>If true, displays breakdown of execution steps for every query executed on Hive CLI or Beeline client. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.tez.exec.inplace.progress</name>
+    <value>true</value>
+    <description>Updates Tez job execution progress in-place in the terminal when Hive CLI is used. Default: true</description>
+  </property>
+
+  <property>
+    <name>hive.log.explain.output</name>
+    <value>false</value>
+    <description>When enabled, will log EXPLAIN EXTENDED output for the query at log4j INFO level and in HiveServer2 WebUI / Drilldown / Query Plan. From Hive 3.1.0 onwards, this configuration property only logs to the log4j INFO. To log the EXPLAIN EXTENDED output in WebUI / Drilldown / Query Plan from Hive 3.1.0 onwards, use hive.server2.webui.explain.output.</description>
+  </property>
+
+  <property>
+    <name>hive.zookeeper.client.port</name>
+    <value>2181</value>
+    <description>The port of ZooKeeper servers to talk to. This is only needed for read/write locks. Default: 2181</description>
+  </property>
+  
 </configuration>
