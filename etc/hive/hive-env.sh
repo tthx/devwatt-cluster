@@ -63,3 +63,6 @@ then
 else
   export HADOOP_CLASSPATH=":$(find ${TEZ_CONF_DIR}/ -name '*.xml' | xargs echo | tr ' ' ':'):$(find ${TEZ_HOME}/ \( -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name '*jersey*' \) | xargs echo | tr ' ' ':')"
 fi
+
+export HADOOP_HOME=/opt/hadoop-3.1.2
+export HADOOP_CONF_DIR=/etc/hive/hadoop

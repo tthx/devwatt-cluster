@@ -27,17 +27,18 @@ case "${x}" in
     fi
     ;;
   hbase)
+    hadoop_version="3.2.1";
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     if [[ ${?} -eq 0 ]];
     then
-      cp ./hbase-assembly/target/hbase-*-bin.tar.gz ./hbase-assembly/target/hbase-*-client-bin.tar.gz ~/src/.;
+      cp ./hbase-assembly/target/hbase-*-bin.tar.gz ~/src/.;
     fi
     ;;
   tez)
     mvn clean package -Dhadoop.version=${hadoop_version} -Phadoop28 -P\!hadoop27  -DskipTests -Dmaven.javadoc.skip=true;
     if [[ ${?} -eq 0 ]];
     then
-      cp ./tez-dist/target/tez-*.tar.gz ./tez-dist/target/tez-*-minimal.tar.gz ./tez-plugins/tez-aux-services/target/tez-aux-services-*.jar ~/src/.;
+      cp ./tez-dist/target/tez-*.tar.gz ./tez-plugins/tez-aux-services/target/tez-aux-services-*.jar ~/src/.;
     fi
     ;;
   hive)
@@ -45,13 +46,13 @@ case "${x}" in
     mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version};
     if [[ ${?} -eq 0 ]];
     then
-      cp ./standalone-metastore/target/apache-hive-metastore-*-bin.tar.gz
-./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
+      cp ./standalone-metastore/target/apache-hive-metastore-*-bin.tar.gz ./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
     fi
     ;;
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     export SPARK_DIST_CLASSPATH="$(hadoop classpath)";
+    hadoop_version="3.2.1";
     scala_major_version="2.12";
     scala_minor_version="10";
     spark_version="2.4.5";

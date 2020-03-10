@@ -33,7 +33,7 @@
 
   <property>
     <name>hive.server2.tez.initialize.default.sessions</name>
-    <value>false</value>
+    <value>true</value>
     <description>This flag is used in HiveServer 2 to enable a user to use HiveServer 2 without turning on Tez for HiveServer 2. The user could potentially want to run queries over Tez without the pool of sessions. Default: false</description>
   </property>
 
