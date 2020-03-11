@@ -59,10 +59,7 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
-  export HADOOP_CLASSPATH+=":$(find ${TEZ_CONF_DIR}/ ${TEZ_HOME}/ \( -name '*.xml' -o -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name '*jersey*' \)| xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH+=":$(find ${TEZ_CONF_DIR}/ ${TEZ_HOME}/ \( -name '*.xml' -o -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name 'jersey-*.jar'  ! -name 'guava-*.jar' ! -name '*guice-*.jar' \)| xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH="$(find ${TEZ_CONF_DIR}/ ${TEZ_HOME}/ \( -name '*.xml' -o -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name '*jersey*' \)| xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH="$(find ${TEZ_CONF_DIR}/ ${TEZ_HOME}/ \( -name '*.xml' -o -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name 'jersey-*.jar'  ! -name 'guava-*.jar' ! -name '*guice-*.jar' \)| xargs echo | tr ' ' ':')"
 fi
-
-export HADOOP_HOME=/opt/hadoop-3.1.2
-export HADOOP_CONF_DIR=/etc/hive/hadoop

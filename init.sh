@@ -1,4 +1,11 @@
-#!/bin/bash
+# yarn-ui compilation
+sudo -i
+npm install -g bower
+npm install -g ember-cli
+
+abdmob/x2js -> x2js
+./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/bower.json ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/ember-cli-build.js
+
 sudo addgroup hadoop
 sudo adduser ubuntu hadoop
 sudo useradd zookeeper --create-home --groups hadoop --shell /bin/bash
@@ -21,7 +28,8 @@ sudo chmod 755 /mnt/hdfs
 cd /opt;sudo chown -R root:root ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 cd /opt;sudo chmod -R g-w,o-w ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 
-sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
+hdfs:
+rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
 
 ${ZOOBINDIR}/zkCli.sh
 deleteall /hbase /hive
@@ -58,13 +66,8 @@ hdfs dfs -put ${HADOOP_HOME}/share/hadoop/yarn/timelineservice/hadoop-yarn-serve
 hdfs dfs -chown hbase /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -chmod -R g+r,o+r /home/hbase/coprocessor/
 
+yarn:
 hadoop org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create
-
-hdfs dfs -mkdir -p /home/hive/lib /home/hive/install
-hdfs dfs -rm -f /home/hive/lib/hive-exec-*.jar
-hdfs dfs -put ${HIVE_HOME}/lib/hive-exec-*.jar /home/hive/lib
-hdfs dfs -chown -R hive /home/hive/lib /home/hive/install
-hdfs dfs -chmod -R 1777 /home/hive/lib /home/hive/install
 
 hdfs dfs -mkdir -p /home/yarn/tez
 hdfs dfs -rm -f /home/yarn/tez/tez-*.tar.gz
@@ -77,3 +80,9 @@ hdfs dfs -rm -f /home/yarn/spark/*
 hdfs dfs -put ${SPARK_HOME}/jars/* /home/yarn/spark/.
 hdfs dfs -chown -R yarn /home/yarn/spark
 hdfs dfs -chmod -R g+r,o+r /home/yarn/spark
+
+hdfs dfs -mkdir -p /home/hive/lib /home/hive/install
+hdfs dfs -rm -f /home/hive/lib/hive-exec-*.jar
+hdfs dfs -put ${HIVE_HOME}/lib/hive-exec-*.jar /home/hive/lib
+hdfs dfs -chown -R hive /home/hive/lib /home/hive/install
+hdfs dfs -chmod -R 1777 /home/hive/lib /home/hive/install

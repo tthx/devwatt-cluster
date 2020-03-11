@@ -57,12 +57,6 @@ export JAVA_HOME="/opt/jdk1.8.0_241"
 export JAVA_OPTS="-XX:+UseG1GC"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
-export HADOOP_HOME=/opt/hadoop-3.1.2
-export HADOOP_CONF_DIR=/etc/hive/hadoop
-
-export HIVE_HOME=/opt/hive
-export HIVE_CONF_DIR=/etc/hive
-
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
   export HADOOP_CLASSPATH+=":${HIVE_HOME}/lib/hive-exec-3.1.2.jar";

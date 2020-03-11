@@ -2,7 +2,7 @@
 x="${1:-"hadoop"}";
 shift 1;
 action="${*:-"clean package"}";
-hadoop_version="3.2.1";
+hadoop_version="3.1.2";
 unset CXXFLAGS;
 export JAVA_HOME="/opt/jdk1.8.0_241";
 export JAVA_OPTS="-XX:+UseG1GC";
@@ -38,6 +38,7 @@ case "${x}" in
     if [[ ${?} -eq 0 ]];
     then
       cp ./tez-dist/target/tez-*.tar.gz ./tez-plugins/tez-aux-services/target/tez-aux-services-*.jar ~/src/.;
+      rm ~/src/tez-aux-services-*-tests.jar
     fi
     ;;
   hive)
@@ -51,10 +52,11 @@ case "${x}" in
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     export SPARK_DIST_CLASSPATH="$(hadoop classpath)";
+    unset SPARK_HOME SPARK_CONF_DIR SPARK_DIST_CLASSPATH
     scala_major_version="2.12";
     scala_minor_version="10";
     spark_version="2.4.5";
-    hdfs dfs rm -r -f /home/${USER}/src/spark-${spark_version};
+    hdfs dfs -rm -r -f /home/${USER}/src/spark-${spark_version};
     hdfs dfs -mkdir -p /home/${USER}/src/spark-${spark_version}/examples/src/main/resources;
     hdfs dfs -put examples/src/main/resources/* /home/${USER}/src/spark-${spark_version}/examples/src/main/resources/.;
     ./dev/change-scala-version.sh "${scala_major_version}";
