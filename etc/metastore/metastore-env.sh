@@ -65,7 +65,7 @@ export HIVE_CONF_DIR=/etc/hive
 
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
-  export HADOOP_CLASSPATH+=":$(find ${HIVE_CONF_DIR}/ ${HIVE_HOME}/ \( -name '*.xml' -o -name '*.properties' -o -name '*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH+=":${HIVE_HOME}/lib/hive-exec-3.1.2.jar";
 else
-  export HADOOP_CLASSPATH="$(find ${HIVE_CONF_DIR}/ ${HIVE_HOME}/ \( -name '*.xml' -o -name '*.properties' -o -name '*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH="${HIVE_HOME}/lib/hive-exec-3.1.2.jar";
 fi
