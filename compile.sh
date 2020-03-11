@@ -2,7 +2,7 @@
 x="${1:-"hadoop"}";
 shift 1;
 action="${*:-"clean package"}";
-hadoop_version="3.1.2";
+hadoop_version="3.2.1";
 unset CXXFLAGS;
 export JAVA_HOME="/opt/jdk1.8.0_241";
 export JAVA_OPTS="-XX:+UseG1GC";
@@ -27,7 +27,6 @@ case "${x}" in
     fi
     ;;
   hbase)
-    hadoop_version="3.2.1";
     mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     if [[ ${?} -eq 0 ]];
     then
@@ -52,7 +51,6 @@ case "${x}" in
   spark)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
     export SPARK_DIST_CLASSPATH="$(hadoop classpath)";
-    hadoop_version="3.2.1";
     scala_major_version="2.12";
     scala_minor_version="10";
     spark_version="2.4.5";
