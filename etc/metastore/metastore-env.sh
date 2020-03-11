@@ -59,3 +59,13 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 
 export HADOOP_HOME=/opt/hadoop-3.1.2
 export HADOOP_CONF_DIR=/etc/hive/hadoop
+
+export HIVE_HOME=/opt/hive
+export HIVE_CONF_DIR=/etc/hive
+
+if [[ -n "${HADOOP_CLASSPATH}" ]];
+then
+  export HADOOP_CLASSPATH+=":$(find ${HIVE_CONF_DIR}/ ${HIVE_HOME}/ \( -name '*.xml' -o -name '*.properties' -o -name '*.jar' \) | xargs echo | tr ' ' ':')"
+else
+  export HADOOP_CLASSPATH="$(find ${HIVE_CONF_DIR}/ ${HIVE_HOME}/ \( -name '*.xml' -o -name '*.properties' -o -name '*.jar' \) | xargs echo | tr ' ' ':')"
+fi

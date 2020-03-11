@@ -152,9 +152,9 @@ esac
 # interactive way for temporary additions on the command line.
 if [[ -n "${HADOOP_CLASSPATH}" ]];
 then
-  export HADOOP_CLASSPATH+=":$(find ${HADOOP_CONF_DIR}/ \( -name '*.xml' -o -name '*.properties' \) | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ \( -name '*.jar' ! -name '*-sources.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH+=":$(find ${HADOOP_CONF_DIR}/ ${HADOOP_HOME}/ \( -name '*.xml' -o -name '*.properties' -o -name '*.jar' ! -name '*-sources.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH=":$(find ${HADOOP_CONF_DIR}/ \( -name '*.xml' -o -name '*.properties' \) | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ \( -name '*.jar' ! -name '*-sources.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
+  export HADOOP_CLASSPATH="$(find ${HADOOP_CONF_DIR}/ ${HADOOP_HOME}/ \( -name '*.xml' -o -name '*.properties' -o -name '*.jar' ! -name '*-sources.jar' ! -name 'slf4j-log4j12-*.jar' \) | xargs echo | tr ' ' ':')"
 fi
 
 # Should HADOOP_CLASSPATH be first in the official CLASSPATH?
