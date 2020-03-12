@@ -286,7 +286,7 @@
   <!-- Tez -->
   <property>
     <name>hive.tez.log.level</name>
-    <value>DEBUG</value>
+    <value>INFO</value>
     <description>The log level to use for tasks executing as part of the DAG. Used only if hive.tez.java.opts is used to configure Java options. Default: INFO</description>
   </property>
 

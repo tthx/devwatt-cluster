@@ -41,14 +41,15 @@ CREATE TABLE u_data_bucket(
   movieid INT,
   rating INT,
   unixtime STRING)
-CLUSTERED BY(userid, movieid) INTO 256 BUCKETS;
+CLUSTERED BY(userid, movieid) INTO 4 BUCKETS;
 
+DROP TABLE IF EXISTS u_data_opt PURGE;
 CREATE TABLE u_data_opt(
   userid INT,
   movieid INT,
   rating INT,
   unixtime STRING)
-CLUSTERED BY(userid, movieid) INTO 256 BUCKETS
+CLUSTERED BY(userid, movieid) INTO 4 BUCKETS
 SKEWED BY (rating) ON (1,2,3,45);
 
 INSERT OVERWRITE TABLE u_data_bucket SELECT * FROM u_data_orc;

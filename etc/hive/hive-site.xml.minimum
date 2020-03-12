@@ -241,16 +241,28 @@
   <!-- Statistics -->
   <property>
     <name>hive.stats.dbclass</name>
-    <value>jdbc:postgres</value>
+    <value>jdbc:postgresql</value>
     <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
 
     Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:"database" (where "database" can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
+  </property>
+  
+  <property>
+    <name>hive.stats.jdbcdriver</name>
+    <value>org.postgresql.Driver</value>
+    <description>The JDBC driver for the database that stores temporary Hive statistics. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
+  </property>
+
+  <property>
+    <name>hive.stats.dbconnectionstring</name>
+    <value>jdbc:postgresql://master/TempStatsStore;create=true</value>
+    <description>The default connection string for the database that stores temporary Hive statistics. Default: jdbc:derby:;databaseName=TempStatsStore;create=true</description>
   </property>
 
   <property>
     <name>hive.stats.autogather</name>
     <value>true</value>
-    <description>Whether to automatically gather basic statistics during insert commands. Default: true</description>
+    <description>Whether to automatically gather basic statistics during insert commands. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
   </property>
 
   <property>
@@ -274,7 +286,7 @@
   <!-- Tez -->
   <property>
     <name>hive.tez.log.level</name>
-    <value>DEBUG</value>
+    <value>INFO</value>
     <description>The log level to use for tasks executing as part of the DAG. Used only if hive.tez.java.opts is used to configure Java options. Default: INFO</description>
   </property>
 
