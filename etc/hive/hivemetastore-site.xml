@@ -11,7 +11,9 @@
   <property>
     <name>datanucleus.schema.autoCreateAll</name>
     <value>false</value>
-    <description>Auto creates the necessary schema in the RDBMS at startup if one does not exist. Set this to false after creating it once. To enable auto create also set hive.metastore.schema.verification=false. Auto creation is not recommended in production; run schematool instead.</description>
+    <description>Creates necessary schema on a startup if one does not exist. Set this to false, after creating it once.
+
+    datanucleus.schema.autoCreateAll is disabled if hive.metastore.schema.verification is true. Default: true</description>
   </property>
 
   <property>
@@ -22,31 +24,35 @@
   <property>
     <name>hive.metastore.schema.verification</name>
     <value>true</value>
-    <description>Enforce metastore schema version consistency. When set to true: verify that version information stored in the RDBMS is compatible with the version of the Metastore jar. Also disable automatic schema migration. Users are required to manually migrate the schema after upgrade, which ensures proper schema migration. This setting is strongly recommended in production. When set to false: warn if the version information stored in RDBMS doesn't match the version of the Metastore jar and allow auto schema migration.</description>
+    <description>Enforce metastore schema version consistency.
+    True: Verify that version information stored in metastore matches with one from Hive jars. Also disable automatic schema migration attempt (see datanucleus.autoCreateSchema and datanucleus.schema.autoCreateAll). Users are required to manually migrate schema after Hive upgrade which ensures proper metastore schema migration.
+    False: Warn if the version information stored in metastore doesn't match with one from Hive jars.
+
+    For more information, see Metastore Schema Consistency and Upgrades. Default: false</description>
   </property>
 
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
     <value>jdbc:postgresql://master/metastore</value>
-    <description>Connection URL for the JDBC driver</description>
+    <description>JDBC connect string for a JDBC metastore. Default: jdbc:derby:;databaseName=metastore_db;create=true</description>
   </property>
    
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
     <value>org.postgresql.Driver</value>
-    <description>JDBC driver class</description>
+    <description>Driver class name for a JDBC metastore. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
   </property>
    
   <property>
     <name>javax.jdo.option.ConnectionUserName</name>
     <value>hive</value>
-    <description>User name to connect to the RDBMS with</description>
+    <description>Username to use against metastore database. Default: APP</description>
   </property>
    
   <property>
     <name>javax.jdo.option.ConnectionPassword</name>
     <value>D@$#H0le99*</value>
-    <description>Password to connect to the RDBMS with. The Metastore uses Hadoop's CredentialProvider API so this does not have to be stored in clear text in your configuration file.</description>
+    <description>Password to use against metastore database. Default: mine</description>
   </property>
    
   <property>

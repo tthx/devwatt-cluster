@@ -28,14 +28,6 @@ sudo chmod 755 /mnt/hdfs
 cd /opt;sudo chown -R root:root ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 cd /opt;sudo chmod -R g-w,o-w ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 
-hdfs:
-rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
-
-${ZOOBINDIR}/zkCli.sh
-deleteall /hbase /hive
-
-hdfs namenode -format tthx
-
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark
 sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs
 sudo chown -R yarn:hadoop /var/yarn
@@ -50,6 +42,14 @@ sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.; sudo chmod 
 # For Hive 3.1.2
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
 sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/.; sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/.; sudo cp ~/src/devwatt-cluster/bin/utils.sh ~/src/devwatt-cluster/bin/metastore_ctl ${METASTORE_HOME}/bin/.; sudo cp ~/src/devwatt-cluster/bin/utils.sh ~/src/devwatt-cluster/bin/hiveserver2_ctl ${HIVE_HOME}/bin/.
+
+hdfs:
+rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
+
+${ZOOBINDIR}/zkCli.sh
+deleteall /hbase /hive
+
+hdfs namenode -format tthx
 
 hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive
 hdfs dfs -chown -R ubuntu /home/ubuntu
