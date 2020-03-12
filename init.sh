@@ -51,7 +51,7 @@ deleteall /hbase /hive
 
 hdfs namenode -format tthx
 
-hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive
+hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive
 hdfs dfs -chown -R ubuntu /home/ubuntu
 hdfs dfs -chown -R yarn /home/yarn
 hdfs dfs -chown -R mapred /home/mapred
