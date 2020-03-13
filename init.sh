@@ -55,6 +55,8 @@ hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home
 hdfs dfs -chown -R ubuntu /home/ubuntu
 hdfs dfs -chown -R yarn /home/yarn
 hdfs dfs -chown -R mapred /home/mapred
+hdfs dfs -chmod -R 1777 /home/mapred/mr-history
+hdfs dfs -chmod 1770 /home/mapred/mr-history/done
 hdfs dfs -chown -R hive /home/hive /tmp/hive
 hdfs dfs -chown -R attu7372 /home/attu7372
 hdfs dfs -chown -R hbase /home/hbase

@@ -240,26 +240,6 @@
 
   <!-- Statistics -->
   <property>
-    <name>hive.stats.dbclass</name>
-    <value>jdbc:postgresql</value>
-    <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
-
-    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:"database" (where "database" can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
-  </property>
-  
-  <property>
-    <name>hive.stats.jdbcdriver</name>
-    <value>org.postgresql.Driver</value>
-    <description>The JDBC driver for the database that stores temporary Hive statistics. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
-  </property>
-
-  <property>
-    <name>hive.stats.dbconnectionstring</name>
-    <value>jdbc:postgresql://master/TempStatsStore;create=true</value>
-    <description>The default connection string for the database that stores temporary Hive statistics. Default: jdbc:derby:;databaseName=TempStatsStore;create=true</description>
-  </property>
-
-  <property>
     <name>hive.stats.autogather</name>
     <value>true</value>
     <description>Whether to automatically gather basic statistics during insert commands. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
@@ -282,6 +262,28 @@
     <value>true</value>
     <description>Whether column accesses are tracked in the QueryPlan. This is useful to identify how tables are accessed and to determine if there are wasted columns that can be trimmed. Default: false</description>
   </property>
+
+  <!--
+  <property>
+    <name>hive.stats.dbclass</name>
+    <value>jdbc:postgresql</value>
+    <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
+
+    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:"database" (where "database" can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
+  </property>
+  
+  <property>
+    <name>hive.stats.jdbcdriver</name>
+    <value>org.postgresql.Driver</value>
+    <description>The JDBC driver for the database that stores temporary Hive statistics. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
+  </property>
+
+  <property>
+    <name>hive.stats.dbconnectionstring</name>
+    <value>jdbc:postgresql://master/TempStatsStore;create=true</value>
+    <description>The default connection string for the database that stores temporary Hive statistics. Default: jdbc:derby:;databaseName=TempStatsStore;create=true</description>
+  </property>
+  -->
 
   <!-- Tez -->
   <property>
@@ -316,7 +318,7 @@
 
   <property>
     <name>hive.prewarm.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>Enables container prewarm for Tez (0.13.0 to 1.2.x) or Tez/Spark (1.3.0+). This is for Hadoop 2 only. Default: false</description>
   </property>
 
