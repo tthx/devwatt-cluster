@@ -14,6 +14,7 @@ LOAD DATA LOCAL INPATH '/tmp/ml-100k/u.data' OVERWRITE INTO TABLE u_data;
 SELECT COUNT(*) FROM u_data;
 
 CREATE TABLE u_data_orc STORED AS ORC AS SELECT * FROM u_data;
+DESCRIBE FORMATTED u_data_orc;
 
 SELECT COUNT(*) FROM u_data_orc;
 
