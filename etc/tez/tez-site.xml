@@ -34,7 +34,7 @@
 
   <property>
     <name>tez.am.launch.cmd-opts</name>
-    <value>-XX:+UseG1GC</value>
+    <value></value>
     <description>String value. Command line options provided during the launch of the Tez AppMaster process. Its recommended to not set any Xmx or Xms in these launch opts so that Tez can determine them automatically. Default: -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</description>
   </property>
 
