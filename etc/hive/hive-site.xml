@@ -262,7 +262,8 @@
     <value>true</value>
     <description>Whether column accesses are tracked in the QueryPlan. This is useful to identify how tables are accessed and to determine if there are wasted columns that can be trimmed. Default: false</description>
   </property>
-  
+
+  <!--
   <property>
     <name>hive.stats.dbclass</name>
     <value>jdbc:postgresql</value>
@@ -282,6 +283,7 @@
     <value>jdbc:postgresql://master/TempStatsStore;create=true</value>
     <description>The default connection string for the database that stores temporary Hive statistics. Default: jdbc:derby:;databaseName=TempStatsStore;create=true</description>
   </property>
+  -->
 
   <!-- Tez -->
   <property>

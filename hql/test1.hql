@@ -53,7 +53,8 @@ CLUSTERED BY(userid, movieid, unixtime) INTO 4 BUCKETS
 SKEWED BY (rating) ON (1,2,3,4,5);
 INSERT OVERWRITE TABLE u_data_opt SELECT * FROM u_data_orc;
 
-ANALYZE TABLE mytable COMPUTE STATISTICS FOR COLUMNS;
+ANALYZE TABLE u_data_opt COMPUTE STATISTICS;
+ANALYZE TABLE u_data_opt COMPUTE STATISTICS FOR COLUMNS;
 DESCRIBE FORMATTED u_data_opt;
 
 SELECT userid, movieid, unixtime FROM u_data_opt WHERE unixtime>888639814 AND unixtime<888640275 AND rating>1 AND rating<4 GROUP BY userid, movieid, unixtime;
