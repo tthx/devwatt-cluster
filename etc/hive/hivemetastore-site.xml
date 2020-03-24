@@ -43,7 +43,7 @@
 
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:myql://master/metastore</value>
+    <value>jdbc:mysql://master/metastore</value>
     <description>JDBC connect string for a JDBC metastore. Default: jdbc:derby:;databaseName=metastore_db;create=true</description>
   </property>
    

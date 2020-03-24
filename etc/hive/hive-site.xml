@@ -264,6 +264,14 @@
   </property>
 
   <property>
+    <name>hive.stats.reliable</name>
+    <value>true</value>
+    <description>Whether queries will fail because statistics cannot be collected completely accurately. If this is set to true, reading/writing from/into a partition or unpartitioned table may fail because the statistics could not be computed accurately. If it is set to false, the operation will succeed.
+
+    In Hive 0.13.0 and later, if hive.stats.reliable is false and statistics could not be computed correctly, the operation can still succeed and update the statistics but it sets a partition property "areStatsAccurate" to false. If the application needs accurate statistics, they can then be obtained in the background. Default: false</description>
+  </property>
+
+  <property>
     <name>hive.stats.dbclass</name>
     <value>jdbc:mysql</value>
     <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
@@ -279,7 +287,7 @@
 
   <property>
     <name>hive.stats.dbconnectionstring</name>
-    <value>jdbc:mysql://master:3306/statistics?useUnicode=true;characterEncoding=UTF-8;user=hive;password=D@$#H0le99*</value>
+    <value>jdbc:mysql://master/statistics?useUnicode=true&amp;characterEncoding=UTF-8&amp;user=hive&amp;password=D@$#H0le99*</value>
     <description>The default connection string for the database that stores temporary Hive statistics. Default: jdbc:derby:;databaseName=TempStatsStore;create=true</description>
   </property>
 
