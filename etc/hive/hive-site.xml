@@ -271,26 +271,6 @@
     In Hive 0.13.0 and later, if hive.stats.reliable is false and statistics could not be computed correctly, the operation can still succeed and update the statistics but it sets a partition property "areStatsAccurate" to false. If the application needs accurate statistics, they can then be obtained in the background. Default: false</description>
   </property>
 
-  <property>
-    <name>hive.stats.dbclass</name>
-    <value>jdbc:mysql</value>
-    <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
-
-    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:"database" (where "database" can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
-  </property>
-  
-  <property>
-    <name>hive.stats.jdbcdriver</name>
-    <value>com.mysql.jdbc.Driver</value>
-    <description>The JDBC driver for the database that stores temporary Hive statistics. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
-  </property>
-
-  <property>
-    <name>hive.stats.dbconnectionstring</name>
-    <value>jdbc:mysql://master/statistics?useUnicode=true&amp;characterEncoding=UTF-8&amp;user=hive&amp;password=D@$#H0le99*</value>
-    <description>The default connection string for the database that stores temporary Hive statistics. Default: jdbc:derby:;databaseName=TempStatsStore;create=true</description>
-  </property>
-
   <!-- Tez -->
   <property>
     <name>hive.tez.log.level</name>
