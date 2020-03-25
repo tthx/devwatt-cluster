@@ -260,7 +260,7 @@
 
   <property>
     <name>yarn.resourcemanager.system-metrics-publisher.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>Publish YARN information to Timeline Server</description>
   </property>
 
