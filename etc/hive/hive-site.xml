@@ -252,6 +252,18 @@
   </property>
 
   <property>
+    <name>hive.stats.fetch.column.stats</name>
+    <value>true</value>
+    <description>Annotation of the operator tree with statistics information requires column statistics. Column statistics are fetched from the metastore. Fetching column statistics for each needed column can be expensive when the number of columns is high. This flag can be used to disable fetching of column statistics from the metastore. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.compute.query.using.stats</name>
+    <value>true</value>
+    <description>When set to true Hive will answer a few queries like min, max, and count(1) purely using statistics stored in the metastore. For basic statistics collection, set the configuration property hive.stats.autogather to true. For more advanced statistics collection, run ANALYZE TABLE queries. Default: false</description>
+  </property>
+
+  <property>
     <name>hive.stats.collect.tablekeys</name>
     <value>true</value>
     <description>Whether join and group by keys on tables are derived and maintained in the QueryPlan. This is useful to identify how tables are accessed and to determine if they should be bucketed. Default: false</description>

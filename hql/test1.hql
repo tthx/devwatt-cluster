@@ -13,11 +13,11 @@ LOAD DATA LOCAL INPATH '/tmp/ml-100k/u.data' OVERWRITE INTO TABLE u_data;
 
 SELECT COUNT(*) FROM u_data;
 
-ANALYZE TABLE u_data COMPUTE STATISTICS;
 ANALYZE TABLE u_data COMPUTE STATISTICS FOR COLUMNS;
 
+DROP TABLE IF EXISTS u_data_orc PURGE;
 CREATE TABLE u_data_orc STORED AS ORC AS SELECT * FROM u_data;
-DESCRIBE FORMATTED u_data_orc;
+ANALYZE TABLE u_data_orc COMPUTE STATISTICS FOR COLUMNS;
 
 SELECT COUNT(*) FROM u_data_orc;
 
@@ -44,7 +44,7 @@ CREATE TABLE u_data_bucket(
   unixtime STRING)
 CLUSTERED BY(userid, movieid, unixtime) INTO 4 BUCKETS;
 INSERT OVERWRITE TABLE u_data_bucket SELECT * FROM u_data_orc;
-DESCRIBE FORMATTED u_data_bucket;
+ANALYZE TABLE u_data_bucket COMPUTE STATISTICS FOR COLUMNS;
 
 DROP TABLE IF EXISTS u_data_opt PURGE;
 CREATE TABLE u_data_opt(
@@ -54,13 +54,11 @@ CREATE TABLE u_data_opt(
   unixtime STRING)
 CLUSTERED BY(userid, movieid, unixtime) INTO 4 BUCKETS
 SKEWED BY (rating) ON (1,2,3,4,5);
-INSERT OVERWRITE TABLE u_data_opt SELECT * FROM u_data_orc;
-
-ANALYZE TABLE u_data_opt COMPUTE STATISTICS;
+INSERT OVERWRITE TABLE u_data_opt SELECT * FROM u_data_bucket;
 ANALYZE TABLE u_data_opt COMPUTE STATISTICS FOR COLUMNS;
 DESCRIBE FORMATTED u_data_opt;
 
-SELECT userid, movieid, unixtime FROM u_data_opt WHERE unixtime>888639814 AND unixtime<888640275 AND rating>1 AND rating<4 GROUP BY userid, movieid, unixtime;
+SELECT userid, movieid, unixtime FROM u_data_opt WHERE unixtime>888639814 AND unixtime<888640275 AND rating>1 AND rating<=4 GROUP BY userid, movieid, unixtime;
 
 DROP TABLE IF EXISTS u_data_join PURGE;
 CREATE TABLE u_data_join(
@@ -94,3 +92,18 @@ GROUP BY
   u1.rating,
   u1.unixtime,
   u2.unixtime;
+
+DROP TABLE IF EXISTS u_data_acid PURGE;
+CREATE TABLE u_data_acid(
+  userid INT,
+  movieid INT,
+  rating INT,
+  unixtime STRING)
+CLUSTERED BY(userid, movieid, unixtime) INTO 4 BUCKETS
+SKEWED BY (rating) ON (1,2,3,4,5)
+TBLPROPERTIES('transactional'='true');
+INSERT OVERWRITE TABLE u_data_acid SELECT * FROM u_data_opt;
+ANALYZE TABLE u_data_acid COMPUTE STATISTICS FOR COLUMNS;
+DESCRIBE FORMATTED u_data_acid;
+
+SELECT userid, movieid, unixtime FROM u_data_acid WHERE unixtime>888639814 AND unixtime<888640275 AND rating>1 AND rating<=4 GROUP BY userid, movieid, unixtime;

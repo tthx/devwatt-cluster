@@ -6,20 +6,20 @@ case "${1}" in
     echo "... }: Logs cleaned.";
     k8s-cmd "zkServer.sh start" zookeeper;
     k8s-cmd "start-dfs.sh" hdfs master;
-    k8s-cmd "start-hbase.sh" hbase master;
+    #k8s-cmd "start-hbase.sh" hbase master;
     k8s-cmd "mapred --daemon start historyserver" mapred master;
     k8s-cmd "start-yarn.sh" yarn master;
-    k8s-cmd "yarn --daemon start timelinereader" yarn master;
+    #k8s-cmd "yarn --daemon start timelinereader" yarn master;
     k8s-cmd "metastore_ctl start" hive master;
     k8s-cmd "hiveserver2_ctl start" hive master;
     ;;
   "stop")
     k8s-cmd "hiveserver2_ctl stop" hive master;
     k8s-cmd "metastore_ctl stop" hive master;
-    k8s-cmd "yarn --daemon stop timelinereader" yarn master;
+    #k8s-cmd "yarn --daemon stop timelinereader" yarn master;
     k8s-cmd "stop-yarn.sh" yarn master;
     k8s-cmd "mapred --daemon stop historyserver" mapred master;
-    k8s-cmd "stop-hbase.sh" hbase master;
+    #k8s-cmd "stop-hbase.sh" hbase master;
     k8s-cmd "stop-dfs.sh" hdfs master;
     k8s-cmd "zkServer.sh stop" zookeeper;
     ;;
