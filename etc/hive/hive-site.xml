@@ -231,12 +231,13 @@
     <description>To clean up the Hive scratch directory while starting the Hive server (or HiveServer2). This is not an option for a multi-user environment since it will accidentally remove the scratch directory in use. Default: false</description>
   </property>
 
-  <!-- Index -->
+  <!-- Index : removed since 3.0
   <property>
     <name>hive.optimize.index.filter</name>
     <value>true</value>
     <description>Whether to enable automatic use of indexes. Default: false</description>
   </property>
+  -->
 
   <!-- Statistics -->
   <property>
