@@ -1,3 +1,7 @@
+export PS1="\[\e[32m\]\u@\h \[\e[35m\]\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n$ "
+
+export CC="gcc";
+export CFLAGS="-O2";
 export CXX="g++";
 export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
