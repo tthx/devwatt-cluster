@@ -66,6 +66,6 @@ case "${x}" in
     hdfs dfs -mkdir -p /home/${USER}/src/spark-${spark_version}/examples/src/main/resources;
     hdfs dfs -put examples/src/main/resources/* /home/${USER}/src/spark-${spark_version}/examples/src/main/resources/.;
     ./dev/change-scala-version.sh "${scala_major_version}";
-    ./dev/make-distribution.sh --name without-hadoop-scala-2.12 --tgz --pip --r -T 1C -Psparkr -Dmaven.javadoc.skip=true -DskipTests -Pscala-2.12 -Dscala.version="${scala_major_version}"."${scala_minor_version}" -Phadoop-3.1 -Dhadoop.version=${hadoop_version} -Pyarn -Phive -Phive-thriftserver -Pmesos -Pkubernetes -Phadoop-provided; #-Phive-provided -Porc-provided -Pparquet-provided;
+    ./dev/make-distribution.sh --name without-hadoop-scala-${scala_major_version} --tgz --pip --r -T 1C -Psparkr -Dmaven.javadoc.skip=true -DskipTests -Pscala-${scala_major_version} -Dscala.version="${scala_major_version}"."${scala_minor_version}" -Phadoop-3.1 -Dhadoop.version=${hadoop_version} -Pyarn -Phive -Phive-thriftserver -Pmesos -Pkubernetes -Phadoop-provided; #-Phive-provided -Porc-provided -Pparquet-provided;
     ;;
 esac
