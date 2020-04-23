@@ -3,7 +3,10 @@ x="${1:-"hadoop"}";
 shift 1;
 action="${*:-"clean package"}";
 hadoop_version="3.1.2";
-unset CXXFLAGS;
+export CC="gcc";
+export CFLAGS="-O2";
+export CXX="g++";
+export CXXFLAGS="-O2";
 export JAVA_HOME="/opt/jdk1.8.0_251";
 export JAVA_OPTS="-XX:+UseG1GC";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
@@ -16,6 +19,9 @@ else
   export LD_LIBRARY_PATH="${HADOOP_COMMON_LIB_NATIVE_DIR}";
 fi
 case "${x}" in
+  impala)
+    export IMPALA_HOME=`pwd`;
+    ;;
   testdfsio)
     mvn ${action} -DskipTests
     ;;
