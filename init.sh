@@ -6,6 +6,7 @@ npm install -g ember-cli
 abdmob/x2js -> x2js
 ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/bower.json ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/ember-cli-build.js
 
+echo 'ubuntu:azerty'|sudo chpasswd
 sudo addgroup hadoop
 sudo adduser ubuntu hadoop
 sudo useradd zookeeper --create-home --groups hadoop --shell /bin/bash
@@ -20,6 +21,8 @@ sudo useradd yarn --create-home --groups hadoop --shell /bin/bash
 echo 'yarn:D@$#H0le99*'|sudo chpasswd
 sudo useradd mapred --create-home --groups hadoop --shell /bin/bash
 echo 'mapred:D@$#H0le99*'|sudo chpasswd
+sudo useradd impala --create-home --groups hadoop --shell /bin/bash
+echo 'impala:D@$#H0le99*'|sudo chpasswd
 sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash
 echo 'attu7372:D@$#H0le99*'|sudo chpasswd
 sudo mkdir -p /mnt/hdfs

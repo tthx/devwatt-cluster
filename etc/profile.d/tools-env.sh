@@ -37,3 +37,5 @@ alias sublime='/opt/sublime_text/sublime_text';
 alias docker-clean='docker stop $(docker container ls -a -q) && docker system prune -a -f --volumes';
 alias python='/usr/bin/python3'
 alias clear-logs='journalctl --vacuum-time=1d';
+alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
+alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
