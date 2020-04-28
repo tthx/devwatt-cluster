@@ -1,3 +1,0 @@
-docker pull ubuntu:20.04
-docker run --cap-add SYS_TIME --interactive --tty --name impala-dev -p 25000:25000 -p 25010:25010 -p 25020:25020 ubuntu:20.04 bash
-docker start --interactive impala-dev
