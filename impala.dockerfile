@@ -19,4 +19,6 @@ RUN mkdir src \
 && tar xf apache-impala-3.4.0.tar.gz \
 && cd apache-impala-3.4.0 \
 && export IMPALA_HOME=`pwd` \
-&& $IMPALA_HOME/bin/bootstrap_development.sh
+&& $IMPALA_HOME/bin/bootstrap_system.sh \
+&& source $IMPALA_HOME/bin/impala-config.sh \
+&& $IMPALA_HOME/buildall.sh -noclean -notests
