@@ -32,7 +32,11 @@ export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"\n' >> /etc
 && ln -sf apache-maven-3.6.3 maven \
 && ln -sf apache-ant-1.10.7 ant \
 && apt-get update \
-&& apt-get -y install ntp sudo \
+&& apt-get -y install ccache g++ gcc libffi-dev liblzo2-dev libkrb5-dev \
+krb5-admin-server krb5-kdc krb5-user libsasl2-dev libsasl2-modules \
+libsasl2-modules-gssapi-mit libssl-dev make ninja-build ntp \
+ntpdate python-dev python-setuptools postgresql ssh wget vim-common psmisc \
+lsof openjdk-8-jdk openjdk-8-source openjdk-8-dbg apt-utils git ant sudo \
 && sed -i 's/^pool/#pool/g' /etc/ntp.conf \
 && printf 'listen on 127.0.0.1
 server 127.127.1.0
@@ -80,20 +84,20 @@ export JAVA_OPTS="-XX:+UseG1GC"
 export M2_HOME="/opt/maven"
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m"
 export ANT_HOME="/opt/ant"
-export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"\n' >> ${HOME}/.bashrc \
+export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"
+export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0"\n' >> ${HOME}/.bashrc \
 && mkdir -p ${HOME}/src \
-&& cd ${HOME}/src \
-&& tar xf /exchange/apache-impala-3.4.0.tar.gz \
-&& cd apache-impala-3.4.0 \
-&& export IMPALA_HOME=`pwd`
+&& tar xf /exchange/apache-impala-3.4.0.tar.gz -C ${HOME}/src
 
-RUN printf 'export http_proxy="http://devwatt-proxy.si.fr.intraorange:8080"
+RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& printf 'export http_proxy="http://devwatt-proxy.si.fr.intraorange:8080"
 export https_proxy="${http_proxy}"
 export HTTPS_PROXY="${http_proxy}"
 export HTTP_PROXY="${http_proxy}"
 export ANT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080"\n' > ${IMPALA_HOME}/bin/impala-config-local.sh
 
-RUN printf 'export CC="gcc"
+RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& printf 'export CC="gcc"
 export CFLAGS="-O2"
 export CXX="g++"
 export CXXFLAGS="-O2"
@@ -106,7 +110,39 @@ export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"
 export NUM_CONCURRENT_TESTS=$(nproc)
 export MAX_PYTEST_FAILURES=0
 export USE_GOLD_LINKER=true\n' >> ${IMPALA_HOME}/bin/impala-config-local.sh \
-&& sed -i 's/^sudo\ ntpdate/#sudo\ ntpdate/g' ${IMPALA_HOME}/bin/bootstrap_system.sh \
-&& . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes" \
+&& sed -i 's/^sudo\ ntpdate/#sudo\ ntpdate/g' ${IMPALA_HOME}/bin/bootstrap_system.sh
+
+RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& export CC="gcc" \
+&& export CFLAGS="-O2" \
+&& export CXX="g++" \
+&& export CXXFLAGS="-O2" \
+&& export JAVA_HOME="/opt/jdk" \
+&& export JAVA_OPTS="-XX:+UseG1GC" \
+&& export M2_HOME="/opt/maven" \
+&& export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m" \
+&& export ANT_HOME="/opt/ant" \
+&& export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}" \
+&& export NUM_CONCURRENT_TESTS=$(nproc) \
+&& export MAX_PYTEST_FAILURES=0 \
+&& export USE_GOLD_LINKER=true \
+&& cd ${IMPALA_HOME} \
+&& . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes"
+
+RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& export CC="gcc" \
+&& export CFLAGS="-O2" \
+&& export CXX="g++" \
+&& export CXXFLAGS="-O2" \
+&& export JAVA_HOME="/opt/jdk" \
+&& export JAVA_OPTS="-XX:+UseG1GC" \
+&& export M2_HOME="/opt/maven" \
+&& export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m" \
+&& export ANT_HOME="/opt/ant" \
+&& export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}" \
+&& export NUM_CONCURRENT_TESTS=$(nproc) \
+&& export MAX_PYTEST_FAILURES=0 \
+&& export USE_GOLD_LINKER=true \
+&& cd ${IMPALA_HOME} \
 && . ${IMPALA_HOME}/bin/impala-config.sh \
 && ${IMPALA_HOME}/buildall.sh -notests -release
