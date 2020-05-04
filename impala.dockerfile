@@ -110,22 +110,7 @@ export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"
 export NUM_CONCURRENT_TESTS=$(nproc)
 export MAX_PYTEST_FAILURES=0
 export USE_GOLD_LINKER=true\n' >> ${IMPALA_HOME}/bin/impala-config-local.sh \
-&& sed -i 's/^sudo\ ntpdate/#sudo\ ntpdate/g' ${IMPALA_HOME}/bin/bootstrap_system.sh
-
-RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
-&& export CC="gcc" \
-&& export CFLAGS="-O2" \
-&& export CXX="g++" \
-&& export CXXFLAGS="-O2" \
-&& export JAVA_HOME="/opt/jdk" \
-&& export JAVA_OPTS="-XX:+UseG1GC" \
-&& export M2_HOME="/opt/maven" \
-&& export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m" \
-&& export ANT_HOME="/opt/ant" \
-&& export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}" \
-&& export NUM_CONCURRENT_TESTS=$(nproc) \
-&& export MAX_PYTEST_FAILURES=0 \
-&& export USE_GOLD_LINKER=true \
+&& sed -i 's/^sudo\ ntpdate/#sudo\ ntpdate/g' ${IMPALA_HOME}/bin/bootstrap_system.sh \
 && cd ${IMPALA_HOME} \
 && . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes"
 
