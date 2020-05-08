@@ -14,7 +14,9 @@ export no_proxy="localhost,127.0.0.1,master,worker-1,worker-2,worker-3,worker-4,
 export NO_PROXY="${no_proxy}"
 export ANT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080"\n' >> /etc/profile
 
-RUN printf 'export CC="gcc"
+RUN apt-get update \
+&& apt-get -y install ccache g++ gcc libffi-dev liblzo2-dev libkrb5-dev krb5-admin-server krb5-kdc krb5-user libsasl2-dev libsasl2-modules libsasl2-modules-gssapi-mit libssl-dev make ninja-build ntp ntpdate python-dev python-setuptools postgresql ssh wget vim-common psmisc lsof openjdk-8-jdk openjdk-8-source openjdk-8-dbg apt-utils git ant sudo \
+&& printf 'export CC="gcc"
 export CFLAGS="-O2"
 export CXX="g++"
 export CXXFLAGS="-O2"
@@ -31,18 +33,6 @@ export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"\n' >> /etc
 && ln -sf jdk1.8.0_251 jdk \
 && ln -sf apache-maven-3.6.3 maven \
 && ln -sf apache-ant-1.10.7 ant \
-&& apt-get update \
-&& apt-get -y install ccache g++ gcc libffi-dev liblzo2-dev libkrb5-dev \
-krb5-admin-server krb5-kdc krb5-user libsasl2-dev libsasl2-modules \
-libsasl2-modules-gssapi-mit libssl-dev make ninja-build ntp \
-ntpdate python-dev python-setuptools postgresql ssh wget vim-common psmisc \
-lsof openjdk-8-jdk openjdk-8-source openjdk-8-dbg apt-utils git ant sudo \
-&& sed -i 's/^pool/#pool/g' /etc/ntp.conf \
-&& printf 'listen on 127.0.0.1
-server 127.127.1.0
-fudge 127.127.1.0 stratum 10\n' >> /etc/ntp.conf \
-&& service ntp restart \
-&& printf '127.0.0.1 us.pool.ntp.org\n' >> /etc/hosts \
 && adduser --disabled-password --gecos '' impala \
 && echo 'impala ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
 && su - impala
@@ -73,9 +63,26 @@ export HTTPS_PROXY="${http_proxy}"
 export HTTP_PROXY="${http_proxy}"
 export no_proxy="localhost,127.0.0.1,master,worker-1,worker-2,worker-3,worker-4,127.0.0.0/8,192.168.0.0/16,10.96.0.0/12,10.244.0.0/16,orange-labs.fr,10.171.44.14,dbsp.dw,10.165.0.4,10.165.0.7,k8s.local,10.166.1.8,10.166.1.9,10.166.1.10,10.166.1.11,10.166.1.12,10.166.1.13,10.166.1.15,10.166.1.16,10.166.1.17"
 export NO_PROXY="${no_proxy}"
-export ANT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080"\n' >> ${HOME}/.bashrc
+export ANT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080"\n' >> ${HOME}/.bashrc \
+&& export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& printf 'export http_proxy="http://devwatt-proxy.si.fr.intraorange:8080"
+export https_proxy="${http_proxy}"
+export HTTPS_PROXY="${http_proxy}"
+export HTTP_PROXY="${http_proxy}"
+export ANT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080"\n' > ${IMPALA_HOME}/bin/impala-config-local.sh \
+&& sed -i 's/^pool/#pool/g' /etc/ntp.conf \
+&& printf 'listen on 127.0.0.1
+server 127.127.1.0
+fudge 127.127.1.0 stratum 10\n' >> /etc/ntp.conf \
+&& service ntp restart \
+&& printf '127.0.0.1 us.pool.ntp.org\n' >> /etc/hosts \
+&& export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& sed -i 's/^sudo\ ntpdate/#sudo\ ntpdate/g' ${IMPALA_HOME}/bin/bootstrap_system.sh
 
-RUN printf 'export CC="gcc"
+RUN mkdir -p ${HOME}/src \
+&& tar xf /exchange/apache-impala-3.4.0.tar.gz -C ${HOME}/src \
+&& export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+&& printf 'export CC="gcc"
 export CFLAGS="-O2"
 export CXX="g++"
 export CXXFLAGS="-O2"
@@ -86,17 +93,6 @@ export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m"
 export ANT_HOME="/opt/ant"
 export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"
 export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0"\n' >> ${HOME}/.bashrc \
-&& mkdir -p ${HOME}/src \
-&& tar xf /exchange/apache-impala-3.4.0.tar.gz -C ${HOME}/src
-
-RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
-&& printf 'export http_proxy="http://devwatt-proxy.si.fr.intraorange:8080"
-export https_proxy="${http_proxy}"
-export HTTPS_PROXY="${http_proxy}"
-export HTTP_PROXY="${http_proxy}"
-export ANT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080"\n' > ${IMPALA_HOME}/bin/impala-config-local.sh
-
-RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
 && printf 'export CC="gcc"
 export CFLAGS="-O2"
 export CXX="g++"
@@ -109,12 +105,8 @@ export ANT_HOME="/opt/ant"
 export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"
 export NUM_CONCURRENT_TESTS=$(nproc)
 export MAX_PYTEST_FAILURES=0
-export USE_GOLD_LINKER=true\n' >> ${IMPALA_HOME}/bin/impala-config-local.sh \
-&& sed -i 's/^sudo\ ntpdate/#sudo\ ntpdate/g' ${IMPALA_HOME}/bin/bootstrap_system.sh \
-&& cd ${IMPALA_HOME} \
-&& . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes"
-
-RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
+export USE_GOLD_LINKER=true
+export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0\n' >> ${IMPALA_HOME}/bin/impala-config-local.sh \
 && export CC="gcc" \
 && export CFLAGS="-O2" \
 && export CXX="g++" \
@@ -129,5 +121,6 @@ RUN export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0" \
 && export MAX_PYTEST_FAILURES=0 \
 && export USE_GOLD_LINKER=true \
 && cd ${IMPALA_HOME} \
+&& . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes" \
 && . ${IMPALA_HOME}/bin/impala-config.sh \
 && ${IMPALA_HOME}/buildall.sh -notests -release
