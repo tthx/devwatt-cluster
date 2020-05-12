@@ -14,3 +14,5 @@ docker container prune
 
 docker run --cap-add SYS_TIME --interactive --tty --name impala-dev -p 25000:25000 -p 25010:25010 -v ~/tmp/docker:/exchange -p 25020:25020 impala/boot:0.0.1 bash
 docker start --interactive impala-dev
+
+docker exec -it <CONTAINER ID> bash
