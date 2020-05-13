@@ -1,9 +1,0 @@
-2020-03-13 10:32:59,550 FATAL org.apache.hadoop.yarn.event.AsyncDispatcher: Error in dispatcher thread
-java.lang.NullPointerException
-  at org.apache.hadoop.yarn.server.resourcemanager.metrics.TimelineServiceV2Publisher.putEntity(TimelineServiceV2Publisher.java:459)
-  at org.apache.hadoop.yarn.server.resourcemanager.metrics.TimelineServiceV2Publisher.access$100(TimelineServiceV2Publisher.java:73)
-  at org.apache.hadoop.yarn.server.resourcemanager.metrics.TimelineServiceV2Publisher$TimelineV2EventHandler.handle(TimelineServiceV2Publisher.java:494)
-  at org.apache.hadoop.yarn.server.resourcemanager.metrics.TimelineServiceV2Publisher$TimelineV2EventHandler.handle(TimelineServiceV2Publisher.java:483)
-  at org.apache.hadoop.yarn.event.AsyncDispatcher.dispatch(AsyncDispatcher.java:197)
-  at org.apache.hadoop.yarn.event.AsyncDispatcher$1.run(AsyncDispatcher.java:126)
-  at java.lang.Thread.run(Thread.java:748)

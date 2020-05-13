@@ -54,13 +54,13 @@
 
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:postgresql://master/metastore</value>
+    <value>jdbc:mysql://master/metastore</value>
     <description>JDBC connect string for a JDBC metastore. Default: jdbc:derby:;databaseName=metastore_db;create=true</description>
   </property>
    
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>org.postgresql.Driver</value>
+    <value>com.mysql.jdbc.Driver</value>
     <description>Driver class name for a JDBC metastore. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
   </property>
    
@@ -74,12 +74,6 @@
     <name>javax.jdo.option.ConnectionPassword</name>
     <value>D@$#H0le99*</value>
     <description>Password to use against metastore database. Default: mine</description>
-  </property>
-   
-  <property>
-    <name>metastore.try.direct.sql.ddl</name>
-    <value>false</value>
-    <description>When using Postgres you should set the configuration parameter metastore.try.direct.sql.ddl (previously hive.metastore.try.direct.sql.ddl) to false, to avoid failures in certain operations.</description>
   </property>
 
   <property>
