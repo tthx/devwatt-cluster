@@ -367,6 +367,12 @@
   </property>
 
   <property>
+    <name>hive.txn.strict.locking.mode</name>
+    <value>false</value>
+    <description>In strict mode non-ACID resources use standard R/W lock semantics, e.g. INSERT will acquire exclusive lock. In non-strict mode, for non-ACID resources, INSERT will only acquire shared lock, which allows two concurrent writes to the same partition but still lets lock manager prevent DROP TABLE etc. when the table is being written to.  Only apples when hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager. Default: true</description>
+  </property>
+
+  <property>
     <name>hive.exec.dynamic.partition.mode</name>
     <value>nonstrict</value>
     <description>In strict mode, the user must specify at least one static partition in case the user accidentally overwrites all partitions. In nonstrict mode all partitions are allowed to be dynamic.

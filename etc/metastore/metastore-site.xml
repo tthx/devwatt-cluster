@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
   
   <!-- Running the Metastore Without Hive -->
+  <!--
   <property>
     <name>metastore.task.threads.always</name>
     <value>org.apache.hadoop.hive.metastore.events.EventCleanerTask,org.apache.hadoop.hive.metastore.MaterializationsCacheCleanerTask</value>
@@ -12,5 +13,6 @@
     <name>metastore.expression.proxy</name>
     <value>org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</value>
   </property>
+  -->
 
 </configuration>
