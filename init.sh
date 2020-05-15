@@ -33,13 +33,14 @@ sudo chmod 755 /mnt/hdfs
 cd /opt;sudo chown -R root:root ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 cd /opt;sudo chmod -R g-w,o-w ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 
-sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark
+sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run
 sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs
 sudo chown -R yarn:hadoop /var/yarn
 sudo chown -R mapred:hadoop /var/mapred
 sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo chown -R hbase:hadoop /var/hbase
 sudo chown -R hive:hadoop /var/hive /var/metastore
+sudo chown -R impala:hadoop /var/impala
 sudo chmod 775 /var/hive/tmp
 sudo chown -R root:root /etc/hadoop /etc/hbase /opt
 sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /opt
@@ -57,7 +58,7 @@ deleteall /hbase /hive
 
 hdfs namenode -format tthx
 
-hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive
+hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive /home/impala
 hdfs dfs -chown -R ubuntu /home/ubuntu
 hdfs dfs -chown -R yarn /home/yarn
 hdfs dfs -chown -R mapred /home/mapred
@@ -66,6 +67,7 @@ hdfs dfs -chmod 1770 /home/mapred/mr-history/done
 hdfs dfs -chown -R hive /home/hive /tmp/hive
 hdfs dfs -chown -R attu7372 /home/attu7372
 hdfs dfs -chown -R hbase /home/hbase
+hdfs dfs -chown -R impala /home/impala
 hdfs dfs -chmod -R 1777 /home/yarn/log /home/hive/warehouse /tmp
 
 hdfs dfs -mkdir -p /home/hbase/coprocessor/
