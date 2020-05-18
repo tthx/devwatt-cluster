@@ -124,3 +124,7 @@ export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0"\n' >> ${IMPALA_HOME}/bin/im
 && . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes" \
 && . ${IMPALA_HOME}/bin/impala-config.sh \
 && ${IMPALA_HOME}/buildall.sh -notests -release
+
+cd ${HOME}/src \
+&& tar cjf /exchange/apache-impala-3.4.0-bin.tar.bz2 apache-impala-3.4.0/be/build/release/service/* apache-impala-3.4.0/fe/target/dependency/* \
+&& cp apache-impala-3.4.0/shell/build/impala-shell-3.4.0-RELEASE.tar.gz /exchange/.
