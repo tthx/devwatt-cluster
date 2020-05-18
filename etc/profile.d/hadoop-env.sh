@@ -15,7 +15,9 @@ export HIVE_HOME="/opt/hive";
 export HIVE_CONF_DIR="/etc/hive";
 export METASTORE_HOME="/opt/metastore";
 export METASTORE_CONF_DIR="/etc/metastore";
-export PATH="${METASTORE_HOME}/bin:${HIVE_HOME}/bin:${SPARK_HOME}/bin:${HBASE_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${ZOOBINDIR}:${JAVA_HOME}/bin:${PATH}";
+export IMPALA_HOME="/opt/impala";
+export IMPALA_CONF_DIR="/etc/impala";
+export PATH="${IMPALA_HOME}/bin:${METASTORE_HOME}/bin:${HIVE_HOME}/bin:${SPARK_HOME}/bin:${HBASE_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${ZOOBINDIR}:${JAVA_HOME}/bin:${PATH}";
 
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native";
 if [[ -n "${LD_LIBRARY_PATH}" ]];
