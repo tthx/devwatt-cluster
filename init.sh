@@ -55,7 +55,7 @@ sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${HIVE_HOME}/lib/.; sudo ln -s /
 cd ~/src/devwatt-cluster/bin; sudo cp utils.sh metastore_ctl ${METASTORE_HOME}/bin/.; sudo cp utils.sh hiveserver2_ctl ${HIVE_HOME}/bin/.
 
 # Impala
-sudo mkdir -p ${IMAPLA_HOME}/bin;cd ~/src/devwatt-cluster/bin;sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMAPLA_HOME}/bin/.
+sudo mkdir -p ${IMPALA_HOME}/bin;cd ~/src/devwatt-cluster/bin;sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMPALA_HOME}/bin/.
 
 # HDFS
 rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
