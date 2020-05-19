@@ -1,15 +1,18 @@
 export IMPALA_LOG_DIR=/var/impala/log
 
 export IMPALA_CATALOG_SERVICE_HOST=master
-export IMPALA_CATALOG_ARGS="-log_dir=${IMPALA_LOG_DIR}"
+export IMPALA_CATALOG_ARGS="--disable_kudu \
+  -log_dir=${IMPALA_LOG_DIR}"
 
 export IMPALA_STATE_STORE_HOST=master
 export IMPALA_STATE_STORE_PORT=24000
-export IMPALA_STATE_STORE_ARGS="-log_dir=${IMPALA_LOG_DIR} \
+export IMPALA_STATE_STORE_ARGS="--disable_kudu \
+  -log_dir=${IMPALA_LOG_DIR} \
   -state_store_port=${IMPALA_STATE_STORE_PORT}"
 
 export IMPALA_BACKEND_PORT=22000
-export IMPALA_SERVER_ARGS="-log_dir=${IMPALA_LOG_DIR} \
+export IMPALA_SERVER_ARGS="--disable_kudu \
+  -log_dir=${IMPALA_LOG_DIR} \
   -catalog_service_host=${IMPALA_CATALOG_SERVICE_HOST} \
   -state_store_port=${IMPALA_STATE_STORE_PORT} \
   -use_statestore \
