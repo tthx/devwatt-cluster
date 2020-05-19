@@ -45,12 +45,19 @@ sudo chmod 775 /var/hive/tmp
 sudo chown -R root:root /etc/hadoop /etc/hbase /opt
 sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /opt
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.; sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop/bin/container-executor; sudo chmod 6050 /opt/hadoop/bin/container-executor
-# For Hive 3.1.2
-sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
-sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/.; sudo ln -s /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/.; sudo cp ~/src/devwatt-cluster/bin/utils.sh ~/src/devwatt-cluster/bin/metastore_ctl ${METASTORE_HOME}/bin/.; sudo cp ~/src/devwatt-cluster/bin/utils.sh ~/src/devwatt-cluster/bin/hiveserver2_ctl ${HIVE_HOME}/bin/.
-#sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar /opt/hive/lib/.; sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar /opt/metastore/lib/.; sudo cp ~/src/devwatt-cluster/bin/utils.sh ~/src/devwatt-cluster/bin/metastore_ctl ${METASTORE_HOME}/bin/.; sudo cp ~/src/devwatt-cluster/bin/utils.sh ~/src/devwatt-cluster/bin/hiveserver2_ctl ${HIVE_HOME}/bin/.
 
-hdfs:
+# Hive 3.1.2
+sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
+
+sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${HIVE_HOME}/lib/.; sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${METASTORE_HOME}/lib/.
+#sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${HIVE_HOME}/lib/.; sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${METASTORE_HOME}/lib/.
+
+cd ~/src/devwatt-cluster/bin; sudo cp utils.sh metastore_ctl ${METASTORE_HOME}/bin/.; sudo cp utils.sh hiveserver2_ctl ${HIVE_HOME}/bin/.
+
+# Impala
+sudo mkdir -p ${IMAPLA_HOME}/bin;cd ~/src/devwatt-cluster/bin;sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMAPLA_HOME}/bin/.
+
+# HDFS
 rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
 
 ${ZOOBINDIR}/zkCli.sh
