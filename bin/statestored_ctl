@@ -9,7 +9,7 @@ LOG_DIR="/var/impala/log";
 
 PIDFILE="${IMPALA_HOME}/${SERVICE}.pid";
 
-. "${BIN_DIR}/utils.sh";
+. "${IMPALA_HOME}/bin/utils.sh";
 exec 1>> "${LOG_DIR}/${SERVICE}.stdout.log";
 exec 2>> "${LOG_DIR}/${SERVICE}.stderr.log";
 

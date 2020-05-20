@@ -126,9 +126,15 @@ export IMPALA_HOME="${HOME}/src/apache-impala-3.4.0"\n' >> ${IMPALA_HOME}/bin/im
 && ${IMPALA_HOME}/buildall.sh -notests -release
 
 cd ${HOME}/src \
+&& strip -s apache-impala-3.4.0/be/build/release/service/impalad \
+apache-impala-3.4.0/be/build/release/service/libfesupport.so \
+&& cp apache-impala-3.4.0/toolchain/kudu-4ed0dbbd1/release/lib/libkudu_client.so.0.1.0 apache-impala-3.4.0/be/build/release/service/. \
+&& strip -s apache-impala-3.4.0/be/build/release/service/libkudu_client.so.0.1.0 \
+&& cp apache-impala-3.4.0/fe/target/impala-frontend-0.1-SNAPSHOT.jar apache-impala-3.4.0/fe/target/dependency/. \
+&& cd apache-impala-3.4.0/be/build/release/service \
+&& ln -sf libkudu_client.so.0.1.0 libkudu_client.so.0 \
+&& cd - \
 && tar cjf /exchange/apache-impala-3.4.0-bin.tar.bz2 \
 apache-impala-3.4.0/be/build/release/service/* \
 apache-impala-3.4.0/fe/target/dependency/* \
-apache-impala-3.4.0/toolchain/kudu-4ed0dbbd1/release/lib/libkudu_client.so.0.1.0 \
-apache-impala-3.4.0/fe/target/impala-frontend-0.1-SNAPSHOT.jar \
 apache-impala-3.4.0/shell/build/impala-shell-3.4.0-RELEASE.tar.gz
