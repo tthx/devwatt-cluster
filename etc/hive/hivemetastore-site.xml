@@ -96,6 +96,7 @@
   </property>
 
   <!-- Compactor -->
+  <!--
   <property>
     <name>hive.compactor.initiator.on</name>
     <value>true</value>
@@ -116,5 +117,6 @@
     <name>hive.compactor.job.queue</name>
     <value>hive</value>
   </property>
+  -->
 
 </configuration>
