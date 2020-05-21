@@ -28,11 +28,11 @@ export ANT_HOME="/opt/ant"
 export PATH="${JAVA_HOME}/bin:${M2_HOME}/bin:${ANT_HOME}/bin:${PATH}"\n' >> /etc/profile \
 && tar xf /exchange/jdk-8u251-linux-x64.tar.gz -C /opt \
 && tar xf /exchange/apache-maven-3.6.3-bin.tar.gz -C /opt \
-&& tar xf /exchange/apache-ant-1.10.7-bin.tar.bz2 -C /opt \
+&& tar xf /exchange/apache-ant-1.10.8-bin.tar.bz2 -C /opt \
 && cd /opt \
 && ln -sf jdk1.8.0_251 jdk \
 && ln -sf apache-maven-3.6.3 maven \
-&& ln -sf apache-ant-1.10.7 ant \
+&& ln -sf apache-ant-1.10.8 ant \
 && adduser --disabled-password --gecos '' impala \
 && echo 'impala ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
 && su - impala
