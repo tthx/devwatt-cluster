@@ -43,7 +43,7 @@ export IMPALA_HOME="${HOME}/src/impala"\n' >> ${IMPALA_HOME}/bin/impala-config-l
 && ${IMPALA_HOME}/buildall.sh -notests -release
 
 export IMPALA_HOME="${HOME}/src/impala" \
-cd ${IMPALA_HOME}/be/build/release/service \
+&& cd ${IMPALA_HOME}/be/build/release/service \
 && cp ${IMPALA_HOME}/toolchain/kudu-*/release/lib/libkudu_client.so.0.1.0 . \
 && strip -s ./impalad ./libfesupport.so ./libkudu_client.so.0.1.0 \
 && ln -sf libkudu_client.so.0.1.0 libkudu_client.so.0 \
