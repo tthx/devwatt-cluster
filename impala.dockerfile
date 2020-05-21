@@ -47,6 +47,7 @@ cd ${IMPALA_HOME}/be/build/release/service \
 && cp ${IMPALA_HOME}/toolchain/kudu-*/release/lib/libkudu_client.so.0.1.0 . \
 && strip -s ./impalad ./libfesupport.so ./libkudu_client.so.0.1.0 \
 && ln -sf libkudu_client.so.0.1.0 libkudu_client.so.0 \
+&& ln -sf libkudu_client.so.0 libkudu_client.so \
 && cp ${IMPALA_HOME}/fe/target/impala-frontend-0.1-SNAPSHOT.jar ${IMPALA_HOME}/fe/target/dependency/. \
 && cd ${IMPALA_HOME} \
 && tar cjf /exchange/apache-impala-3.4.0-bin.tar.bz2 \
