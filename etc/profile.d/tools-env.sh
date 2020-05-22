@@ -30,7 +30,6 @@ alias vi='vim';
 alias md='mkdir -p';
 alias cls='clear';
 alias more='less';
-alias python='python3';
 alias chrome='google-chrome-stable 2>/dev/null';
 alias firefox='/usr/bin/firefox 2>/dev/null';
 alias sublime='/opt/sublime_text/sublime_text';
