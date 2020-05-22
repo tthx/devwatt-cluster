@@ -25,13 +25,10 @@ sudo useradd impala --create-home --groups hadoop --shell /bin/bash
 echo 'impala:D@$#H0le99*'|sudo chpasswd
 sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash
 echo 'attu7372:D@$#H0le99*'|sudo chpasswd
-sudo useradd impala --create-home --groups hadoop --shell /bin/bash
-echo 'impala:D@$#H0le99*'|sudo chpasswd
+sudo useradd spark --create-home --groups hadoop --shell /bin/bash
+echo 'spark:D@$#H0le99*'|sudo chpasswd
 sudo mkdir -p /mnt/hdfs
 sudo chmod 755 /mnt/hdfs
-
-cd /opt;sudo chown -R root:root ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
-cd /opt;sudo chmod -R g-w,o-w ./hadoop* ./apache-hive* ./tez* ./hbase* ./spark*
 
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run
 sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs
@@ -41,9 +38,10 @@ sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo chown -R hbase:hadoop /var/hbase
 sudo chown -R hive:hadoop /var/hive /var/metastore
 sudo chown -R impala:hadoop /var/impala
+sudo chown -R spark:hadoop /var/impala
 sudo chmod 775 /var/hive/tmp
-sudo chown -R root:root /etc/hadoop /etc/hbase /opt
-sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /opt
+sudo chown -R root:root /etc/hadoop /etc/hbase /etc/hive /etc/impala /etc/metastore /etc/spark /etc/tez /opt
+sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /etc/hive /etc/impala /etc/metastore /etc/spark /etc/tez /opt
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.; sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop/bin/container-executor; sudo chmod 6050 /opt/hadoop/bin/container-executor
 
 # Hive 3.1.2
