@@ -3,9 +3,9 @@
 set -eu
 
 SERVICE="metastore";
-BIN_DIR="/opt/hive/bin"
-RUN_DIR="/var/hive/run";
-LOG_DIR="/var/hive/log";
+BIN_DIR="/opt/metastore/bin"
+RUN_DIR="/var/metastore/run";
+LOG_DIR="/var/metastore/log";
 
 PIDFILE="${RUN_DIR}/${SERVICE}.pid";
 
@@ -16,7 +16,7 @@ exec 2>> "${LOG_DIR}/${SERVICE}.stderr.log";
 case "${1}" in
   "start")
     pid_guard "${PIDFILE}" "${SERVICE}";
-    "${BIN_DIR}/hive" --service "${SERVICE}" \
+    "${BIN_DIR}/start-${SERVICE}" \
       >>  "${LOG_DIR}/${SERVICE}.stdout.log" \
       2>> "${LOG_DIR}/${SERVICE}.stderr.log" & disown;
     echo "${!}" > "${PIDFILE}";

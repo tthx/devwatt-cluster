@@ -40,8 +40,40 @@ sudo chown -R hive:hadoop /var/hive /var/metastore
 sudo chown -R impala:hadoop /var/impala
 sudo chown -R spark:hadoop /var/impala
 sudo chmod 775 /var/hive/tmp
-sudo chown -R root:root /etc/hadoop /etc/hbase /etc/hive /etc/impala /etc/metastore /etc/spark /etc/tez /opt
-sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /etc/hive /etc/impala /etc/metastore /etc/spark /etc/tez /opt
+
+cd /opt \
+&& sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
+&& cd /tmp \
+&& sudo tar xf apache-hive-3.1.2-bin.tar.gz -C /opt \
+&& sudo tar xf apache-hive-metastore-3.1.2-bin.tar.gz -C /opt \
+&& sudo tar xf hbase-2.2.4-bin.tar.gz -C /opt \
+&& sudo tar xf hbase-2.2.4-client-bin.tar.gz -C /opt \
+&& sudo mkdir -p /opt/apache-impala-3.4.0-bin \
+&& sudo tar xf apache-impala-3.4.0-bin.tar.bz2 -C /opt/apache-impala-3.4.0-bin \
+&& sudo tar xf hadoop-3.1.2.tar.gz -C /opt \
+&& sudo tar xf hadoop-3.2.1.tar.gz -C /opt \
+&& sudo mkdir -p /opt/tez-0.9.2 \
+&& sudo tar xf tez-0.9.2.tar.gz -C /opt/tez-0.9.2 \
+&& sudo cp tez-aux-services-0.9.2.jar /opt/tez-0.9.2/. \
+&& sudo tar xf /opt/apache-impala-3.4.0-bin/shell/build/impala-shell-3.4.0-RELEASE.tar.gz -C /opt \
+&& cd /opt \
+&& sudo rm -f hive metastore hbase hbase hbase-client impala impala-shell hadoop tez \
+&& sudo ln -sf apache-hive-3.1.2-bin hive \
+&& sudo ln -sf apache-hive-metastore-3.1.2-bin metastore \
+&& sudo ln -sf hbase-2.2.4 hbase \
+&& sudo ln -sf hbase-2.2.4-client hbase-client \
+&& sudo ln -sf apache-impala-3.4.0-bin impala \
+&& sudo ln -sf impala-shell-3.4.0-RELEASE impala-shell \
+&& sudo ln -sf hadoop-3.1.2 hadoop \
+&& sudo ln -sf tez-0.9.2 tez
+
+cd /etc \
+&& sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
+&& sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
+&& cd /opt \
+&& sudo chown -R root:root ./hadoop-* ./hbase-2* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-* \
+&& sudo chmod -R g-w,o-w ./hadoop-* ./hbase-2* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-*
+
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.2.1/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.2.1/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.2.1/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.2.1/bin/container-executor
 
 # Hive 3.1.2
