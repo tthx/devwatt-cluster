@@ -6,29 +6,44 @@ npm install -g ember-cli
 abdmob/x2js -> x2js
 ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/bower.json ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/ember-cli-build.js
 
-echo 'ubuntu:azerty'|sudo chpasswd
-sudo addgroup hadoop
-sudo adduser ubuntu hadoop
-sudo useradd zookeeper --create-home --groups hadoop --shell /bin/bash
-echo 'zookeeper:D@$#H0le99*'|sudo chpasswd
-sudo useradd hive --create-home --groups hadoop --shell /bin/bash
-echo 'hive:D@$#H0le99*'|sudo chpasswd
-sudo useradd hbase --create-home --groups hadoop --shell /bin/bash
-echo 'hbase:D@$#H0le99*'|sudo chpasswd
-sudo useradd hdfs --create-home --groups hadoop --shell /bin/bash
-echo 'hdfs:D@$#H0le99*'|sudo chpasswd
-sudo useradd yarn --create-home --groups hadoop --shell /bin/bash
-echo 'yarn:D@$#H0le99*'|sudo chpasswd
-sudo useradd mapred --create-home --groups hadoop --shell /bin/bash
-echo 'mapred:D@$#H0le99*'|sudo chpasswd
-sudo useradd impala --create-home --groups hadoop --shell /bin/bash
-echo 'impala:D@$#H0le99*'|sudo chpasswd
-sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash
-echo 'attu7372:D@$#H0le99*'|sudo chpasswd
-sudo useradd spark --create-home --groups hadoop --shell /bin/bash
-echo 'spark:D@$#H0le99*'|sudo chpasswd
-sudo mkdir -p /mnt/hdfs
-sudo chmod 755 /mnt/hdfs
+echo 'ubuntu:azerty'|sudo chpasswd \
+&& sudo adduser ubuntu hadoop \
+sudo addgroup hadoop \
+&& sudo useradd zookeeper --create-home --groups hadoop --shell /bin/bash \
+&& echo 'zookeeper:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd hive --create-home --groups hadoop --shell /bin/bash \
+&& echo 'hive:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd hbase --create-home --groups hadoop --shell /bin/bash \
+&& echo 'hbase:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd hdfs --create-home --groups hadoop --shell /bin/bash \
+&& echo 'hdfs:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd yarn --create-home --groups hadoop --shell /bin/bash \
+&& echo 'yarn:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd mapred --create-home --groups hadoop --shell /bin/bash \
+&& echo 'mapred:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd impala --create-home --groups hadoop --shell /bin/bash \
+&& echo 'impala:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash \
+&& echo 'attu7372:D@$#H0le99*'|sudo chpasswd \
+&& sudo useradd spark --create-home --groups hadoop --shell /bin/bash \
+&& echo 'spark:D@$#H0le99*'|sudo chpasswd \
+&& sudo mkdir -p /mnt/hdfs \
+&& sudo chmod 755 /mnt/hdfs
+
+users="hdfs yarn mapred hive hbase zookeeper spark impala";
+cat ~/.ssh/id_rsa.pub > /tmp/authorized_keys
+chmod 777 /tmp/authorized_keys
+for x in ${user};
+do
+  sudo -u ${x} ssh-keygen -t rsa -b 4096 -q -N '' -f /home/${x}/.ssh/id_rsa <<< y
+  sudo -u ${x} cat /home/${x}/.ssh/id_rsa.pub >> /tmp/authorized_keys
+done
+for x in ${user};
+do
+  sudo -u ${x} cp /tmp/authorized_keys /home/${x}/.ssh/.
+  sudo -u ${x} chmod 600 /home/${x}/.ssh/authorized_keys
+done
+
 
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run \
 && sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
@@ -65,9 +80,8 @@ cd /opt \
 && sudo ln -sf apache-impala-3.4.0-bin impala \
 && sudo ln -sf impala-shell-3.4.0-RELEASE impala-shell \
 && sudo ln -sf hadoop-3.1.2 hadoop \
-&& sudo ln -sf tez-0.9.2 tez
-
-cd /opt \
+&& sudo ln -sf tez-0.9.2 tez \
+&& cd /opt \
 && sudo chown -R root:root ./hadoop-* ./hbase-2* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-* \
 && sudo chmod -R g-w,o-w ./hadoop-* ./hbase-2* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-*
 
@@ -82,11 +96,11 @@ sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/. \
 && sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor \
 && sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
 
-sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${HIVE_HOME}/lib/. \
-&& sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${METASTORE_HOME}/lib/.
+sudo ln -sf /usr/share/java/postgresql-jdbc4.jar ${HIVE_HOME}/lib/. \
+&& sudo ln -sf /usr/share/java/postgresql-jdbc4.jar ${METASTORE_HOME}/lib/.
 
-sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${HIVE_HOME}/lib/. \
-&& sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${METASTORE_HOME}/lib/.
+sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar ${HIVE_HOME}/lib/. \
+&& sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar ${METASTORE_HOME}/lib/.
 
 cd ~/src/devwatt-cluster \
 && git pull \
