@@ -26,24 +26,22 @@ sudo addgroup hadoop \
 && sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash \
 && echo 'attu7372:D@$#H0le99*'|sudo chpasswd \
 && sudo useradd spark --create-home --groups hadoop --shell /bin/bash \
-&& echo 'spark:D@$#H0le99*'|sudo chpasswd \
-&& sudo mkdir -p /mnt/hdfs \
-&& sudo chmod 755 /mnt/hdfs
+&& echo 'spark:D@$#H0le99*'|sudo chpasswd 
 
-users="hdfs yarn mapred hive hbase zookeeper spark impala";
+users="hdfs yarn mapred hive hbase zookeeper spark impala"
 cat ~/.ssh/id_rsa.pub > /tmp/authorized_keys
 chmod 777 /tmp/authorized_keys
-for x in ${user};
+for x in ${users};
 do
-  sudo -u ${x} ssh-keygen -t rsa -b 4096 -q -N '' -f /home/${x}/.ssh/id_rsa <<< y
-  sudo -u ${x} cat /home/${x}/.ssh/id_rsa.pub >> /tmp/authorized_keys
+  sudo -u ${x} ssh-keygen -t rsa -b 4096 -q -N '' -f /home/${x}/.ssh/id_rsa <<< y \
+  && sudo -u ${x} cat /home/${x}/.ssh/id_rsa.pub >> /tmp/authorized_keys
 done
-for x in ${user};
+for x in ${users};
 do
-  sudo -u ${x} cp /tmp/authorized_keys /home/${x}/.ssh/.
-  sudo -u ${x} chmod 600 /home/${x}/.ssh/authorized_keys
+  sudo -u ${x} cp /tmp/authorized_keys /home/${x}/.ssh/. \
+  && sudo -u ${x} chmod 600 /home/${x}/.ssh/authorized_keys
 done
-
+rm /tmp/authorized_keys
 
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run \
 && sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
@@ -54,7 +52,9 @@ sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1
 && sudo chown -R hive:hadoop /var/hive /var/metastore \
 && sudo chown -R impala:hadoop /var/impala \
 && sudo chown -R spark:hadoop /var/impala \
-&& sudo chmod 775 /var/hive/tmp
+&& sudo chmod 775 /var/hive/tmp \
+&& sudo mkdir -p /mnt/hdfs \
+&& sudo chmod 755 /mnt/hdfs
 
 cd /opt \
 && sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
@@ -121,10 +121,13 @@ sudo mkdir -p ${IMPALA_HOME}/bin \
 # HDFS
 rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
 
-${ZOOBINDIR}/zkCli.sh
+# Zookeeper
+sudo cp -R ~/src/devwatt-cluster/var /var/.
+sudo chown -R zookeeper:hadoop /var/zookeeper
+sudo -u zookeeper ${ZOOBINDIR}/zkCli.sh
 deleteall /hbase /hive
 
-hdfs namenode -format tthx
+sudo -u hdfs ${HADOOP_HOME}/bin/hdfs namenode -format tthx
 
 hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive /home/impala
 hdfs dfs -chown -R ubuntu /home/ubuntu
