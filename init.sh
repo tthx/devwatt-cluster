@@ -30,16 +30,16 @@ echo 'spark:D@$#H0le99*'|sudo chpasswd
 sudo mkdir -p /mnt/hdfs
 sudo chmod 755 /mnt/hdfs
 
-sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run
-sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs
-sudo chown -R yarn:hadoop /var/yarn
-sudo chown -R mapred:hadoop /var/mapred
-sudo chown -R zookeeper:hadoop /var/zookeeper
-sudo chown -R hbase:hadoop /var/hbase
-sudo chown -R hive:hadoop /var/hive /var/metastore
-sudo chown -R impala:hadoop /var/impala
-sudo chown -R spark:hadoop /var/impala
-sudo chmod 775 /var/hive/tmp
+sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run \
+&& sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
+&& sudo chown -R yarn:hadoop /var/yarn \
+&& sudo chown -R mapred:hadoop /var/mapred \
+&& sudo chown -R zookeeper:hadoop /var/zookeeper \
+&& sudo chown -R hbase:hadoop /var/hbase \
+&& sudo chown -R hive:hadoop /var/hive /var/metastore \
+&& sudo chown -R impala:hadoop /var/impala \
+&& sudo chown -R spark:hadoop /var/impala \
+&& sudo chmod 775 /var/hive/tmp
 
 cd /opt \
 && sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
@@ -67,25 +67,42 @@ cd /opt \
 && sudo ln -sf hadoop-3.1.2 hadoop \
 && sudo ln -sf tez-0.9.2 tez
 
-cd /etc \
-&& sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
-&& sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
-&& cd /opt \
+cd /opt \
 && sudo chown -R root:root ./hadoop-* ./hbase-2* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-* \
 && sudo chmod -R g-w,o-w ./hadoop-* ./hbase-2* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-*
 
-sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.2.1/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.2.1/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.2.1/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.2.1/bin/container-executor
+sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.2.1/etc/hadoop/. \
+&& sudo chmod 644 /opt/hadoop-3.2.1/etc/hadoop/container-executor.cfg \
+&& sudo chown root:hadoop /opt/hadoop-3.2.1/bin/container-executor \
+&& sudo chmod 6050 /opt/hadoop-3.2.1/bin/container-executor
 
 # Hive 3.1.2
-sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
+sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/. \
+&& sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg \
+&& sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor \
+&& sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
 
-sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${HIVE_HOME}/lib/.; sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${METASTORE_HOME}/lib/.
-#sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${HIVE_HOME}/lib/.; sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${METASTORE_HOME}/lib/.
+sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${HIVE_HOME}/lib/. \
+&& sudo ln -s /usr/share/java/postgresql-jdbc4.jar ${METASTORE_HOME}/lib/.
 
-cd ~/src/devwatt-cluster/bin; sudo cp utils.sh metastore_ctl ${METASTORE_HOME}/bin/.; sudo cp utils.sh hiveserver2_ctl ${HIVE_HOME}/bin/.
+sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${HIVE_HOME}/lib/. \
+&& sudo ln -s /usr/share/java/mysql-connector-java-8.0.19.jar ${METASTORE_HOME}/lib/.
+
+cd ~/src/devwatt-cluster \
+&& git pull \
+&& sudo cp -r etc/* /etc/. \
+&& cd /etc \
+&& sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
+&& sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez
+
+cd ~/src/devwatt-cluster/bin \
+&& sudo cp utils.sh metastore_standalone_ctl ${METASTORE_HOME}/bin/. \
+&& sudo cp utils.sh metastore_ctl hiveserver2_ctl ${HIVE_HOME}/bin/.
 
 # Impala
-sudo mkdir -p ${IMPALA_HOME}/bin;cd ~/src/devwatt-cluster/bin;sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMPALA_HOME}/bin/.
+sudo mkdir -p ${IMPALA_HOME}/bin \
+&& cd ~/src/devwatt-cluster/bin \
+&& sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMPALA_HOME}/bin/.
 
 # HDFS
 rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
