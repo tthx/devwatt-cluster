@@ -20,7 +20,7 @@ export IMPALA_CONF_DIR="/etc/impala";
 export PATH="${IMPALA_HOME}/bin:${METASTORE_HOME}/bin:${HIVE_HOME}/bin:${SPARK_HOME}/bin:${HBASE_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${ZOOBINDIR}:${JAVA_HOME}/bin:${PATH}";
 
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native";
-if [[ -n "${LD_LIBRARY_PATH}" ]];
+if [[ -n "${LD_LIBRARY_PATH+x}" ]];
 then
   export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}";
 else

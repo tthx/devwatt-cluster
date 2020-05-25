@@ -57,7 +57,7 @@ export JAVA_HOME="/opt/jdk1.8.0_251"
 export JAVA_OPTS="-XX:+UseG1GC"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
-if [[ -n "${HADOOP_CLASSPATH}" ]];
+if [[ -n "${HADOOP_CLASSPATH+x}" ]];
 then
   export HADOOP_CLASSPATH+=":${HIVE_HOME}/lib/hive-exec-3.1.2.jar";
 else

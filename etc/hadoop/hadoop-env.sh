@@ -62,7 +62,7 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 export HADOOP_HOME="/opt/hadoop"
 export PATH="${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}"
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native"
-if [[ -n "${LD_LIBRARY_PATH}" ]];
+if [[ -n "${LD_LIBRARY_PATH+x}" ]];
 then
   export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}"
 else
@@ -150,7 +150,7 @@ esac
 # Similarly, end users should utilize ${HOME}/.hadooprc .
 # This variable should ideally only be used as a short-cut,
 # interactive way for temporary additions on the command line.
-if [[ -n "${HADOOP_CLASSPATH}" ]];
+if [[ -n "${HADOOP_CLASSPATH+x}" ]];
 then
   export HADOOP_CLASSPATH+=":$(find ${HADOOP_CONF_DIR}/ \( -name '*.xml' -o -name '*.properties' \) | xargs echo | tr ' ' ':'):$(find ${HADOOP_HOME}/ \( -name '*.jar' ! -name '*-sources.jar' \) | xargs echo | tr ' ' ':')"
 else

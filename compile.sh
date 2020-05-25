@@ -14,7 +14,7 @@ export JAVA_OPTS="-XX:+UseG1GC";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms1g -Xmx2g";
 export PATH="${JAVA_HOME}/bin:${PATH}";
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native";
-if [[ -n "${LD_LIBRARY_PATH}" ]];
+if [[ -n "${LD_LIBRARY_PATH+x}" ]];
 then
   export LD_LIBRARY_PATH+=":${HADOOP_COMMON_LIB_NATIVE_DIR}";
 else

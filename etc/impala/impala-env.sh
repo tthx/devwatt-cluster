@@ -35,7 +35,7 @@ export HADOOP_CONF_DIR=/etc/hadoop
 export HIVE_CONF_DIR=/etc/hive
 export HBASE_CONF_DIR=/etc/hbase
 
-if [[ -n "${LD_LIBRARY_PATH}" ]];
+if [[ -n "${LD_LIBRARY_PATH+x}" ]];
 then
   export LD_LIBRARY_PATH+=":/usr/lib/x86_64-linux-gnu/"
 else
@@ -53,7 +53,7 @@ for library in libjvm.so libjsig.so libjava.so; do
 done
 export LD_LIBRARY_PATH="${IMPALA_BIN}:${LD_LIBRARY_PATH}"
 
-if [[ -n "${CLASSPATH}" ]];
+if [[ -n "${CLASSPATH+x}" ]];
 then
   export CLASSPATH+="${IMPALA_CONF_DIR}:${HADOOP_CONF_DIR}:${HIVE_CONF_DIR}:${HBASE_CONF_DIR}:${POSTGRESQL_CONNECTOR_JAR}:$(find ${IMPALA_HOME}/fe/target/dependency/ -name '*.jar' | xargs echo | tr ' ' ':')"
 else

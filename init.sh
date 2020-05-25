@@ -42,7 +42,7 @@ sudo chown -R spark:hadoop /var/impala
 sudo chmod 775 /var/hive/tmp
 sudo chown -R root:root /etc/hadoop /etc/hbase /etc/hive /etc/impala /etc/metastore /etc/spark /etc/tez /opt
 sudo chmod -R g-w,o-w /etc/hadoop /etc/hbase /etc/hive /etc/impala /etc/metastore /etc/spark /etc/tez /opt
-sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/.; sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop/bin/container-executor; sudo chmod 6050 /opt/hadoop/bin/container-executor
+sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.2.1/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.2.1/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.2.1/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.2.1/bin/container-executor
 
 # Hive 3.1.2
 sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop-3.1.2/etc/hadoop/.; sudo chmod 644 /opt/hadoop-3.1.2/etc/hadoop/container-executor.cfg; sudo chown root:hadoop /opt/hadoop-3.1.2/bin/container-executor; sudo chmod 6050 /opt/hadoop-3.1.2/bin/container-executor
@@ -75,14 +75,14 @@ hdfs dfs -chown -R hbase /home/hbase
 hdfs dfs -chown -R impala /home/impala
 hdfs dfs -chmod -R 1777 /home/yarn/log /home/hive/warehouse /tmp
 
+# YARN Timeline service
+hadoop org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create
+
 hdfs dfs -mkdir -p /home/hbase/coprocessor/
 hdfs dfs -rm -f /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -put ${HADOOP_HOME}/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-*.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -chown hbase /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar
 hdfs dfs -chmod -R g+r,o+r /home/hbase/coprocessor/
-
-yarn:
-hadoop org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create
 
 hdfs dfs -mkdir -p /home/yarn/tez
 hdfs dfs -rm -f /home/yarn/tez/tez-*.tar.gz
