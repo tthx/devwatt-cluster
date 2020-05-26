@@ -93,4 +93,15 @@
     <value>*</value>
   </property>
 
+  <!-- Impala proxy users -->
+  <property>
+    <name>hadoop.proxyuser.impala.hosts</name>
+    <value>*</value>
+  </property>
+
+  <property>
+    <name>hadoop.proxyuser.impala.groups</name>
+    <value>*</value>
+  </property>
+
 </configuration>
