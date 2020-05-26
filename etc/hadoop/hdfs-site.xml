@@ -80,13 +80,28 @@
   <property>
     <name>dfs.client.read.shortcircuit</name>
     <value>true</value>
-    <description>This configuration parameter turns on short-circuit local reads. Default: false</description>
+    <description>This configuration parameter turns on short-circuit local reads. Default: false
+    Short-circuit local reads are mandatory for Impala.</description>
   </property>
 
   <property>
     <name>dfs.domain.socket.path</name>
     <value>/var/hdfs/run/sc-socket</value>
     <description>This is a path to a UNIX domain socket that will be used for communication between the DataNode and local HDFS clients. If the string "_PORT" is present in this path, it will be replaced by the TCP port of the DataNode.</description>
+  </property>
+
+  <property>
+    <name>dfs.client.file-block-storage-locations.timeout.millis</name>
+    <value>10000</value>
+    <description>Timeout (in milliseconds) for the parallel RPCs made in DistributedFileSystem#getFileBlockStorageLocations(). Default: 1000
+    Setting to 10000 is for Impala.</description>
+  </property>
+
+  <property>
+    <name>dfs.datanode.hdfs-blocks-metadata.enabled</name>
+    <value>true</value>
+    <description>Boolean which enables backend datanode-side support for the experimental DistributedFileSystem#getFileVBlockStorageLocations API. Default: false
+    Enabling block location metadata allows Impala to know which disk data blocks are located on, allowing better utilization of the underlying disks. Impala will not start unless this setting is enabled.</description>
   </property>
 
   <property>
