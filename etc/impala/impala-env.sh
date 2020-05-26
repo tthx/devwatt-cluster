@@ -5,19 +5,28 @@ IMPALA_COMMON_ARGS="--disable_kudu \
   --log_dir=${IMPALA_LOG_DIR}"
 
 export IMPALA_CATALOG_SERVICE_HOST=master
-export IMPALA_CATALOG_ARGS="${IMPALA_COMMON_ARGS}"
-
+export IMPALA_CATALOG_SERVICE_PORT=26000
 export IMPALA_STATE_STORE_HOST=master
 export IMPALA_STATE_STORE_PORT=24000
-export IMPALA_STATE_STORE_ARGS="${IMPALA_COMMON_ARGS} \
+export IMPALA_BACKEND_PORT=22000
+
+export IMPALA_CATALOG_ARGS="${IMPALA_COMMON_ARGS} \
+  --catalog_service_host=${IMPALA_CATALOG_SERVICE_HOST} \
+  --catalog_service_port=${IMPALA_CATALOG_SERVICE_PORT} \
+  --state_store_host=${IMPALA_STATE_STORE_HOST} \
   --state_store_port=${IMPALA_STATE_STORE_PORT}"
 
-export IMPALA_BACKEND_PORT=22000
+export IMPALA_STATE_STORE_ARGS="${IMPALA_COMMON_ARGS} \
+  --catalog_service_host=${IMPALA_CATALOG_SERVICE_HOST} \
+  --catalog_service_port=${IMPALA_CATALOG_SERVICE_PORT} \
+  --state_store_host=${IMPALA_STATE_STORE_HOST} \
+  --state_store_port=${IMPALA_STATE_STORE_PORT}"
+
 export IMPALA_SERVER_ARGS="${IMPALA_COMMON_ARGS} \
   --catalog_service_host=${IMPALA_CATALOG_SERVICE_HOST} \
-  --use_statestore \
+  --catalog_service_port=${IMPALA_CATALOG_SERVICE_PORT} \
   --state_store_host=${IMPALA_STATE_STORE_HOST} \
-  --state_store_port=${IMPALA_STATE_STORE_PORT} \
+  --state_store_port=${IMPALA_STATE_STORE_PORT}
   --be_port=${IMPALA_BACKEND_PORT}"
 
 export ENABLE_CORE_DUMPS=false

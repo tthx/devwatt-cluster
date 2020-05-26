@@ -7,7 +7,7 @@ BIN_DIR="/opt/impala/be/build/release/service"
 RUN_DIR="/var/impala/run";
 LOG_DIR="/var/impala/log";
 
-PIDFILE="${IMPALA_HOME}/${SERVICE}.pid";
+PIDFILE="${RUN_DIR}/${SERVICE}.pid";
 
 . "${IMPALA_HOME}/bin/utils.sh";
 exec 1>> "${LOG_DIR}/${SERVICE}.stdout.log";
