@@ -418,5 +418,62 @@
     <value>true</value>
     <description>Clean extra nodes at the end of the session. Default: false</description>
   </property>
-  
+
+  <!-- SQL Standard Based Hive Authorization -->
+  <property>
+    <name>hive.security.authorization.enabled</name>
+    <value>true</value>
+    <description>Enable or disable the Hive client authorization. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.security.authorization.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory</value>
+    <description>The Hive client authorization manager class name. The user defined authorization class should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveAuthorizationProvider. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveAuthorizationProvider</description>
+  </property>
+
+  <property>
+    <name>hive.security.authenticator.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator</value>
+    <description>Hive client authenticator manager class name. The user-defined authenticator should implement interface org.apache.hadoop.hive.ql.security.HiveAuthenticationProvider. Default: org.apache.hadoop.hive.ql.security.HadoopDefaultAuthenticator</description>
+  </property>
+
+  <property>
+    <name>hive.metastore.uris</name>
+    <value></value>
+  </property>
+
+  <!-- Storage Based Authorization in the Metastore Server -->
+  <property>
+    <name>hive.metastore.pre.event.listeners</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
+    <description>The pre-event listener classes to be loaded on the metastore side to run code whenever databases, tables, and partitions are created, altered, or dropped. Set this configuration property to org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener in hive-site.xml to turn on Hive metastore-side security. Default: empty</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authorization.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
+    <description>Hive 0.13 and earlier: The authorization manager class name to be used in the metastore for authorization. The user-defined authorization class should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider.
+
+    Hive 0.14 and later: Names of authorization manager classes (comma separated) to be used in the metastore for authorization. User-defined authorization classes should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider. All authorization manager classes have to successfully authorize the metastore API call for the command execution to be allowed.
+
+    The DefaultHiveMetastoreAuthorizationProvider implements the standard Hive grant/revoke model. A storage-based authorization implementation is also provided to use as the value of this configuration property:
+
+    org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider
+
+    which uses HDFS permissions to provide authorization instead of using Hive-style grant-based authorization. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveMetastoreAuthorizationProvider</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authenticator.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.HadoopDefaultMetastoreAuthenticator</value>
+    <description>The authenticator manager class name to be used in the metastore for authentication. The user-defined authenticator class should implement interface org.apache.hadoop.hive.ql.security.HiveAuthenticationProvider. Default: org.apache.hadoop.hive.ql.security.HadoopDefaultMetastoreAuthenticator</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authorization.auth.reads</name>
+    <value>true</value>
+    <description>If this is true, the metastore authorizer authorizes read actions on database and table. Default: true</description>
+  </property>
+
 </configuration>
