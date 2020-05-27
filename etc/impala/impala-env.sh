@@ -20,6 +20,12 @@ export IMPALA_STATE_STORE_ARGS="${IMPALA_COMMON_ARGS}"
 export IMPALA_SERVER_ARGS="${IMPALA_COMMON_ARGS} \
   --be_port=${IMPALA_BACKEND_PORT}"
 
+export IMPALA_COORDINATOR_ARGS="${IMPALA_SERVER_ARGS} \
+  ‑‑is_executor=false"
+
+export IMPALA_EXECUTOR_ARGS="${IMPALA_SERVER_ARGS} \
+  ‑‑is_coordinator=false"
+
 export ENABLE_CORE_DUMPS=false
 
 export JAVA_HOME=/opt/jdk1.8.0_251

@@ -39,14 +39,18 @@ case "${1}" in
     k8s-cmd "statestored_ctl start" impala ${master};
     echo -e "}: statestored started.\n";
 
-    echo -e "Starting impalad: {...";
-    k8s-cmd "impalad_ctl start" impala "${workers}";
-    echo -e "}: impalad started.\n";
+    echo -e "Starting impala coordinator: {...";
+    k8s-cmd "impalad_ctl start coordinator" impala "${master}";
+    echo -e "}: impala coordinator started.\n";
+
+    echo -e "Starting impala executors: {...";
+    k8s-cmd "impalad_ctl start executor" impala "${workers}";
+    echo -e "}: impala executors started.\n";
     ;;
   "stop")
-    echo -e "Stopping impalad: {...";
-    k8s-cmd "impalad_ctl stop" impala "${workers}";
-    echo -e "}: impalad stopped.\n";
+    echo -e "Stopping impala coordinator and executors: {...";
+    k8s-cmd "impalad_ctl stop" impala;
+    echo -e "}: impala coordinator and executors stopped.\n";
 
     echo -e "Stopping statestored: {...";
     k8s-cmd "statestored_ctl stop" impala ${master};
