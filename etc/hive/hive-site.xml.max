@@ -231,32 +231,37 @@
     <description>To clean up the Hive scratch directory while starting the Hive server (or HiveServer2). This is not an option for a multi-user environment since it will accidentally remove the scratch directory in use. Default: false</description>
   </property>
 
-  <!-- Index -->
+  <!-- Index : removed since 3.0
   <property>
     <name>hive.optimize.index.filter</name>
     <value>true</value>
     <description>Whether to enable automatic use of indexes. Default: false</description>
   </property>
+  -->
 
   <!-- Statistics -->
   <property>
-    <name>hive.stats.dbclass</name>
-    <value>jdbc:postgres</value>
-    <description>Hive 0.7 to 0.12:  The default database that stores temporary Hive statistics.  Options are jdbc:derby, jdbc:mysql, and hbase as defined in StatsSetupConst.java.
-
-    Hive 0.13 and later:  The storage that stores temporary Hive statistics. In filesystem based statistics collection ("fs"), each task writes statistics it has collected in a file on the filesystem, which will be aggregated after the job has finished. Supported values are fs (filesystem), jdbc:"database" (where "database" can be derby, mysql, etc.), hbase, counter, and custom as defined in StatsSetupConst.java. Default: jdbc:derby</description>
-  </property>
-
-  <property>
     <name>hive.stats.autogather</name>
     <value>true</value>
-    <description>Whether to automatically gather basic statistics during insert commands. Default: true</description>
+    <description>Whether to automatically gather basic statistics during insert commands. Default: org.apache.derby.jdbc.EmbeddedDriver</description>
   </property>
 
   <property>
     <name>hive.stats.column.autogather</name>
     <value>true</value>
     <description>Extends statistics autogathering to also collect column level statistics. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.stats.fetch.column.stats</name>
+    <value>true</value>
+    <description>Annotation of the operator tree with statistics information requires column statistics. Column statistics are fetched from the metastore. Fetching column statistics for each needed column can be expensive when the number of columns is high. This flag can be used to disable fetching of column statistics from the metastore. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.compute.query.using.stats</name>
+    <value>true</value>
+    <description>When set to true Hive will answer a few queries like min, max, and count(1) purely using statistics stored in the metastore. For basic statistics collection, set the configuration property hive.stats.autogather to true. For more advanced statistics collection, run ANALYZE TABLE queries. Default: false</description>
   </property>
 
   <property>
@@ -271,10 +276,18 @@
     <description>Whether column accesses are tracked in the QueryPlan. This is useful to identify how tables are accessed and to determine if there are wasted columns that can be trimmed. Default: false</description>
   </property>
 
+  <property>
+    <name>hive.stats.reliable</name>
+    <value>true</value>
+    <description>Whether queries will fail because statistics cannot be collected completely accurately. If this is set to true, reading/writing from/into a partition or unpartitioned table may fail because the statistics could not be computed accurately. If it is set to false, the operation will succeed.
+
+    In Hive 0.13.0 and later, if hive.stats.reliable is false and statistics could not be computed correctly, the operation can still succeed and update the statistics but it sets a partition property "areStatsAccurate" to false. If the application needs accurate statistics, they can then be obtained in the background. Default: false</description>
+  </property>
+
   <!-- Tez -->
   <property>
     <name>hive.tez.log.level</name>
-    <value>DEBUG</value>
+    <value>INFO</value>
     <description>The log level to use for tasks executing as part of the DAG. Used only if hive.tez.java.opts is used to configure Java options. Default: INFO</description>
   </property>
 
@@ -306,6 +319,12 @@
     <name>hive.prewarm.enabled</name>
     <value>true</value>
     <description>Enables container prewarm for Tez (0.13.0 to 1.2.x) or Tez/Spark (1.3.0+). This is for Hadoop 2 only. Default: false</description>
+  </property>
+
+  <property>
+    <name>hive.prewarm.numcontainers</name>
+    <value>3</value>
+    <description>Controls the number of containers to prewarm for Tez (0.13.0 to 1.2.x) or Tez/Spark (1.3.0+). This is for Hadoop 2 only. Default: 10</description>
   </property>
 
   <property>
@@ -345,6 +364,12 @@
     <description>Set this to org.apache.hadoop.hive.ql.lockmgr.DbTxnManager as part of turning on Hive transactions. The default DummyTxnManager replicates pre-Hive-0.13 behavior and provides no transactions.
 
     Turning on Hive transactions also requires appropriate settings for hive.compactor.initiator.on, hive.compactor.worker.threads, hive.support.concurrency, hive.enforce.bucketing (Hive 0.x and 1.x only), and hive.exec.dynamic.partition.mode. Default: org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager</description>
+  </property>
+
+  <property>
+    <name>hive.txn.strict.locking.mode</name>
+    <value>false</value>
+    <description>In strict mode non-ACID resources use standard R/W lock semantics, e.g. INSERT will acquire exclusive lock. In non-strict mode, for non-ACID resources, INSERT will only acquire shared lock, which allows two concurrent writes to the same partition but still lets lock manager prevent DROP TABLE etc. when the table is being written to.  Only apples when hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager. Default: true</description>
   </property>
 
   <property>
@@ -394,26 +419,61 @@
     <description>Clean extra nodes at the end of the session. Default: false</description>
   </property>
 
-  <!-- Compactor -->
+  <!-- SQL Standard Based Hive Authorization -->
   <property>
-    <name>hive.compactor.initiator.on</name>
+    <name>hive.security.authorization.enabled</name>
     <value>true</value>
-    <description>Whether to run the initiator and cleaner threads on this metastore instance. Set this to true on one instance of the Thrift metastore service as part of turning on Hive transactions. For a complete list of parameters required for turning on transactions, see hive.txn.manager.
-
-    It's critical that this is enabled on exactly one metastore service instance (not enforced yet). Default: false</description>
+    <description>Enable or disable the Hive client authorization. Default: false</description>
   </property>
 
   <property>
-    <name>hive.compactor.worker.threads</name>
-    <value>1</value>
-    <description>How many compactor worker threads to run on this metastore instance. Set this to a positive number on one or more instances of the Thrift metastore service as part of turning on Hive transactions. For a complete list of parameters required for turning on transactions, see hive.txn.manager.
-
-    Worker threads spawn MapReduce jobs to do compactions. They do not do the compactions themselves. Increasing the number of worker threads will decrease the time it takes tables or partitions to be compacted once they are determined to need compaction. It will also increase the background load on the Hadoop cluster as more MapReduce jobs will be running in the background. Default: 0</description>
+    <name>hive.security.authorization.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory</value>
+    <description>The Hive client authorization manager class name. The user defined authorization class should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveAuthorizationProvider. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveAuthorizationProvider</description>
   </property>
 
   <property>
-    <name>hive.compactor.job.queue</name>
-    <value>hive</value>
+    <name>hive.security.authenticator.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator</value>
+    <description>Hive client authenticator manager class name. The user-defined authenticator should implement interface org.apache.hadoop.hive.ql.security.HiveAuthenticationProvider. Default: org.apache.hadoop.hive.ql.security.HadoopDefaultAuthenticator</description>
   </property>
-  
+
+  <property>
+    <name>hive.metastore.uris</name>
+    <value></value>
+  </property>
+
+  <!-- Storage Based Authorization in the Metastore Server -->
+  <property>
+    <name>hive.metastore.pre.event.listeners</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
+    <description>The pre-event listener classes to be loaded on the metastore side to run code whenever databases, tables, and partitions are created, altered, or dropped. Set this configuration property to org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener in hive-site.xml to turn on Hive metastore-side security. Default: empty</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authorization.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
+    <description>Hive 0.13 and earlier: The authorization manager class name to be used in the metastore for authorization. The user-defined authorization class should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider.
+
+    Hive 0.14 and later: Names of authorization manager classes (comma separated) to be used in the metastore for authorization. User-defined authorization classes should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider. All authorization manager classes have to successfully authorize the metastore API call for the command execution to be allowed.
+
+    The DefaultHiveMetastoreAuthorizationProvider implements the standard Hive grant/revoke model. A storage-based authorization implementation is also provided to use as the value of this configuration property:
+
+    org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider
+
+    which uses HDFS permissions to provide authorization instead of using Hive-style grant-based authorization. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveMetastoreAuthorizationProvider</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authenticator.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.HadoopDefaultMetastoreAuthenticator</value>
+    <description>The authenticator manager class name to be used in the metastore for authentication. The user-defined authenticator class should implement interface org.apache.hadoop.hive.ql.security.HiveAuthenticationProvider. Default: org.apache.hadoop.hive.ql.security.HadoopDefaultMetastoreAuthenticator</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authorization.auth.reads</name>
+    <value>true</value>
+    <description>If this is true, the metastore authorizer authorizes read actions on database and table. Default: true</description>
+  </property>
+
 </configuration>

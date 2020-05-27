@@ -11,7 +11,7 @@ case "${1}" in
 
     k8s-cmd "start-dfs.sh" hdfs ${master};
 
-    #k8s-cmd "start-hbase.sh" hbase master;
+    k8s-cmd "start-hbase.sh" hbase ${master};
 
     echo -e "Starting historyserver: {...";
     k8s-cmd "mapred --daemon start historyserver" mapred ${master};
@@ -19,7 +19,9 @@ case "${1}" in
 
     k8s-cmd "start-yarn.sh" yarn ${master};
 
-    #k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
+    echo -e "Starting timelinereader: {...";
+    k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
+    echo -e "}: historyserver timelinereader.\n";
 
     echo -e "Starting metastore: {...";
     k8s-cmd "metastore_ctl start" hive ${master};
@@ -62,7 +64,9 @@ case "${1}" in
     k8s-cmd "metastore_ctl stop" hive ${master};
     echo -e "}: metastore stopped.\n";
 
-    #k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};
+    echo -e "Stopping timelinereader: {...";
+    k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};
+    echo -e "}: metastore timelinereader.\n";
 
     k8s-cmd "stop-yarn.sh" yarn ${master};
 
@@ -70,7 +74,7 @@ case "${1}" in
     k8s-cmd "mapred --daemon stop historyserver" mapred ${master};
     echo -e "}: historyserver stopped.\n";
 
-    #k8s-cmd "stop-hbase.sh" hbase master;
+    k8s-cmd "stop-hbase.sh" hbase ${master};
 
     k8s-cmd "stop-dfs.sh" hdfs ${master};
 
