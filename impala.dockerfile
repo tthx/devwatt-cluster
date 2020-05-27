@@ -58,4 +58,5 @@ export IMPALA_HOME="${HOME}/src/impala" \
 && tar cjf /exchange/apache-impala-3.4.0-bin.tar.bz2 \
 ./be/build/release/service/* \
 ./fe/target/dependency/* \
-./shell/build/impala-shell-3.4.0-RELEASE.tar.gz
+./shell/build/impala-shell-3.4.0-RELEASE.tar.gz \
+./www/*

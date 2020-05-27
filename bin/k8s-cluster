@@ -3,9 +3,9 @@ master="10.171.46.145";
 workers="10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168";
 case "${1}" in
   "start")
-    echo "Cleaning logs: {...";
+    echo -e "Cleaning logs: {...";
     k8s-cmd "sudo rm -rf /var/hive/log/* /var/metastore/log/* /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/* /var/impala/log/*";
-    echo "}: Logs cleaned.\n";
+    echo -e "}: Logs cleaned.\n";
 
     k8s-cmd "zkServer.sh start" zookeeper;
 
@@ -13,62 +13,62 @@ case "${1}" in
 
     #k8s-cmd "start-hbase.sh" hbase master;
 
-    echo "Starting historyserver: {...";
+    echo -e "Starting historyserver: {...";
     k8s-cmd "mapred --daemon start historyserver" mapred ${master};
-    echo "}: historyserver started.\n";
+    echo -e "}: historyserver started.\n";
 
     k8s-cmd "start-yarn.sh" yarn ${master};
 
     #k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
 
-    echo "Starting metastore: {...";
+    echo -e "Starting metastore: {...";
     k8s-cmd "metastore_ctl start" hive ${master};
-    echo "}: metastore started.\n";
+    echo -e "}: metastore started.\n";
 
-    echo "Starting hiveserver2: {...";
+    echo -e "Starting hiveserver2: {...";
     k8s-cmd "hiveserver2_ctl start" hive ${master};
-    echo "}: hiveserver2 started.\n";
+    echo -e "}: hiveserver2 started.\n";
 
-    echo "Starting catalogd: {...";
+    echo -e "Starting catalogd: {...";
     k8s-cmd "catalogd_ctl start" impala ${master};
-    echo "}: catalogd started.\n";
+    echo -e "}: catalogd started.\n";
 
-    echo "Starting statestored: {...";
+    echo -e "Starting statestored: {...";
     k8s-cmd "statestored_ctl start" impala ${master};
-    echo "}: statestored started.\n";
+    echo -e "}: statestored started.\n";
 
-    echo "Starting impalad: {...";
+    echo -e "Starting impalad: {...";
     k8s-cmd "impalad_ctl start" impala "${workers}";
-    echo "}: impalad started.\n";
+    echo -e "}: impalad started.\n";
     ;;
   "stop")
-    echo "Stopping impalad: {...";
+    echo -e "Stopping impalad: {...";
     k8s-cmd "impalad_ctl stop" impala "${workers}";
-    echo "}: impalad stopped.\n";
+    echo -e "}: impalad stopped.\n";
 
-    echo "Stopping statestored: {...";
+    echo -e "Stopping statestored: {...";
     k8s-cmd "statestored_ctl stop" impala ${master};
-    echo "}: statestored stopped.\n";
+    echo -e "}: statestored stopped.\n";
 
-    echo "Stopping catalogd: {...";
+    echo -e "Stopping catalogd: {...";
     k8s-cmd "catalogd_ctl stop" impala ${master};
-    echo "}: catalogd stopped.\n";
+    echo -e "}: catalogd stopped.\n";
 
-    echo "Stopping hiveserver2: {...";
+    echo -e "Stopping hiveserver2: {...";
     k8s-cmd "hiveserver2_ctl stop" hive ${master};
-    echo "}: hiveserver2 stopped.\n";
+    echo -e "}: hiveserver2 stopped.\n";
 
-    echo "Stopping metastore: {...";
+    echo -e "Stopping metastore: {...";
     k8s-cmd "metastore_ctl stop" hive ${master};
-    echo "}: metastore stopped.\n";
+    echo -e "}: metastore stopped.\n";
 
     #k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};
 
     k8s-cmd "stop-yarn.sh" yarn ${master};
 
-    echo "Stopping historyserver: {...";
+    echo -e "Stopping historyserver: {...";
     k8s-cmd "mapred --daemon stop historyserver" mapred ${master};
-    echo "}: historyserver stopped.\n";
+    echo -e "}: historyserver stopped.\n";
 
     #k8s-cmd "stop-hbase.sh" hbase master;
 
