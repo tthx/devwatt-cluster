@@ -1,3 +1,9 @@
+# Log level
+# GLOG_v=1 - The default level. Logs information about each connection and query that is initiated to an impalad instance, including runtime profiles.
+# GLOG_v=2 - Everything from the previous level plus information for each RPC initiated. This level also records query execution progress information, including details on each file that is read.
+# GLOG_v=3 - Everything from the previous level plus logging of every row that is read. This level is only applicable for the most serious troubleshooting and tuning scenarios, because it can produce exceptionally large and detailed log files, potentially leading to its own set of performance and capacity problems.
+export GLOG_v=1
+
 export IMPALA_LOG_DIR=/var/impala/log
 export IMPALA_CATALOG_SERVICE_HOST=master
 export IMPALA_CATALOG_SERVICE_PORT=26000

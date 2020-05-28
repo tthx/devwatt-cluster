@@ -11,3 +11,5 @@ WHERE tableowner = CURRENT_USER and schemaname = 'public';
 \pset tuples_only off
 \i /tmp/grant-privs
 \q
+
+CREATE USER impala WITH PASSWORD 'D@$#H0le99*';

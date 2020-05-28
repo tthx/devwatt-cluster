@@ -20,11 +20,12 @@ docker exec -it <CONTAINER ID> bash
 # Using Cloudera repo
 docker pull ubuntu:16.04
 docker run --cap-add SYS_TIME --interactive --tty --name impala-dev -p 25000:25000 -p 25010:25010 -v ~/tmp/docker:/exchange -p 25020:25020 ubuntu:16.04 bash
-apt-get -y install file wget gnupg apt-transport-https
-cd /etc/apt/sources.list.d
-&& wget https://archive.cloudera.com/cdh5/ubuntu/xenial/amd64/cdh/cloudera.list
-cd /tmp
-&& wget https://archive.cloudera.com/cdh5/ubuntu/xenial/amd64/cdh/archive.key
-&& apt-key add archive.key
-apt-get update
-apt-get -y install impala impala-server impala-state-store impala-shell
+apt-get update \
+&& apt-get -y install file wget gnupg apt-transport-https \
+&& cd /etc/apt/sources.list.d \
+&& wget https://archive.cloudera.com/cdh5/ubuntu/xenial/amd64/cdh/cloudera.list \
+&& cd /tmp \
+&& wget https://archive.cloudera.com/cdh5/ubuntu/xenial/amd64/cdh/archive.key \
+&& apt-key add archive.key \
+&& apt-get update \
+&& apt-get -y install impala impala-server impala-state-store impala-shell

@@ -31,13 +31,13 @@ case "${1}" in
     k8s-cmd "hiveserver2_ctl start" hive ${master};
     echo -e "}: hiveserver2 started.\n";
 
-    echo -e "Starting catalogd: {...";
-    k8s-cmd "catalogd_ctl start" impala ${master};
-    echo -e "}: catalogd started.\n";
-
     echo -e "Starting statestored: {...";
     k8s-cmd "statestored_ctl start" impala ${master};
     echo -e "}: statestored started.\n";
+
+    echo -e "Starting catalogd: {...";
+    k8s-cmd "catalogd_ctl start" impala ${master};
+    echo -e "}: catalogd started.\n";
 
     echo -e "Starting impala coordinator: {...";
     k8s-cmd "impalad_ctl start coordinator" impala "${master}";
@@ -52,13 +52,13 @@ case "${1}" in
     k8s-cmd "impalad_ctl stop" impala;
     echo -e "}: impala coordinator and executors stopped.\n";
 
-    echo -e "Stopping statestored: {...";
-    k8s-cmd "statestored_ctl stop" impala ${master};
-    echo -e "}: statestored stopped.\n";
-
     echo -e "Stopping catalogd: {...";
     k8s-cmd "catalogd_ctl stop" impala ${master};
     echo -e "}: catalogd stopped.\n";
+
+    echo -e "Stopping statestored: {...";
+    k8s-cmd "statestored_ctl stop" impala ${master};
+    echo -e "}: statestored stopped.\n";
 
     echo -e "Stopping hiveserver2: {...";
     k8s-cmd "hiveserver2_ctl stop" hive ${master};
