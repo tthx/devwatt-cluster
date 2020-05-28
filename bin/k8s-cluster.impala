@@ -1,0 +1,55 @@
+#!/bin/bash
+master="10.171.46.145";
+workers="10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168";
+case "${1}" in
+  "start")
+    echo -e "Cleaning logs: {...";
+    k8s-cmd "sudo rm -rf /var/hive/log/* /var/metastore/log/* /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/* /var/impala/log/*";
+    echo -e "}: Logs cleaned.\n";
+
+    k8s-cmd "zkServer.sh start" zookeeper;
+
+    k8s-cmd "start-dfs.sh" hdfs ${master};
+
+    echo -e "Starting metastore: {...";
+    k8s-cmd "metastore_ctl start" hive ${master};
+    echo -e "}: metastore started.\n";
+
+    echo -e "Starting catalogd: {...";
+    k8s-cmd "catalogd_ctl start" impala ${master};
+    echo -e "}: catalogd started.\n";
+
+    echo -e "Starting statestored: {...";
+    k8s-cmd "statestored_ctl start" impala ${master};
+    echo -e "}: statestored started.\n";
+
+    echo -e "Starting impala coordinator: {...";
+    k8s-cmd "impalad_ctl start coordinator" impala "${master}";
+    echo -e "}: impala coordinator started.\n";
+
+    echo -e "Starting impala executors: {...";
+    k8s-cmd "impalad_ctl start executor" impala "${workers}";
+    echo -e "}: impala executors started.\n";
+    ;;
+  "stop")
+    echo -e "Stopping impala coordinator and executors: {...";
+    k8s-cmd "impalad_ctl stop" impala;
+    echo -e "}: impala coordinator and executors stopped.\n";
+
+    echo -e "Stopping statestored: {...";
+    k8s-cmd "statestored_ctl stop" impala ${master};
+    echo -e "}: statestored stopped.\n";
+
+    echo -e "Stopping catalogd: {...";
+    k8s-cmd "catalogd_ctl stop" impala ${master};
+    echo -e "}: catalogd stopped.\n";
+
+    echo -e "Stopping metastore: {...";
+    k8s-cmd "metastore_ctl stop" hive ${master};
+    echo -e "}: metastore stopped.\n";
+
+    k8s-cmd "stop-dfs.sh" hdfs ${master};
+
+    k8s-cmd "zkServer.sh stop" zookeeper;
+    ;;
+esac
