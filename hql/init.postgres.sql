@@ -1,5 +1,5 @@
 CREATE USER hive WITH PASSWORD 'D@$#H0le99*';
-CREATE DATABASE metastore;
+CREATE DATABASE metastore OWNER hive;
 \c metastore;
 \i /opt/hive/scripts/metastore/upgrade/postgres/hive-schema-3.1.0.postgres.sql;
 \pset tuples_only on
@@ -13,3 +13,5 @@ WHERE tableowner = CURRENT_USER and schemaname = 'public';
 \q
 
 CREATE USER impala WITH PASSWORD 'D@$#H0le99*';
+
+ALTER DATABASE metastore OWNER TO hive;
