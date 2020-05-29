@@ -7,21 +7,29 @@ case "${1}" in
     k8s-cmd "sudo rm -rf /var/hive/log/* /var/metastore/log/* /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/* /var/impala/log/*";
     echo -e "}: Logs cleaned.\n";
 
+    echo -e "Starting zookeeper: {...";
     k8s-cmd "zkServer.sh start" zookeeper;
+    echo -e "}: zookeeper started.\n";
 
+    echo -e "Starting hdfs: {...";
     k8s-cmd "start-dfs.sh" hdfs ${master};
+    echo -e "}: hdfs started.\n";
 
+    #echo -e "Starting hbase: {...";
     #k8s-cmd "start-hbase.sh" hbase ${master};
+    #echo -e "}: hbase started.\n";
 
     echo -e "Starting historyserver: {...";
     k8s-cmd "mapred --daemon start historyserver" mapred ${master};
     echo -e "}: historyserver started.\n";
 
+    echo -e "Starting yarn: {...";
     k8s-cmd "start-yarn.sh" yarn ${master};
+    echo -e "}: yarn started.\n";
 
     #echo -e "Starting timelinereader: {...";
     #k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
-    #echo -e "}: historyserver timelinereader.\n";
+    #echo -e "}: timelinereader started.\n";
 
     echo -e "Starting metastore: {...";
     k8s-cmd "metastore_ctl start" hive ${master};
@@ -70,18 +78,26 @@ case "${1}" in
 
     #echo -e "Stopping timelinereader: {...";
     #k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};
-    #echo -e "}: metastore timelinereader.\n";
+    #echo -e "}: timelinereader stopped.\n";
 
+    echo -e "Stopping yarn: {...";
     k8s-cmd "stop-yarn.sh" yarn ${master};
+    echo -e "}: yarn stopped.\n";
 
     echo -e "Stopping historyserver: {...";
     k8s-cmd "mapred --daemon stop historyserver" mapred ${master};
     echo -e "}: historyserver stopped.\n";
 
+    #echo -e "Stopping hbase: {...";
     #k8s-cmd "stop-hbase.sh" hbase ${master};
+    #echo -e "}: hbase stopped.\n";
 
+    echo -e "Stopping hdfs: {...";
     k8s-cmd "stop-dfs.sh" hdfs ${master};
+    echo -e "}: hdfs stopped.\n";
 
+    echo -e "Stopping zookeeper: {...";
     k8s-cmd "zkServer.sh stop" zookeeper;
+    echo -e "}: zookeeper stopped.\n";
     ;;
 esac
