@@ -228,7 +228,7 @@
 
   <property>
     <name>yarn.timeline-service.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>Indicate to clients whether Timeline service is enabled or not. If enabled, the TimelineClient library used by applications will post entities and events to the Timeline server. Defaults to false.</description>
   </property>
 
@@ -240,7 +240,7 @@
 
   <property>
     <name>yarn.system-metrics-publisher.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>The setting that controls whether yarn system metrics is published on the Timeline service or not by RM And NM. Defaults to false.</description>
   </property>
 
@@ -258,7 +258,7 @@
 
   <property>
     <name>yarn.resourcemanager.system-metrics-publisher.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>Publish YARN information to Timeline Server</description>
   </property>
 
@@ -278,7 +278,7 @@
 
   <property>
     <name>yarn.nodemanager.aux-services</name>
-    <value>tez_shuffle,timeline_collector,mapreduce_shuffle</value>
+    <value>tez_shuffle,mapreduce_shuffle</value>
     <description>A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers</description>
   </property>
 
@@ -299,7 +299,7 @@
 
   <property>
     <name>yarn.rm.system-metrics-publisher.emit-container-events</name>
-    <value>true</value>
+    <value>false</value>
     <description>The setting that controls whether yarn container events are published to the timeline service or not by RM. This configuration setting is for ATS V2. Default: false</description>
   </property>
 

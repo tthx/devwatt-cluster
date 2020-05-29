@@ -11,7 +11,7 @@ case "${1}" in
 
     k8s-cmd "start-dfs.sh" hdfs ${master};
 
-    k8s-cmd "start-hbase.sh" hbase ${master};
+    #k8s-cmd "start-hbase.sh" hbase ${master};
 
     echo -e "Starting historyserver: {...";
     k8s-cmd "mapred --daemon start historyserver" mapred ${master};
@@ -19,9 +19,9 @@ case "${1}" in
 
     k8s-cmd "start-yarn.sh" yarn ${master};
 
-    echo -e "Starting timelinereader: {...";
-    k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
-    echo -e "}: historyserver timelinereader.\n";
+    #echo -e "Starting timelinereader: {...";
+    #k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
+    #echo -e "}: historyserver timelinereader.\n";
 
     echo -e "Starting metastore: {...";
     k8s-cmd "metastore_ctl start" hive ${master};
@@ -31,34 +31,34 @@ case "${1}" in
     k8s-cmd "hiveserver2_ctl start" hive ${master};
     echo -e "}: hiveserver2 started.\n";
 
-    echo -e "Starting statestored: {...";
-    k8s-cmd "statestored_ctl start" impala ${master};
-    echo -e "}: statestored started.\n";
+    #echo -e "Starting statestored: {...";
+    #k8s-cmd "statestored_ctl start" impala ${master};
+    #echo -e "}: statestored started.\n";
 
-    echo -e "Starting catalogd: {...";
-    k8s-cmd "catalogd_ctl start" impala ${master};
-    echo -e "}: catalogd started.\n";
+    #echo -e "Starting catalogd: {...";
+    #k8s-cmd "catalogd_ctl start" impala ${master};
+    #echo -e "}: catalogd started.\n";
 
-    echo -e "Starting impala coordinator: {...";
-    k8s-cmd "impalad_ctl start coordinator" impala "${master}";
-    echo -e "}: impala coordinator started.\n";
+    #echo -e "Starting impala coordinator: {...";
+    #k8s-cmd "impalad_ctl start coordinator" impala "${master}";
+    #echo -e "}: impala coordinator started.\n";
 
-    echo -e "Starting impala executors: {...";
-    k8s-cmd "impalad_ctl start executor" impala "${workers}";
-    echo -e "}: impala executors started.\n";
+    #echo -e "Starting impala executors: {...";
+    #k8s-cmd "impalad_ctl start executor" impala "${workers}";
+    #echo -e "}: impala executors started.\n";
     ;;
   "stop")
-    echo -e "Stopping impala coordinator and executors: {...";
-    k8s-cmd "impalad_ctl stop" impala;
-    echo -e "}: impala coordinator and executors stopped.\n";
+    #echo -e "Stopping impala coordinator and executors: {...";
+    #k8s-cmd "impalad_ctl stop" impala;
+    #echo -e "}: impala coordinator and executors stopped.\n";
 
-    echo -e "Stopping catalogd: {...";
-    k8s-cmd "catalogd_ctl stop" impala ${master};
-    echo -e "}: catalogd stopped.\n";
+    #echo -e "Stopping catalogd: {...";
+    #k8s-cmd "catalogd_ctl stop" impala ${master};
+    #echo -e "}: catalogd stopped.\n";
 
-    echo -e "Stopping statestored: {...";
-    k8s-cmd "statestored_ctl stop" impala ${master};
-    echo -e "}: statestored stopped.\n";
+    #echo -e "Stopping statestored: {...";
+    #k8s-cmd "statestored_ctl stop" impala ${master};
+    #echo -e "}: statestored stopped.\n";
 
     echo -e "Stopping hiveserver2: {...";
     k8s-cmd "hiveserver2_ctl stop" hive ${master};
@@ -68,9 +68,9 @@ case "${1}" in
     k8s-cmd "metastore_ctl stop" hive ${master};
     echo -e "}: metastore stopped.\n";
 
-    echo -e "Stopping timelinereader: {...";
-    k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};
-    echo -e "}: metastore timelinereader.\n";
+    #echo -e "Stopping timelinereader: {...";
+    #k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};
+    #echo -e "}: metastore timelinereader.\n";
 
     k8s-cmd "stop-yarn.sh" yarn ${master};
 
@@ -78,7 +78,7 @@ case "${1}" in
     k8s-cmd "mapred --daemon stop historyserver" mapred ${master};
     echo -e "}: historyserver stopped.\n";
 
-    k8s-cmd "stop-hbase.sh" hbase ${master};
+    #k8s-cmd "stop-hbase.sh" hbase ${master};
 
     k8s-cmd "stop-dfs.sh" hdfs ${master};
 
