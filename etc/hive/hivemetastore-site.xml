@@ -21,7 +21,7 @@
 
   <property>
     <name>datanucleus.schema.autoCreateAll</name>
-    <value>false</value>
+    <value>true</value>
     <description>Creates necessary schema on a startup if one does not exist. Set this to false, after creating it once.
 
     datanucleus.schema.autoCreateAll is disabled if hive.metastore.schema.verification is true. Default: true</description>
@@ -44,7 +44,7 @@
 
   <property>
     <name>hive.metastore.schema.verification</name>
-    <value>true</value>
+    <value>false</value>
     <description>Enforce metastore schema version consistency.
     True: Verify that version information stored in metastore matches with one from Hive jars. Also disable automatic schema migration attempt (see datanucleus.autoCreateSchema and datanucleus.schema.autoCreateAll). Users are required to manually migrate schema after Hive upgrade which ensures proper metastore schema migration.
     False: Warn if the version information stored in metastore doesn't match with one from Hive jars.
@@ -98,7 +98,7 @@
   <!-- Compactor -->
   <property>
     <name>hive.compactor.initiator.on</name>
-    <value>false</value>
+    <value>true</value>
     <description>Whether to run the initiator and cleaner threads on this metastore instance. Set this to true on one instance of the Thrift metastore service as part of turning on Hive transactions. For a complete list of parameters required for turning on transactions, see hive.txn.manager.
 
     It's critical that this is enabled on exactly one metastore service instance (not enforced yet). Default: false</description>
