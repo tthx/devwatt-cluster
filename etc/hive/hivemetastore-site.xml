@@ -21,7 +21,7 @@
 
   <property>
     <name>datanucleus.schema.autoCreateAll</name>
-    <value>true</value>
+    <value>false</value>
     <description>Creates necessary schema on a startup if one does not exist. Set this to false, after creating it once.
 
     datanucleus.schema.autoCreateAll is disabled if hive.metastore.schema.verification is true. Default: true</description>
@@ -44,7 +44,7 @@
 
   <property>
     <name>hive.metastore.schema.verification</name>
-    <value>false</value>
+    <value>true</value>
     <description>Enforce metastore schema version consistency.
     True: Verify that version information stored in metastore matches with one from Hive jars. Also disable automatic schema migration attempt (see datanucleus.autoCreateSchema and datanucleus.schema.autoCreateAll). Users are required to manually migrate schema after Hive upgrade which ensures proper metastore schema migration.
     False: Warn if the version information stored in metastore doesn't match with one from Hive jars.
@@ -96,6 +96,7 @@
   </property>
 
   <!-- Compactor -->
+  <!--
   <property>
     <name>hive.compactor.initiator.on</name>
     <value>true</value>
@@ -111,6 +112,7 @@
 
     Worker threads spawn MapReduce jobs to do compactions. They do not do the compactions themselves. Increasing the number of worker threads will decrease the time it takes tables or partitions to be compacted once they are determined to need compaction. It will also increase the background load on the Hadoop cluster as more MapReduce jobs will be running in the background. Default: 0</description>
   </property>
+  -->
 
   <property>
     <name>hive.compactor.job.queue</name>
