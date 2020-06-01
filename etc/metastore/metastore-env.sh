@@ -59,7 +59,7 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 
 if [[ -n "${HADOOP_CLASSPATH+x}" ]];
 then
-  export HADOOP_CLASSPATH+=":${HIVE_HOME}/lib/hive-exec-3.1.2.jar";
+  export HADOOP_CLASSPATH+=":$(find ${HIVE_HOME}/lib/ -name 'hive-exec-*.jar')";
 else
-  export HADOOP_CLASSPATH="${HIVE_HOME}/lib/hive-exec-3.1.2.jar";
+  export HADOOP_CLASSPATH="$(find ${HIVE_HOME}/lib/ -name 'hive-exec-*.jar')";
 fi

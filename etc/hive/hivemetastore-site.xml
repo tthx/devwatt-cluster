@@ -96,7 +96,6 @@
   </property>
 
   <!-- Compactor -->
-  <!--
   <property>
     <name>hive.compactor.initiator.on</name>
     <value>true</value>
@@ -112,7 +111,6 @@
 
     Worker threads spawn MapReduce jobs to do compactions. They do not do the compactions themselves. Increasing the number of worker threads will decrease the time it takes tables or partitions to be compacted once they are determined to need compaction. It will also increase the background load on the Hadoop cluster as more MapReduce jobs will be running in the background. Default: 0</description>
   </property>
-  -->
 
   <property>
     <name>hive.compactor.job.queue</name>
