@@ -33,8 +33,8 @@ alias more='less';
 alias chrome='google-chrome-stable 2>/dev/null';
 alias firefox='/usr/bin/firefox 2>/dev/null';
 alias sublime='/opt/sublime_text/sublime_text';
-alias docker-purge='docker stop $(docker container ls -aq) && docker system prune -a -f --volumes';
-alias docker-clean='docker container stop $(docker container ls -aq) && docker container prune';
+alias docker-purge='containers="$(docker container ls -aq)" && if [ -n "${containers}" ]; then docker container stop ${containers}; fi && docker system prune -a -f --volumes';
+alias docker-clean='containers="$(docker container ls -aq)" && if [ -n "${containers}" ]; then docker container stop ${containers}; fi && docker container prune';
 alias python='/usr/bin/python3'
 alias clear-logs='journalctl --vacuum-time=1d';
 alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
