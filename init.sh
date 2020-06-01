@@ -119,7 +119,7 @@ sudo mkdir -p ${IMPALA_HOME}/bin \
 && sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMPALA_HOME}/bin/.
 
 # HDFS
-rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
+sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
 
 # Zookeeper
 sudo cp -R ~/src/devwatt-cluster/var /var/.
