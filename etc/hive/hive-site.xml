@@ -94,19 +94,6 @@
     <value>true</value>
     <description>Enable metrics on the Hive Metastore Service. (For other metastore configuration properties, see the Metastore and Hive Metastore Security sections.) Default: false</description>
   </property>
-  
-  <!-- Standalone Metastore -->
-  <!--
-  <property>
-    <name>metastore.task.threads.always</name>
-    <value>org.apache.hadoop.hive.metastore.events.EventCleanerTask</value>
-  </property>
-
-  <property>
-    <name>metastore.expression.proxy</name>
-    <value>org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</value>
-  </property>
-  -->
 
   <!-- HiveServer2 -->
   <property>
