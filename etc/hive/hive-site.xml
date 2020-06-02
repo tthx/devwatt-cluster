@@ -96,6 +96,7 @@
   </property>
   
   <!-- Standalone Metastore -->
+  <!--
   <property>
     <name>metastore.task.threads.always</name>
     <value>org.apache.hadoop.hive.metastore.events.EventCleanerTask</value>
@@ -105,6 +106,7 @@
     <name>metastore.expression.proxy</name>
     <value>org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</value>
   </property>
+  -->
 
   <!-- HiveServer2 -->
   <property>
@@ -610,7 +612,6 @@
   </property>
 
   <!-- Transaction -->
-  <!--
   <property>
     <name>hive.txn.manager</name>
     <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
@@ -632,10 +633,8 @@
 
     Set to nonstrict to support INSERT ... VALUES, UPDATE, and DELETE transactions (Hive 0.14.0 and later). For a complete list of parameters required for turning on Hive transactions, see hive.txn.manager. Default: strict</description>
   </property>
-  -->
 
   <!-- Compactor -->
-  <!--
   <property>
     <name>hive.compactor.initiator.on</name>
     <value>true</value>
@@ -656,10 +655,8 @@
     <name>hive.compactor.job.queue</name>
     <value>hive</value>
   </property>
-  -->
 
   <!-- Locking -->
-  <!--
   <property>
     <name>hive.support.concurrency</name>
     <value>true</value>
@@ -697,7 +694,6 @@
     <value>true</value>
     <description>Clean extra nodes at the end of the session. Default: false</description>
   </property>
-  -->
 
   <!-- Hive Client Security -->
   <property>
