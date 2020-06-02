@@ -32,7 +32,7 @@ case "${1}" in
     #echo -e "}: timelinereader started.\n";
 
     echo -e "Starting metastore: {...";
-    k8s-cmd "metastore_ctl start" hive ${master};
+    k8s-cmd "metastore_standalone_ctl start" hive ${master};
     echo -e "}: metastore started.\n";
 
     echo -e "Starting hiveserver2: {...";
@@ -73,7 +73,7 @@ case "${1}" in
     echo -e "}: hiveserver2 stopped.\n";
 
     echo -e "Stopping metastore: {...";
-    k8s-cmd "metastore_ctl stop" hive ${master};
+    k8s-cmd "metastore_standalone_ctl stop" hive ${master};
     echo -e "}: metastore stopped.\n";
 
     #echo -e "Stopping timelinereader: {...";

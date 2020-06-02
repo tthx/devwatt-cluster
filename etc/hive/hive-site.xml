@@ -610,6 +610,7 @@
   </property>
 
   <!-- Transaction -->
+  <!--
   <property>
     <name>hive.txn.manager</name>
     <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
@@ -631,8 +632,10 @@
 
     Set to nonstrict to support INSERT ... VALUES, UPDATE, and DELETE transactions (Hive 0.14.0 and later). For a complete list of parameters required for turning on Hive transactions, see hive.txn.manager. Default: strict</description>
   </property>
+  -->
 
   <!-- Compactor -->
+  <!--
   <property>
     <name>hive.compactor.initiator.on</name>
     <value>true</value>
@@ -653,8 +656,10 @@
     <name>hive.compactor.job.queue</name>
     <value>hive</value>
   </property>
+  -->
 
   <!-- Locking -->
+  <!--
   <property>
     <name>hive.support.concurrency</name>
     <value>true</value>
@@ -692,6 +697,7 @@
     <value>true</value>
     <description>Clean extra nodes at the end of the session. Default: false</description>
   </property>
+  -->
 
   <!-- Hive Client Security -->
   <property>
@@ -701,6 +707,7 @@
   </property>
 
   <!-- Storage Based Authorization in the Metastore Server -->
+  <!--
   <property>
     <name>hive.metastore.pre.event.listeners</name>
     <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
@@ -720,12 +727,15 @@
 
     which uses HDFS permissions to provide authorization instead of using Hive-style grant-based authorization. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveMetastoreAuthorizationProvider</description>
   </property>
+  -->
   
   <!-- SQL Standard Based Hive Authorization -->
+  <!--
   <property>
     <name>hive.users.in.admin.role</name>
     <value>hive,impala</value>
     <description>A comma separated list of users which will be added to the ADMIN role when the metastore starts up. More users can still be added later on. Default: empty</description>
   </property>
+  -->
 
 </configuration>
