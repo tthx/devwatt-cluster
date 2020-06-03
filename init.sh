@@ -107,14 +107,11 @@ cd ~/src/devwatt-cluster \
 && sudo cp -r etc/* /etc/. \
 && cd /etc \
 && sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
-&& sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez
-
-cd ~/src/devwatt-cluster/bin \
+&& sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
+&& cd ~/src/devwatt-cluster/bin \
 && sudo cp utils.sh metastore_standalone_ctl ${METASTORE_HOME}/bin/. \
-&& sudo cp utils.sh metastore_ctl hiveserver2_ctl ${HIVE_HOME}/bin/.
-
-# Impala
-sudo mkdir -p ${IMPALA_HOME}/bin \
+&& sudo cp utils.sh metastore_ctl hiveserver2_ctl ${HIVE_HOME}/bin/. \
+&& sudo mkdir -p ${IMPALA_HOME}/bin \
 && cd ~/src/devwatt-cluster/bin \
 && sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl ${IMPALA_HOME}/bin/.
 

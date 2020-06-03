@@ -52,11 +52,13 @@
     When set to false: warn if the version information stored in RDBMS doesn't match the version of the Metastore jar and allow auto schema migration. Default: true</description>
   </property>
 
+  <!-- Useless...
   <property>
     <name>metastore.log4j.file</name>
     <value>/etc/metastore/metastore-log4j2.properties</value>
     <description>Log4j configuration file. If unset will look for metastore-log4j2.properties in $METASTORE_HOME/conf. Default: none</description>
   </property>
+  -->
 
   <property>
     <name>metastore.stats.autogather</name>
