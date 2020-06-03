@@ -51,7 +51,7 @@ case "${x}" in
     mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version} -Dhbase.version=${hbase_version}; #-Dapache-directory-server.version=2.0.0.AM26 -Dorg.glassfish.javax.el.version=${javax_el_version};
     if [[ ${?} -eq 0 ]];
     then
-      cp ./standalone-metastore/target/apache-hive-metastore-*-bin.tar.gz ./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
+      cp ./standalone-metastore/target/apache-hive*-metastore-*-bin.tar.gz ./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
     fi
     ;;
   spark)

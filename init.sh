@@ -59,10 +59,10 @@ sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1
 cd /opt \
 && sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
 && cd /tmp \
-&& sudo tar xf apache-hive-3.1.2-bin.tar.gz -C /opt \
-&& sudo tar xf apache-hive-metastore-3.1.2-bin.tar.gz -C /opt \
-&& sudo tar xf hbase-2.2.4-bin.tar.gz -C /opt \
-&& sudo tar xf hbase-2.2.4-client-bin.tar.gz -C /opt \
+&& sudo tar xf apache-hive-4.0.0-SNAPSHOT-bin.tar.gz -C /opt \
+&& sudo tar xf apache-hive-standalone-metastore-server-4.0.0-SNAPSHOT-bin.tar.gz -C /opt \
+&& sudo tar xf hbase-2.2.6-SNAPSHOT-bin.tar.gz -C /opt \
+&& sudo tar xf hbase-2.2.6-SNAPSHOT-client-bin.tar.gz -C /opt \
 && sudo mkdir -p /opt/apache-impala-3.4.0-bin \
 && sudo tar xf apache-impala-3.4.0-bin.tar.bz2 -C /opt/apache-impala-3.4.0-bin \
 && sudo tar xf hadoop-3.1.2.tar.gz -C /opt \
@@ -73,10 +73,10 @@ cd /opt \
 && sudo tar xf /opt/apache-impala-3.4.0-bin/shell/build/impala-shell-3.4.0-RELEASE.tar.gz -C /opt \
 && cd /opt \
 && sudo rm -f hive metastore hbase hbase hbase-client impala impala-shell hadoop tez \
-&& sudo ln -sf apache-hive-3.1.2-bin hive \
-&& sudo ln -sf apache-hive-metastore-3.1.2-bin metastore \
-&& sudo ln -sf hbase-2.2.4 hbase \
-&& sudo ln -sf hbase-2.2.4-client hbase-client \
+&& sudo ln -sf apache-hive-4.0.0-SNAPSHOT-bin hive \
+&& sudo ln -sf apache-hive-metastore-4.0.0-SNAPSHOT-bin metastore \
+&& sudo ln -sf hbase-2.2.6-SNAPSHOT hbase \
+&& sudo ln -sf hbase-2.2.6-SNAPSHOT-client hbase-client \
 && sudo ln -sf apache-impala-3.4.0-bin impala \
 && sudo ln -sf impala-shell-3.4.0-RELEASE impala-shell \
 && sudo ln -sf hadoop-3.1.2 hadoop \

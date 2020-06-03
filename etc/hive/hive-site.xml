@@ -4,29 +4,31 @@
   <property>
     <name>metastore.thrift.uris</name>
     <value>thrift://master:9083</value>
-    <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
+    <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore. Format:
+    thrift://#HOST#:#PORT#[, thrift://#HOST#:#PORT#...]
+    HOST = hostname, PORT = should be set to match metastore.thrift.port on the server (which defaults to 9083. You can provide multiple servers in a comma separate list.
+    Default: none</description>
   </property>
 
   <property>
-    <name>hive.metastore.port</name>
+    <name>metastore.thrift.port</name>
     <value>9083</value>
-    <description>Port Thrift will listen on.</description>
+    <description>Port Thrift will listen on. Default: 9083</description>
   </property>
 
   <property>
-    <name>hive.metastore.warehouse.dir</name>
+    <name>metastore.warehouse.dir</name>
     <value>hdfs://master:9000/home/hive/warehouse</value>
-    <description>URI of the default location for tables in the default catalog and database.</description>
+    <description>URI of the default location for tables in the default catalog and database. Default: empty</description>
   </property>
 
   <property>
     <name>datanucleus.schema.autoCreateAll</name>
     <value>false</value>
-    <description>Creates necessary schema on a startup if one does not exist. Set this to false, after creating it once.
-
-    datanucleus.schema.autoCreateAll is disabled if hive.metastore.schema.verification is true. Default: true</description>
+    <description>Auto creates the necessary schema in the RDBMS at startup if one does not exist. Set this to false after creating it once. To enable auto create also set hive.metastore.schema.verification=false. Auto creation is not recommended in production; run schematool instead. Default: false</description>
   </property>
 
+  <!--
   <property>
     <name>datanucleus.schema.autoCreateTables</name>
     <value>true</value>
@@ -40,16 +42,26 @@
   <property>
     <name>datanucleus.autoStartMechanism</name> 
     <value>SchemaTable</value>
-  </property> 
+  </property>
+  -->
 
   <property>
-    <name>hive.metastore.schema.verification</name>
+    <name>metastore.schema.verification</name>
     <value>true</value>
-    <description>Enforce metastore schema version consistency.
-    True: Verify that version information stored in metastore matches with one from Hive jars. Also disable automatic schema migration attempt (see datanucleus.autoCreateSchema and datanucleus.schema.autoCreateAll). Users are required to manually migrate schema after Hive upgrade which ensures proper metastore schema migration.
-    False: Warn if the version information stored in metastore doesn't match with one from Hive jars.
+    <description>Enforce metastore schema version consistency. When set to true: verify that version information stored in the RDBMS is compatible with the version of the Metastore jar. Also disable automatic schema migration. Users are required to manually migrate the schema after upgrade, which ensures proper schema migration. This setting is strongly recommended in production.
+    When set to false: warn if the version information stored in RDBMS doesn't match the version of the Metastore jar and allow auto schema migration. Default: true</description>
+  </property>
 
-    For more information, see Metastore Schema Consistency and Upgrades. Default: false</description>
+  <property>
+    <name>metastore.log4j.file</name>
+    <value>/etc/metastore/metastore-log4j2.properties</value>
+    <description>Log4j configuration file. If unset will look for metastore-log4j2.properties in $METASTORE_HOME/conf. Default: none</description>
+  </property>
+
+  <property>
+    <name>metastore.stats.autogather</name>
+    <value>true</value>
+    <description>Whether to automatically gather basic statistics during insert commands. Default: true</description>
   </property>
 
   <property>
@@ -79,21 +91,57 @@
   <property>
     <name>metastore.try.direct.sql.ddl</name>
     <value>false</value>
-    <description>When using Postgres you should set the configuration parameter metastore.try.direct.sql.ddl (previously hive.metastore.try.direct.sql.ddl) to false, to avoid failures in certain operations.</description>
+    <description>Same as Configuration Properties#hive.metastore.try.direct.sql, for read statements within a transaction that modifies metastore data. Due to non-standard behavior in Postgres, if a direct SQL select query has incorrect syntax or something similar inside a transaction, the entire transaction will fail and fall-back to DataNucleus will not be possible. You should disable the usage of direct SQL inside transactions if that happens in your case.
+
+    This can be configured on a per client basis by using the "set metaconf:hive.metastore.try.direct.sql.ddl=#value#" command, starting with Hive 0.14.0 (HIVE-7532). Default: true</description>
   </property>
 
   <property>
-    <name>hive.metastore.rawstore.impl</name>
+    <name>metastore.rawstore.impl</name>
     <value>org.apache.hadoop.hive.metastore.cache.CachedStore</value>
-    <description>As of Hive 3.0 there are two implementations. The default implementation (org.apache.hadoop.hive.metastore.ObjectStore) queries the database directly. HIVE-16520 introduced a new CachedStore (full class name is org.apache.hadoop.hive.metastore.cache.CachedStore) that caches retrieved objects in memory on the Metastore.</description>
+    <description>Name of the class that implements org.apache.hadoop.hive.metastore.rawstore interface. This class is used to store and retrieval of raw metadata objects such as table, database.
+
+    As of Hive 3.0 there are two implementations. The default implementation (ObjectStore) queries the database directly. HIVE-16520 introduced a new CachedStore (full class name is org.apache.hadoop.hive.metastore.cache.CachedStore) that caches retrieved objects in memory on the Metastore. Default: org.apache.hadoop.hive.metastore.ObjectStore</description>
   </property>
 
   <!-- Metastore metrics -->
   <property>
     <name>hive.metastore.metrics.enabled</name>
     <value>true</value>
-    <description>Enable metrics on the Hive Metastore Service. (For other metastore configuration properties, see the Metastore and Hive Metastore Security sections.) Default: false</description>
+    <description>Enable metrics on the Hive Metastore Service. Default: false</description>
   </property>
+
+  <!-- Storage Based Authorization in the Metastore Server -->
+  <!--
+  <property>
+    <name>hive.metastore.pre.event.listeners</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
+    <description>The pre-event listener classes to be loaded on the metastore side to run code whenever databases, tables, and partitions are created, altered, or dropped. Set this configuration property to org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener in hive-site.xml to turn on Hive metastore-side security. Default: empty</description>
+  </property>
+
+  <property>
+    <name>hive.security.metastore.authorization.manager</name>
+    <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
+    <description>Hive 0.13 and earlier: The authorization manager class name to be used in the metastore for authorization. The user-defined authorization class should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider.
+
+    Hive 0.14 and later: Names of authorization manager classes (comma separated) to be used in the metastore for authorization. User-defined authorization classes should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider. All authorization manager classes have to successfully authorize the metastore API call for the command execution to be allowed.
+
+    The DefaultHiveMetastoreAuthorizationProvider implements the standard Hive grant/revoke model. A storage-based authorization implementation is also provided to use as the value of this configuration property:
+
+    org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider
+
+    which uses HDFS permissions to provide authorization instead of using Hive-style grant-based authorization. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveMetastoreAuthorizationProvider</description>
+  </property>
+  -->
+  
+  <!-- SQL Standard Based Hive Authorization -->
+  <!--
+  <property>
+    <name>hive.users.in.admin.role</name>
+    <value>hive,impala</value>
+    <description>A comma separated list of users which will be added to the ADMIN role when the metastore starts up. More users can still be added later on. Default: empty</description>
+  </property>
+  -->
 
   <!-- HiveServer2 -->
   <property>
@@ -688,37 +736,5 @@
     <value>false</value>
     <description>Enable or disable the Hive client authorization. Default: false</description>
   </property>
-
-  <!-- Storage Based Authorization in the Metastore Server -->
-  <!--
-  <property>
-    <name>hive.metastore.pre.event.listeners</name>
-    <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
-    <description>The pre-event listener classes to be loaded on the metastore side to run code whenever databases, tables, and partitions are created, altered, or dropped. Set this configuration property to org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener in hive-site.xml to turn on Hive metastore-side security. Default: empty</description>
-  </property>
-
-  <property>
-    <name>hive.security.metastore.authorization.manager</name>
-    <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
-    <description>Hive 0.13 and earlier: The authorization manager class name to be used in the metastore for authorization. The user-defined authorization class should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider.
-
-    Hive 0.14 and later: Names of authorization manager classes (comma separated) to be used in the metastore for authorization. User-defined authorization classes should implement interface org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider. All authorization manager classes have to successfully authorize the metastore API call for the command execution to be allowed.
-
-    The DefaultHiveMetastoreAuthorizationProvider implements the standard Hive grant/revoke model. A storage-based authorization implementation is also provided to use as the value of this configuration property:
-
-    org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider
-
-    which uses HDFS permissions to provide authorization instead of using Hive-style grant-based authorization. Default: org.apache.hadoop.hive.ql.security.authorization.DefaultHiveMetastoreAuthorizationProvider</description>
-  </property>
-  -->
-  
-  <!-- SQL Standard Based Hive Authorization -->
-  <!--
-  <property>
-    <name>hive.users.in.admin.role</name>
-    <value>hive,impala</value>
-    <description>A comma separated list of users which will be added to the ADMIN role when the metastore starts up. More users can still be added later on. Default: empty</description>
-  </property>
-  -->
 
 </configuration>
