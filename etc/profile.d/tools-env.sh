@@ -1,5 +1,3 @@
-export PS1="\[\e[32m\]\u@\h \[\e[35m\]\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n$ "
-
 export CC="gcc";
 export CFLAGS="-O2";
 export CXX="g++";
@@ -39,3 +37,10 @@ alias python='/usr/bin/python3'
 alias clear-logs='journalctl --vacuum-time=1d';
 alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
 alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
+
+if [ -n "$(which git)" ];
+then
+  export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')\[\e[00m\]\n$ ";
+else
+  export PS1="\[\e[32m\]\u@\h \[\e[35m\]\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n$ ";
+fi
