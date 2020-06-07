@@ -3,7 +3,7 @@ x="${1:-"hadoop"}";
 shift 1;
 action="${*:-"clean package"}";
 hadoop_version="3.1.2";
-hbase_version="2.2.4";
+hbase_version="2.2.5";
 javax_el_version="3.0.1-b11";
 export CC="gcc";
 export CFLAGS="-O2";
@@ -25,14 +25,14 @@ case "${x}" in
     mvn ${action} -DskipTests
     ;;
   hadoop)
-    mvn ${action} -Pdist,native -Pyarn-ui -DskipTests -Dtar -Dmaven.javadoc.skip=true -Drequire.openssl -Drequire.zstd -Drequire.snappy -Drequire.isal -Disal.prefix=/opt/isa-l -Disal.lib=/opt/isa-l/lib -Dbundle.isal -Dhbase.profile=2.0 -Dhbase.two.version=${hbase_version}; #-Dorg.glassfish.javax.el.version=${javax_el_version};
+    mvn ${action} -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -Drequire.openssl -Drequire.zstd -Drequire.snappy -Drequire.isal -Disal.prefix=/opt/isa-l -Disal.lib=/opt/isa-l/lib -Dbundle.isal -Dhbase.profile=2.0; #-Dhbase.two.version=${hbase_version} -Pyarn-ui;
     if [[ ${?} -eq 0 ]];
     then
       cp ./hadoop-dist/target/hadoop-*.tar.gz ~/src/.;
     fi
     ;;
   hbase)
-    mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version}; #-Dglassfish.el.version=${javax_el_version};
+    mvn ${action} assembly:single -Dmaven.javadoc.skip=true -DskipTests -Dhadoop.profile=3.0 -Dhadoop-three.version=${hadoop_version};
     if [[ ${?} -eq 0 ]];
     then
       cp ./hbase-assembly/target/hbase-*-bin.tar.gz ~/src/.;
@@ -48,10 +48,11 @@ case "${x}" in
     ;;
   hive)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
-    mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version} -Dhbase.version=${hbase_version}; #-Dapache-directory-server.version=2.0.0.AM26 -Dorg.glassfish.javax.el.version=${javax_el_version};
+    mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true;
     if [[ ${?} -eq 0 ]];
     then
-      cp ./standalone-metastore/target/apache-hive*-metastore-*-bin.tar.gz ./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
+      cp ./standalone-metastore/target/apache-hive*-metastore-*-bin.tar.gz ~/src/.;
+      cp ./packaging/target/apache-hive-*-bin.tar.gz ~/src/.;
     fi
     ;;
   spark)
