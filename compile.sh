@@ -25,7 +25,7 @@ case "${x}" in
     mvn ${action} -DskipTests
     ;;
   hadoop)
-    mvn ${action} -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -Drequire.openssl -Drequire.zstd -Drequire.snappy -Drequire.isal -Disal.prefix=/opt/isa-l -Disal.lib=/opt/isa-l/lib -Dbundle.isal -Dhbase.profile=2.0; #-Dhbase.two.version=${hbase_version} -Pyarn-ui;
+    mvn ${action} -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -Drequire.openssl -Drequire.zstd -Drequire.snappy -Drequire.isal -Disal.prefix=/opt/isa-l -Disal.lib=/opt/isa-l/lib -Dbundle.isal -Dhbase.profile=2.0 -Dhbase.two.version=${hbase_version}; #-Pyarn-ui;
     if [[ ${?} -eq 0 ]];
     then
       cp ./hadoop-dist/target/hadoop-*.tar.gz ~/src/.;
