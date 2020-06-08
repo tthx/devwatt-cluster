@@ -86,7 +86,7 @@
    
   <property>
     <name>javax.jdo.option.ConnectionPassword</name>
-    <value>D@$#H0le99*</value>
+    <value>azerty</value>
     <description>Password to use against metastore database. Default: mine</description>
   </property>
    

@@ -1,7 +1,7 @@
 DROP DATABASE metastore;
 DROP USER hive;
 DROP USER impala;
-CREATE USER hive WITH PASSWORD 'D@$#H0le99*';
+CREATE USER hive WITH PASSWORD 'azerty';
 CREATE DATABASE metastore;
 \c metastore;
 \i /opt/hive/scripts/metastore/upgrade/postgres/hive-schema-3.1.0.postgres.sql;
