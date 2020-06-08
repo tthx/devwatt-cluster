@@ -34,7 +34,7 @@ export IMPALA_EXECUTOR_ARGS="${IMPALA_SERVER_ARGS} \
 
 export ENABLE_CORE_DUMPS=false
 
-export JAVA_HOME=/opt/jdk1.8.0_251
+export JAVA_HOME=/opt/jdk
 export LIBHDFS_OPTS=-Djava.library.path=/opt/hadoop/lib/native
 export POSTGRESQL_CONNECTOR_JAR=/usr/share/java/postgresql.jar
 export IMPALA_BIN=/opt/impala/be/build/release/service

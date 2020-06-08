@@ -69,7 +69,7 @@
 # - OPENBLAS_NUM_THREADS=1   Disable multi-threading of OpenBLAS
 
 
-export JAVA_HOME="/opt/jdk1.8.0_251"
+export JAVA_HOME="/opt/jdk"
 export JAVA_OPTS="-XX:+UseG1GC"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 

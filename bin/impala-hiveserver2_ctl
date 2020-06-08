@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -eu
+
+SERVICE="hiveserver2";
+BIN_DIR="/opt/impala-hive/bin"
+RUN_DIR="/var/impala/run";
+LOG_DIR="/var/impala/log";
+
+PIDFILE="${RUN_DIR}/${SERVICE}.pid";
+
+. "${BIN_DIR}/utils.sh";
+exec 1>> "${LOG_DIR}/${SERVICE}.stdout.log";
+exec 2>> "${LOG_DIR}/${SERVICE}.stderr.log";
+
+case "${1}" in
+  "start")
+    pid_guard "${PIDFILE}" "${SERVICE}";
+    "${BIN_DIR}/${SERVICE}" \
+      >>  "${LOG_DIR}/${SERVICE}.stdout.log" \
+      2>> "${LOG_DIR}/${SERVICE}.stderr.log" & disown;
+    echo "${!}" > "${PIDFILE}";
+    ;;
+
+  "stop")
+    kill_and_wait "${PIDFILE}";
+    ;;
+
+  *)
+    echo "Usage: ${0} {start|stop}";
+    exit 1;
+    ;;
+
+esac
+exit 0;
+
