@@ -41,11 +41,13 @@ export IMPALA_BIN=/opt/impala/be/build/release/service
 export IMPALA_HOME=/opt/impala
 export IMPALA_SHELL_HOME="${IMPALA_HOME}/shell/build/impala-shell-3.4.0-RELEASE"
 export HADOOP_HOME=/opt/hadoop
-export HIVE_HOME=/opt/hive
+export HIVE_HOME=/opt/impla-hive
+export METASTORE_HOME=/opt/impla-hive
 export HBASE_HOME=/opt/hbase
 export IMPALA_CONF_DIR=/etc/impala
 export HADOOP_CONF_DIR=/etc/hadoop
-export HIVE_CONF_DIR=/etc/hive
+export HIVE_CONF_DIR=/etc/impala
+export METASTORE_CONF_DIR=/etc/impala
 export HBASE_CONF_DIR=/etc/hbase
 
 if [[ -n "${LD_LIBRARY_PATH+x}" ]];

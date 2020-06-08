@@ -6,7 +6,11 @@
   </queue>
 
   <queue name="hive">
-    <weight>80</weight>
+    <weight>40</weight>
+  </queue>
+
+  <queue name="impala">
+    <weight>40</weight>
   </queue>
 
   <queuePlacementPolicy>

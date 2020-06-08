@@ -2,8 +2,13 @@
 
 set -eu
 
+export HIVE_HOME="/opt/impala-hive";
+export HIVE_CONF_DIR="/etc/impala";
+export METASTORE_HOME="/opt/impala-hive";
+export METASTORE_CONF_DIR="/etc/impala";
+
 SERVICE="metastore";
-BIN_DIR="/opt/impala-hive/bin"
+BIN_DIR="/opt/impala-hive/bin";
 RUN_DIR="/var/impala/run";
 LOG_DIR="/var/impala/log";
 

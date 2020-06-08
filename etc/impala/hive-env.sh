@@ -59,7 +59,7 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 
 if [[ -n "${HADOOP_CLASSPATH+x}" ]];
 then
-  export HADOOP_CLASSPATH+=":$(find ${HIVE_HOME}/lib/ -name 'hive-exec-*.jar')";
+  export HADOOP_CLASSPATH+=":$(find ${TEZ_CONF_DIR}/ ${TEZ_HOME}/ \( -name '*.xml' -o -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name 'jersey-*.jar'  ! -name 'guava-*.jar' ! -name '*guice-*.jar' \)| xargs echo | tr ' ' ':')"
 else
-  export HADOOP_CLASSPATH="$(find ${HIVE_HOME}/lib/ -name 'hive-exec-*.jar')";
+  export HADOOP_CLASSPATH="$(find ${TEZ_CONF_DIR}/ ${TEZ_HOME}/ \( -name '*.xml' -o -name '*.jar' ! -name 'slf4j-log4j12-*.jar' ! -name 'jersey-*.jar'  ! -name 'guava-*.jar' ! -name '*guice-*.jar' \)| xargs echo | tr ' ' ':')"
 fi
