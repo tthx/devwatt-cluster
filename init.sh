@@ -45,6 +45,11 @@ do
 done
 rm /tmp/authorized_keys-$(hostname)
 
+git config --global http.proxy http://devwatt-proxy.si.fr.intraorange:8080 \
+&& mkdir -p src \
+&& cd src \
+&& git clone https://github.com/tthx/devwatt-cluster.git
+
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp \
 && sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
 && sudo chown -R yarn:hadoop /var/yarn \
@@ -61,12 +66,14 @@ sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1
 cd /opt \
 && sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
 && cd /tmp \
+&& zookeeper_version="3.6.1" \
 && hive_version="3.1.3" \
 && impala_hive_version="2.1.2-SNAPSHOT" \
 && hbase_version="2.2.6-SNAPSHOT" \
 && impala_version="3.4.0" \
 && hadoop_version="3.1.2" \
 && tez_version="0.9.2" \
+&& sudo tar xf apache-zookeeper-${zookeeper_version}-bin.tar.gz -C /opt \
 && sudo tar xf apache-hive-${hive_version}-bin.tar.gz -C /opt \
 && sudo tar xf apache-hive-metastore-${hive_version}-bin.tar.gz -C /opt \
 && sudo tar xf apache-hive-${impala_hive_version}-bin.tar.gz -C /opt \
@@ -80,6 +87,7 @@ cd /opt \
 && sudo tar xf /opt/apache-impala-${impala_version}-bin/shell/build/impala-shell-${impala_version}-RELEASE.tar.gz -C /opt \
 && cd /opt \
 && sudo rm -f hive metastore hbase hbase impala impala-hive impala-shell hadoop tez \
+&& sudo ln -sf apache-zookeeper-${zookeeper_version}-bin zookeeper \
 && sudo ln -sf apache-hive-${hive_version}-bin hive \
 && sudo ln -sf apache-hive-metastore-${hive_version}-bin metastore \
 && sudo ln -sf apache-hive-${impala_hive_version}-bin impala-hive \
