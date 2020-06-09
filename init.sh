@@ -6,9 +6,6 @@ npm install -g ember-cli
 abdmob/x2js -> x2js
 ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/bower.json ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-ui/src/main/webapp/ember-cli-build.js
 
-echo 'ubuntu:azerty'|sudo chpasswd \
-&& sudo adduser ubuntu hadoop
-
 sudo addgroup hadoop \
 && sudo useradd zookeeper --create-home --groups hadoop --shell /bin/bash \
 && echo 'zookeeper:azerty'|sudo chpasswd \
@@ -27,22 +24,26 @@ sudo addgroup hadoop \
 && sudo useradd attu7372 --create-home --groups hadoop --shell /bin/bash \
 && echo 'attu7372:azerty'|sudo chpasswd \
 && sudo useradd spark --create-home --groups hadoop --shell /bin/bash \
-&& echo 'spark:azerty'|sudo chpasswd 
+&& echo 'spark:azerty'|sudo chpasswd \
+&& echo 'ubuntu:azerty'|sudo chpasswd \
+&& sudo adduser ubuntu hadoop
 
-users="hdfs yarn mapred hive hbase zookeeper spark impala"
-cat ~/.ssh/id_rsa.pub > /tmp/authorized_keys
-chmod 777 /tmp/authorized_keys
+users="ubuntu attu7372 hdfs yarn mapred hive hbase zookeeper spark impala"
+rm /tmp/authorized_keys-$(hostname)
+touch /tmp/authorized_keys-$(hostname)
+chmod 777 /tmp/authorized_keys-$(hostname)
 for x in ${users};
 do
   sudo -u ${x} ssh-keygen -t rsa -b 4096 -q -N '' -f /home/${x}/.ssh/id_rsa <<< y \
-  && sudo -u ${x} cat /home/${x}/.ssh/id_rsa.pub >> /tmp/authorized_keys
+  && sudo -u ${x} cat /home/${x}/.ssh/id_rsa.pub >> /tmp/authorized_keys-$(hostname)
 done
+users="ubuntu attu7372 hdfs yarn mapred hive hbase zookeeper spark impala"
 for x in ${users};
 do
   sudo -u ${x} cp /tmp/authorized_keys /home/${x}/.ssh/. \
   && sudo -u ${x} chmod 600 /home/${x}/.ssh/authorized_keys
 done
-rm /tmp/authorized_keys
+rm /tmp/authorized_keys-$(hostname)
 
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp \
 && sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
