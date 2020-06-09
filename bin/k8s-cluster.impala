@@ -7,6 +7,10 @@ case "${1}" in
     k8s-cmd "sudo rm -rf /var/impala/log/*";
     echo -e "}: Logs cleaned.\n";
 
+    echo -e "Starting impala metastore: {...";
+    k8s-cmd "impala_metastore_ctl start" impala ${master};
+    echo -e "}: impala metastore started.\n";
+
     echo -e "Starting statestored: {...";
     k8s-cmd "statestored_ctl start" impala ${master};
     echo -e "}: statestored started.\n";
@@ -35,5 +39,9 @@ case "${1}" in
     echo -e "Stopping statestored: {...";
     k8s-cmd "statestored_ctl stop" impala ${master};
     echo -e "}: statestored stopped.\n";
+
+    echo -e "Stopping impala metastore: {...";
+    k8s-cmd "impala_metastore_ctl stop" impala ${master};
+    echo -e "}: impala metastore stopped.\n";
     ;;
 esac

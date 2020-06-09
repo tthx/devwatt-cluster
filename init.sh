@@ -66,46 +66,39 @@ sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1
 cd /opt \
 && sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
 && cd /tmp \
-&& zookeeper_version="3.6.1" \
-&& hive_version="3.1.3" \
-&& impala_hive_version="2.1.2-SNAPSHOT" \
-&& hbase_version="2.2.6-SNAPSHOT" \
-&& impala_version="3.4.0" \
-&& hadoop_version="3.1.2" \
-&& tez_version="0.9.2" \
-&& sudo tar xf apache-zookeeper-${zookeeper_version}-bin.tar.gz -C /opt \
-&& sudo tar xf apache-hive-${hive_version}-bin.tar.gz -C /opt \
-&& sudo tar xf apache-hive-metastore-${hive_version}-bin.tar.gz -C /opt \
-&& sudo tar xf apache-hive-${impala_hive_version}-bin.tar.gz -C /opt \
-&& sudo tar xf hbase-${hbase_version}-bin.tar.gz -C /opt \
-&& sudo mkdir -p /opt/apache-impala-${impala_version}-bin \
-&& sudo tar xf apache-impala-${impala_version}-bin.tar.bz2 -C /opt/apache-impala-${impala_version}-bin \
-&& sudo tar xf hadoop-${hadoop_version}.tar.gz -C /opt \
-&& sudo mkdir -p /opt/tez-${tez_version} \
-&& sudo tar xf tez-${tez_version}.tar.gz -C /opt/tez-${tez_version} \
-&& sudo cp tez-aux-services-${tez_version}.jar /opt/tez-${tez_version}/. \
-&& sudo tar xf /opt/apache-impala-${impala_version}-bin/shell/build/impala-shell-${impala_version}-RELEASE.tar.gz -C /opt \
+&& sudo tar xf jdk-8u251-linux-x64.tar.gz -C /opt \
+&& sudo tar xf apache-zookeeper-3.6.1-bin.tar.gz -C /opt \
+&& sudo tar xf apache-hive-3.1.3-bin.tar.gz -C /opt \
+&& sudo tar xf apache-hive-metastore-3.1.3-bin.tar.gz -C /opt \
+&& sudo tar xf apache-hive-2.1.2-SNAPSHOT-bin.tar.gz -C /opt \
+&& sudo tar xf hbase-2.2.6-SNAPSHOT-bin.tar.gz -C /opt \
+&& sudo mkdir -p /opt/apache-impala-3.4.0-bin \
+&& sudo tar xf apache-impala-3.4.0-bin.tar.bz2 -C /opt/apache-impala-3.4.0-bin \
+&& sudo tar xf hadoop-3.1.2.tar.gz -C /opt \
+&& sudo mkdir -p /opt/tez-0.9.2 \
+&& sudo tar xf tez-0.9.2.tar.gz -C /opt/tez-0.9.2 \
+&& sudo cp tez-aux-services-0.9.2.jar /opt/tez-0.9.2/. \
+&& sudo tar xf /opt/apache-impala-3.4.0-bin/shell/build/impala-shell-3.4.0-RELEASE.tar.gz -C /opt \
 && cd /opt \
 && sudo rm -f hive metastore hbase hbase impala impala-hive impala-shell hadoop tez \
-&& sudo ln -sf apache-zookeeper-${zookeeper_version}-bin zookeeper \
-&& sudo ln -sf apache-hive-${hive_version}-bin hive \
-&& sudo ln -sf apache-hive-metastore-${hive_version}-bin metastore \
-&& sudo ln -sf apache-hive-${impala_hive_version}-bin impala-hive \
-&& sudo ln -sf hbase-${hbase_version} hbase \
-&& sudo ln -sf apache-impala-${impala_version}-bin impala \
-&& sudo ln -sf impala-shell-${impala_version}-RELEASE impala-shell \
-&& sudo ln -sf hadoop-${hadoop_version} hadoop \
-&& sudo ln -sf tez-${tez_version} tez \
+&& sudo ln -sf jdk1.8.0_251 jdk \
+&& sudo ln -sf apache-zookeeper-3.6.1-bin zookeeper \
+&& sudo ln -sf apache-hive-3.1.3-bin hive \
+&& sudo ln -sf apache-hive-metastore-3.1.3-bin metastore \
+&& sudo ln -sf apache-hive-2.1.2-SNAPSHOT-bin impala-hive \
+&& sudo ln -sf hbase-2.2.6-SNAPSHOT hbase \
+&& sudo ln -sf apache-impala-3.4.0-bin impala \
+&& sudo ln -sf impala-shell-3.4.0-RELEASE impala-shell \
+&& sudo ln -sf hadoop-3.1.2 hadoop \
+&& sudo ln -sf tez-0.9.2 tez \
 && cd /opt \
-&& sudo chown -R root:root ./hadoop-* ./hbase-* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-* \
-&& sudo chmod -R g-w,o-w ./hadoop-* ./hbase-* ./apache-hive* ./apache-impala* ./impala-shell-* ./spark-* ./tez-*
-
-sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/. \
+&& sudo chown -R root:root ./hadoop-* ./hbase-* ./apache-hive* ./apache-impala* ./impala-shell-* ./tez-* \
+&& sudo chmod -R g-w,o-w ./hadoop-* ./hbase-* ./apache-hive* ./apache-impala* ./impala-shell-* ./tez-* \
+&& sudo cp /etc/hadoop/container-executor.cfg /opt/hadoop/etc/hadoop/. \
 && sudo chmod 644 /opt/hadoop/etc/hadoop/container-executor.cfg \
 && sudo chown root:hadoop /opt/hadoop/bin/container-executor \
-&& sudo chmod 6050 /opt/hadoop/bin/container-executor
-
-sudo ln -sf /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/. \
+&& sudo chmod 6050 /opt/hadoop/bin/container-executor \
+&& sudo ln -sf /usr/share/java/postgresql-jdbc4.jar /opt/hive/lib/. \
 && sudo ln -sf /usr/share/java/postgresql-jdbc4.jar /opt/metastore/lib/. \
 && sudo ln -sf /usr/share/java/postgresql-jdbc4.jar /opt/impala-hive/lib/.
 
@@ -127,58 +120,54 @@ cd ~/src/devwatt-cluster \
 && cd ~/src/devwatt-cluster/bin \
 && sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl /opt/impala/bin/.
 
-# HDFS
-sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
-
 # Zookeeper
 sudo cp -R ~/src/devwatt-cluster/var /var/.
 sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo -u zookeeper /opt/zookeeper/bin/zkCli.sh
 deleteall /hbase /hive
 
+# HDFS
+sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
+
 sudo -u hdfs /opt/hadoop/bin/hdfs namenode -format tthx
 
-hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive /home/impala
-hdfs dfs -chown -R ubuntu /home/ubuntu
-hdfs dfs -chown -R yarn /home/yarn
-hdfs dfs -chown -R mapred /home/mapred
-hdfs dfs -chmod -R 1777 /home/mapred/mr-history
-hdfs dfs -chmod 1770 /home/mapred/mr-history/done
-hdfs dfs -chown -R hive /home/hive /tmp/hive
-hdfs dfs -chown -R attu7372 /home/attu7372
-hdfs dfs -chown -R hbase /home/hbase
-hdfs dfs -chown -R impala /home/impala
-hdfs dfs -chmod -R 1777 /home/yarn/log /home/hive/warehouse /tmp
+sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive /home/impala/warehouse \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R ubuntu /home/ubuntu \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R yarn /home/yarn \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R mapred /home/mapred \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R 1777 /home/mapred/mr-history \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod 1770 /home/mapred/mr-history/done \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R hive /home/hive /tmp/hive \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R attu7372 /home/attu7372 \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R hbase /home/hbase \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R impala /home/impala \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R 1777 /home/yarn/log /home/hive/warehouse /home/impala/warehouse /tmp \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /home/hbase/coprocessor/ \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -rm -f /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -put /opt/hadoop/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-*.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown hbase /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R g+r,o+r /home/hbase/coprocessor/ \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /home/yarn/tez \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -rm -f /home/yarn/tez/tez-*.tar.gz \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -put /tmp/tez-*.tar.gz /home/yarn/tez/. \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R yarn /home/yarn/tez \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R g+r,o+r /home/yarn/tez \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /home/hive/lib /home/hive/install \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -rm -f /home/hive/lib/hive-exec-*.jar \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -put /opt/hive/lib/hive-exec-*.jar /home/hive/lib \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R hive /home/hive/lib /home/hive/install \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R 1777 /home/hive/lib /home/hive/install \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /home/impala-hive/lib /home/impala/install \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -rm -f /home/impala/lib/hive-exec-*.jar \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -put /opt/impala-hive/lib/hive-exec-*.jar /home/impala/lib \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R impala /home/impala/lib /home/impala/install \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R 1777 /home/impala/lib /home/impala/install
 
 # YARN Timeline service
-hadoop org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create
+sudo -u yarn /opt/hadoop/bin/hadoop org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create
 
-hdfs dfs -mkdir -p /home/hbase/coprocessor/ \
-&& hdfs dfs -rm -f /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar \
-&& hdfs dfs -put /opt/hadoop/share/hadoop/yarn/timelineservice/hadoop-yarn-server-timelineservice-hbase-coprocessor-*.jar /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar \
-&& hdfs dfs -chown hbase /home/hbase/coprocessor/hadoop-yarn-server-timelineservice.jar \
-&& hdfs dfs -chmod -R g+r,o+r /home/hbase/coprocessor/
-
-hdfs dfs -mkdir -p /home/yarn/tez \
-&& hdfs dfs -rm -f /home/yarn/tez/tez-*.tar.gz \
-&& hdfs dfs -put /tmp/tez-*.tar.gz /home/yarn/tez/. \
-&& hdfs dfs -chown -R yarn /home/yarn/tez \
-&& hdfs dfs -chmod -R g+r,o+r /home/yarn/tez
-
-hdfs dfs -mkdir -p /home/yarn/spark \
-&& hdfs dfs -rm -f /home/yarn/spark/* \
-&& hdfs dfs -put /opt/spark/jars/* /home/yarn/spark/. \
-&& hdfs dfs -chown -R yarn /home/yarn/spark \
-&& hdfs dfs -chmod -R g+r,o+r /home/yarn/spark
-
-hdfs dfs -mkdir -p /home/hive/lib /home/hive/install \
-&& hdfs dfs -rm -f /home/hive/lib/hive-exec-*.jar \
-&& hdfs dfs -put /opt/hive/lib/hive-exec-*.jar /home/hive/lib \
-&& hdfs dfs -chown -R hive /home/hive/lib /home/hive/install \
-&& hdfs dfs -chmod -R 1777 /home/hive/lib /home/hive/install
-
-hdfs dfs -mkdir -p /home/impala-hive/lib /home/impala/install \
-&& hdfs dfs -rm -f /home/impala/lib/hive-exec-*.jar \
-&& hdfs dfs -put /opt/impala-hive/lib/hive-exec-*.jar /home/impala/lib \
-&& hdfs dfs -chown -R impala /home/impala/lib /home/impala/install \
-&& hdfs dfs -chmod -R 1777 /home/impala/lib /home/impala/install
+sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /home/yarn/spark \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -rm -f /home/yarn/spark/* \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -put /opt/spark/jars/* /home/yarn/spark/. \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R yarn /home/yarn/spark \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chmod -R g+r,o+r /home/yarn/spark
