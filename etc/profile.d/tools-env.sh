@@ -39,6 +39,8 @@ alias python='/usr/bin/python3'
 alias clear-logs='journalctl --vacuum-time=1d';
 alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
 alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
+alias yum-clean='sudo yum remove $(package-cleanup --leaves)'
+alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1'
 
 if [ -n "$(which git)" ];
 then
