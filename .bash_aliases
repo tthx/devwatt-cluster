@@ -21,6 +21,8 @@ export GOROOT="/opt/go";
 export PATH="${GOROOT}/bin:${PATH}";
 export NODEJS="/opt/nodejs";
 export PATH="${NODEJS}/bin:${PATH}";
+export THRIFT_HOME="/opt/thrift";
+export PATH="${THRIFT_HOME}/bin:${PATH}";
 
 alias h='history';
 alias dir='ls -laF';

@@ -19,7 +19,7 @@ export CXX="g++"
 export CXXFLAGS="-O2"
 export JAVA_OPTS="-XX:+UseG1GC"
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m"
-export USE_CDP_HIVE=false
+export USE_CDP_HIVE=true
 export IMPALA_HOME="${HOME}/src/impala"\n' >> ${HOME}/.bashrc \
 && rm -f ${IMPALA_HOME}/bin/impala-config-local.sh \
 && printf 'export CC="gcc"
@@ -31,7 +31,7 @@ export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m"
 export NUM_CONCURRENT_TESTS=$(nproc)
 export MAX_PYTEST_FAILURES=0
 export USE_GOLD_LINKER=true
-export USE_CDP_HIVE=false
+export USE_CDP_HIVE=true
 export IMPALA_HOME="${HOME}/src/impala"\n' >> ${IMPALA_HOME}/bin/impala-config-local.sh \
 && export CC="gcc" \
 && export CFLAGS="-O2" \
@@ -42,7 +42,7 @@ export IMPALA_HOME="${HOME}/src/impala"\n' >> ${IMPALA_HOME}/bin/impala-config-l
 && export NUM_CONCURRENT_TESTS=$(nproc) \
 && export MAX_PYTEST_FAILURES=0 \
 && export USE_GOLD_LINKER=true \
-&& export USE_CDP_HIVE=false \
+&& export USE_CDP_HIVE=true \
 && . ${IMPALA_HOME}/bin/bootstrap_system.sh <<< "yes" \
 && . ${IMPALA_HOME}/bin/impala-config.sh \
 && ${IMPALA_HOME}/buildall.sh -notests -release \

@@ -48,7 +48,7 @@ case "${x}" in
     ;;
   hive)
     export MAVEN_OPTS="${JAVA_OPTS} -Xms2g -Xmx2g";
-    mvn ${action} -DskipTests -Pdist -Dmaven.javadoc.skip=true;
+    mvn ${action} -DskipTests -Pdist -Pprotobuf -Dmaven.javadoc.skip=true -Dhadoop.version=${hadoop_version};
     if [[ ${?} -eq 0 ]];
     then
       cp ./standalone-metastore/target/apache-hive*-metastore-*-bin.tar.gz ~/src/.;
