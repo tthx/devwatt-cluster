@@ -1,5 +1,5 @@
 JAVA_HOME="/opt/jdk"
-JAVA_OPTS="-XX:+UseG1GC"
+JAVA_OPTS="-XX:+UseG1GC -Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|master|worker-1|worker-2|worker-3|worker-4|10.*.*.*""
 ZOOCFGDIR="/var/zookeeper/conf"
 ZOOBINDIR="/opt/zookeeper/bin"
 ZOO_LOG_DIR="/var/zookeeper/log"

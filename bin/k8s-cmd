@@ -1,5 +1,5 @@
 #!/bin/bash
-user="${2:-"ubuntu"}";
+user="${2:-"attu7372"}";
 nodes="${3:-"master worker-1 worker-2 worker-3 worker-4"}";
 nodes="${3:-"10.171.46.145 10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168"}";
 for i in ${nodes};
