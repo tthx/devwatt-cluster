@@ -1,5 +1,5 @@
 JAVA_HOME="/opt/jdk"
-JAVA_OPTS="-XX:+UseG1GC"
+JAVA_OPTS="-XX:+UseG1GC -Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPort=8080 -Dhttps.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|master|worker-1|worker-2|worker-3|worker-4|10.*.*.*""
 PATH="/opt/jdk/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 http_proxy="http://devwatt-proxy.si.fr.intraorange:8080/"
 https_proxy="http://devwatt-proxy.si.fr.intraorange:8080/"
