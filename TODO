@@ -1,1 +1,0 @@
-Le compactage de Transparent Huge Pages est activé et peut dégrader les performances. Exécutez "echo never > /sys/kernel/mm/transparent_hugepage/defrag" et "echo never > /sys/kernel/mm/transparent_hugepage/enabled" pour désactiver cette option. Ensuite, ajoutez la même commande à un script init comme /etc/rc.local afin de la définir au prochain redémarrage système. 
