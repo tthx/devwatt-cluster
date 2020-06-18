@@ -1,8 +1,7 @@
+DROP DATABASE IF EXISTS tests;
 CREATE DATABASE tests;
 USE tests;
-
-// wget http://files.grouplens.org/datasets/movielens/ml-100k.zip
-
+DROP TABLE IF EXISTS u_data PURGE;
 CREATE TABLE u_data(
   userid INT,
   movieid INT,
@@ -11,7 +10,10 @@ CREATE TABLE u_data(
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 STORED AS TEXTFILE;
+
+// wget http://files.grouplens.org/datasets/movielens/ml-100k.zip
 LOAD DATA LOCAL INPATH '/tmp/ml-100k/u.data' OVERWRITE INTO TABLE u_data;
+
 SELECT COUNT(*) FROM u_data;
 ANALYZE TABLE u_data COMPUTE STATISTICS FOR COLUMNS;
 
