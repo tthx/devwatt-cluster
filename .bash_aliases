@@ -3,6 +3,9 @@ export CFLAGS="-O2";
 export CXX="g++";
 export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
+export JAVA_HOME="/opt/jdk";
+export JAVA_OPTS="-XX:+UseG1GC";
+export PATH="${JAVA_HOME}/bin:${PATH}";
 export M2_HOME="/opt/maven";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
 export PATH="${M2_HOME}/bin:${PATH}";
@@ -19,10 +22,8 @@ export SBT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPo
 export PATH="${SBT_HOME}/bin:${PATH}";
 export GOROOT="/opt/go";
 export PATH="${GOROOT}/bin:${PATH}";
-export NODEJS="/opt/nodejs";
+export NODEJS="/opt/node.js";
 export PATH="${NODEJS}/bin:${PATH}";
-export THRIFT_HOME="/opt/thrift";
-export PATH="${THRIFT_HOME}/bin:${PATH}";
 
 alias h='history';
 alias dir='ls -laF';
