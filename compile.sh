@@ -10,9 +10,9 @@ export CFLAGS="-O2";
 export CXX="g++";
 export CXXFLAGS="-O2";
 #export JAVA_HOME="/opt/jdk";
+#export PATH="${JAVA_HOME}/bin:${PATH}";
 export JAVA_OPTS="-XX:+UseG1GC";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms1g -Xmx2g";
-export PATH="${JAVA_HOME}/bin:${PATH}";
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native";
 if [[ -n "${LD_LIBRARY_PATH+x}" ]];
 then
