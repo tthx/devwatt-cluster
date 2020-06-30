@@ -1,6 +1,6 @@
-#JAVA_HOME="/opt/jdk"
+JAVA_HOME="/opt/jdk"
 JAVA_OPTS="-XX:+UseG1GC"
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+PATH="/opt/jdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 http_proxy="http://devwatt-proxy.si.fr.intraorange:8080/"
 https_proxy="http://devwatt-proxy.si.fr.intraorange:8080/"
 HTTPS_PROXY="http://devwatt-proxy.si.fr.intraorange:8080/"

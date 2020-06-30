@@ -1,5 +1,5 @@
-#export JAVA_HOME="/opt/jdk";
-#export PATH="{JAVA_HOME}/bin:${PATH}"
+export JAVA_HOME="/opt/jdk";
+export PATH="{JAVA_HOME}/bin:${PATH}"
 export JAVA_OPTS="-XX:+UseG1GC";
 export ZOOCFGDIR="/var/zookeeper/conf";
 export ZOOBINDIR="/opt/zookeeper/bin";

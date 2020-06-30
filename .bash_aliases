@@ -3,8 +3,8 @@ export CFLAGS="-O2";
 export CXX="g++";
 export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
-#export JAVA_HOME="/opt/jdk";
-#export PATH="${JAVA_HOME}/bin:${PATH}";
+export JAVA_HOME="/opt/jdk";
+export PATH="${JAVA_HOME}/bin:${PATH}";
 export JAVA_OPTS="-XX:+UseG1GC";
 export M2_HOME="/opt/maven";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
