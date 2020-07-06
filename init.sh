@@ -52,8 +52,8 @@ done
 rm /tmp/authorized_keys-$(hostname)
 
 git config --global http.proxy http://devwatt-proxy.si.fr.intraorange:8080 \
-&& mkdir -p src \
-&& cd src \
+&& mkdir -p ~/src \
+&& cd ~/src \
 && git clone https://github.com/tthx/devwatt-cluster.git
 
 sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp \
