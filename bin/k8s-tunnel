@@ -6,5 +6,5 @@ do
   key=${node%%:*}
   value=${node#*:}
   echo "-- node: ${key} --";
-  /usr/bin/sshuttle -r ${user}@${key} -e "ssh -i $HOME/.ssh/devwatt1024 -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes" ${value} --pidfile=/tmp/sshuttle-${key}.pid --python /usr/bin/python &>/dev/null &disown;
+  /usr/bin/sshuttle -r ${user}@${key} -e "ssh -i $HOME/.ssh/devwatt1024 -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes" ${value} --pidfile=/tmp/sshuttle-${key}.pid --python /usr/bin/python3 &>/dev/null &disown;
 done
