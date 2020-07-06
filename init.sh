@@ -127,8 +127,8 @@ cd ~/src/devwatt-cluster \
 && sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl /opt/impala/bin/.
 
 # Zookeeper
-sudo cp -R ~/src/devwatt-cluster/var /var/.
-sudo chown -R zookeeper:hadoop /var/zookeeper
+sudo cp -R ~/src/devwatt-cluster/var /var/. \
+&& sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo -u zookeeper /opt/zookeeper/bin/zkCli.sh
 deleteall /hbase /hive
 
