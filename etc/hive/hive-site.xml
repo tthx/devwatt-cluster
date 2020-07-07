@@ -68,7 +68,7 @@
 
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:postgresql://master/hive_metastore</value>
+    <value>jdbc:postgresql://master/metastore</value>
     <description>JDBC connect string for a JDBC metastore. Default: jdbc:derby:;databaseName=metastore_db;create=true</description>
   </property>
    
