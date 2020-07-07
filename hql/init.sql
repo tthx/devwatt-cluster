@@ -2,7 +2,7 @@ DROP DATABASE metastore;
 DROP USER hive;
 CREATE USER hive WITH PASSWORD 'azerty';
 CREATE DATABASE metastore WITH OWNER hive;
-\c hive_metastore;
+\c metastore;
 \i /opt/hive/scripts/metastore/upgrade/postgres/hive-schema-3.1.0.postgres.sql;
 \pset tuples_only on
 \o /tmp/grant-privs

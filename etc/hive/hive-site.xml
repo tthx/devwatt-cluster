@@ -703,8 +703,14 @@
   </property>
 
   <property>
+    <name>hive.lock.manager</name>
+    <value>org.apache.hadoop.hive.ql.lockmgr.zookeeper.ZooKeeperHiveLockManager</value>
+    <description>The lock manager to use when hive.support.concurrency is set to true. Default: org.apache.hadoop.hive.ql.lockmgr.zookeeper.ZooKeeperHiveLockManager</description>
+  </property>
+
+  <property>
     <name>hive.lock.mapred.only.operation</name>
-    <value>true</value>
+    <value>false</value>
     <description>This configuration property is to control whether or not only do lock on queries that need to execute at least one mapred job. Default: false</description>
   </property>
 
