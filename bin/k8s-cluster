@@ -31,13 +31,13 @@ case "${1}" in
     #k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
     #echo -e "}: timelinereader started.\n";
 
-    #echo -e "Starting metastore: {...";
-    #k8s-cmd "metastore_standalone_ctl start" hive ${master};
-    #echo -e "}: metastore started.\n";
+    echo -e "Starting metastore: {...";
+    k8s-cmd "metastore_ctl start" hive ${master};
+    echo -e "}: metastore started.\n";
 
-    #echo -e "Starting hiveserver2: {...";
-    #k8s-cmd "hiveserver2_ctl start" hive ${master};
-    #echo -e "}: hiveserver2 started.\n";
+    echo -e "Starting hiveserver2: {...";
+    k8s-cmd "hiveserver2_ctl start" hive ${master};
+    echo -e "}: hiveserver2 started.\n";
 
     #echo -e "Starting statestored: {...";
     #k8s-cmd "statestored_ctl start" impala ${master};
@@ -68,13 +68,13 @@ case "${1}" in
     #k8s-cmd "statestored_ctl stop" impala ${master};
     #echo -e "}: statestored stopped.\n";
 
-    #echo -e "Stopping hiveserver2: {...";
-    #k8s-cmd "hiveserver2_ctl stop" hive ${master};
-    #echo -e "}: hiveserver2 stopped.\n";
+    echo -e "Stopping hiveserver2: {...";
+    k8s-cmd "hiveserver2_ctl stop" hive ${master};
+    echo -e "}: hiveserver2 stopped.\n";
 
-    #echo -e "Stopping metastore: {...";
-    #k8s-cmd "metastore_standalone_ctl stop" hive ${master};
-    #echo -e "}: metastore stopped.\n";
+    echo -e "Stopping metastore: {...";
+    k8s-cmd "metastore_ctl stop" hive ${master};
+    echo -e "}: metastore stopped.\n";
 
     #echo -e "Stopping timelinereader: {...";
     #k8s-cmd "yarn --daemon stop timelinereader" yarn ${master};

@@ -103,8 +103,45 @@ CLUSTERED BY(userid, movieid, unixtime) INTO 4 BUCKETS
 SKEWED BY (rating) ON (1,2,3,4,5)
 TBLPROPERTIES('transactional'='true');
 INSERT OVERWRITE TABLE u_data_acid SELECT * FROM u_data_opt;
-ANALYZE TABLE u_data_acid COMPUTE STATISTICS FOR COLUMNS; // KO
+ANALYZE TABLE u_data_acid COMPUTE STATISTICS FOR COLUMNS;
 SELECT COUNT(*) FROM u_data_acid;
 DESCRIBE FORMATTED u_data_acid;
 
 SELECT userid, movieid, unixtime FROM u_data_acid WHERE unixtime>888639814 AND unixtime<888640275 AND rating>1 AND rating<=4 GROUP BY userid, movieid, unixtime;
+
+DROP TABLE IF EXISTS u_data_acid_join PURGE;
+CREATE TABLE u_data_acid_join(
+  userid1 INT,
+  userid2 INT,
+  movieid INT,
+  rating INT,
+  unixtime1 STRING,
+  unixtime2 STRING)
+CLUSTERED BY(userid1, userid2, movieid, unixtime1, unixtime2) INTO 4 BUCKETS
+SKEWED BY (rating) ON (1,2,3,4,5)
+TBLPROPERTIES('transactional'='true');
+INSERT OVERWRITE TABLE u_data_acid_join 
+SELECT
+  u1.userid,
+  u2.userid,
+  u1.movieid,
+  u1.rating,
+  u1.unixtime,
+  u2.unixtime
+FROM
+  u_data_acid u1
+JOIN u_data_acid u2
+ON
+  u1.userid<>u2.userid AND
+  u1.movieid=u2.movieid AND
+  u1.rating=u2.rating
+GROUP BY
+  u1.userid,
+  u2.userid,
+  u1.movieid,
+  u1.rating,
+  u1.unixtime,
+  u2.unixtime;
+ANALYZE TABLE u_data_acid_join COMPUTE STATISTICS FOR COLUMNS;
+SELECT COUNT(*) FROM u_data_acid_join;
+DESCRIBE FORMATTED u_data_acid_join;
