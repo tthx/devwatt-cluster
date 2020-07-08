@@ -278,7 +278,8 @@
 
   <property>
     <name>yarn.nodemanager.aux-services</name>
-    <value>tez_shuffle,timeline_collector,mapreduce_shuffle</value>
+    <value>tez_shuffle,timeline_collector</value>
+    <!-- <value>tez_shuffle,timeline_collector,mapreduce_shuffle</value> -->
     <description>A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers</description>
   </property>
 
