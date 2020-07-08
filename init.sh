@@ -145,6 +145,7 @@ sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data /data/hdfs /mnt/hdfs/* /var
 sudo -u hdfs /opt/hadoop/bin/hdfs namenode -format tthx
 
 sudo -u hdfs /opt/hadoop/bin/hdfs dfs -mkdir -p /tmp/hive /home/ubuntu /home/yarn/log /home/mapred/mr-history/tmp /home/mapred/mr-history/done /home/hive/warehouse /home/attu7372 /home/hbase/coprocessor /tmp/hive /home/impala/warehouse \
+&& sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown hdfs /home \
 && sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R ubuntu /home/ubuntu \
 && sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R yarn /home/yarn \
 && sudo -u hdfs /opt/hadoop/bin/hdfs dfs -chown -R mapred /home/mapred \
