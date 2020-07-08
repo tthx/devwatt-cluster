@@ -51,6 +51,12 @@ do
 done
 rm /tmp/authorized_keys-$(hostname)
 
+users="ubuntu attu7372 hdfs yarn mapred hive hbase zookeeper spark impala"
+for x in ${users};
+do
+  sudo -u ${x} rm -f /home/${x}/.ssh/known_hosts
+done
+
 git config --global http.proxy http://devwatt-proxy.si.fr.intraorange:8080 \
 && mkdir -p /home/ubuntu/src \
 && cd /home/ubuntu/src \
@@ -115,8 +121,6 @@ sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar /opt/hive/lib/. \
 cd /home/ubuntu/src/devwatt-cluster \
 && git pull \
 && sudo cp -r etc/* /etc/. \
-&& cd /etc \
-&& sudo mv environment.llap environment \
 && sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
 && sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
 && cd ~/src/devwatt-cluster/bin \
@@ -134,7 +138,9 @@ sudo -u zookeeper /opt/zookeeper/bin/zkCli.sh
 deleteall /hbase /hive
 
 # HDFS
-sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data/* /data/hdfs/* /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/*
+sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data /data/hdfs /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/* \
+&& sudo mkdir -p /data/hdfs /var/hdfs/data \
+&& sudo chown -R hdfs:hadoop /data/hdfs /var/hdfs/data
 
 sudo -u hdfs /opt/hadoop/bin/hdfs namenode -format tthx
 
