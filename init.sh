@@ -121,10 +121,11 @@ sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar /opt/hive/lib/. \
 cd /home/ubuntu/src/devwatt-cluster \
 && git pull \
 && sudo cp -r etc/* /etc/. \
+&& sudo rm -f /etc/hadoop/yarn-site.xml /etc/hive/hive-site.xml \
 && sudo mv /etc/hadoop/hdfs-site.xml.llap /etc/hadoop/hdfs-site.xml \
 && sudo mv /etc/hadoop/yarn-site.xml.notimeline /etc/hadoop/yarn-site.xml \
 && sudo mv /etc/hive/hive-site.xml.nollap /etc/hive/hive-site.xml \
-&& sudo rm /etc/hadoop/yarn-site.xml.timeline /etc/hive/hive-site.xml.nollap \
+&& sudo rm -f /etc/hadoop/hdfs-site.xml.nollap /etc/hadoop/yarn-site.xml.timeline /etc/hive/hive-site.xml.llap \
 && sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
 && sudo chmod -R g-w,o-w ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
 && cd ~/src/devwatt-cluster/bin \
