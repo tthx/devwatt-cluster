@@ -1,3 +1,6 @@
+# NTP
+sudo timedatectl set-timezone Europe/Paris
+
 # purge
 sudo rm -rf /var/hdfs /var/mapred /var/yarn /var/hive /var/metastore /var/impala /var/spark /var/zookeeper /var/hbase \
 && sudo rm -rf /etc/hadoop /etc/hive /etc/metastore /etc/impala /etc/spark /etc/zookeeper /etc/hbase  /etc/tez /etc/profile.d/hadoop-env.sh /etc/profile.d/spark-env.sh \
