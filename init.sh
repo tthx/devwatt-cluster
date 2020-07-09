@@ -1,5 +1,6 @@
 # NTP
 sudo timedatectl set-timezone Europe/Paris
+sudo timedatectl set-ntp true
 
 # purge
 sudo rm -rf /var/hdfs /var/mapred /var/yarn /var/hive /var/metastore /var/impala /var/spark /var/zookeeper /var/hbase \
