@@ -62,7 +62,7 @@ git config --global http.proxy http://devwatt-proxy.si.fr.intraorange:8080 \
 && cd /home/ubuntu/src \
 && git clone https://github.com/tthx/devwatt-cluster.git
 
-sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp \
+sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp /var/ubuntu/log /var/attu7372/log \
 && sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
 && sudo chown -R yarn:hadoop /var/yarn \
 && sudo chown -R mapred:hadoop /var/mapred \
@@ -71,6 +71,8 @@ sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1
 && sudo chown -R hive:hadoop /var/hive /var/metastore \
 && sudo chown -R impala:hadoop /var/impala \
 && sudo chown -R spark:hadoop /var/spark \
+&& sudo chown -R ubuntu:hadoop /var/ubuntu \
+&& sudo chown -R attu7372:hadoop /var/attu7372 \
 && sudo chmod 775 /var/hive/tmp \
 && sudo mkdir -p /mnt/hdfs \
 && sudo chmod 755 /mnt/hdfs
