@@ -186,7 +186,11 @@
   <property>
     <name>hive.server2.tez.sessions.per.default.queue</name>
     <value>1</value>
-    <description>A positive integer that determines the number of Tez sessions that should be launched on each of the queues specified by hive.server2.tez.default.queues. Determines the parallelism on each queue. Default: 1.</description>
+    <description>A positive integer that determines the number of Tez sessions that should be launched on each of the queues specified by hive.server2.tez.default.queues. Determines the parallelism on each queue.
+
+    Number of Concurrent Queries LLAP support. This will result in spawning equal number of TEZ AM. 
+
+    Default: 1.</description>
   </property>
 
   <!-- Logging -->
@@ -590,7 +594,7 @@
   
   <property>
     <name>hive.tez.container.size</name>
-    <value>2048</value>
+    <value>3072</value>
     <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
   </property>
   

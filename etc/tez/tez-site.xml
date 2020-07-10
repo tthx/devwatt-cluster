@@ -38,6 +38,13 @@
     <description>String value. Command line options provided during the launch of the Tez AppMaster process. Its recommended to not set any Xmx or Xms in these launch opts so that Tez can determine them automatically. Default: -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</description>
   </property>
 
+  <!-- LLAP -->
+  <property>
+    <name>tez.am.resource.memory.mb</name>
+    <value>1024</value>
+    <description>Int value. The amount of memory in MB to be used by the AppMaster. It shoud be set to the value of yarn.scheduler.minimum-allocation-mb. Default: 1024</description>
+  </property>
+
   <!-- Tez UI
   <property>
     <name>tez.history.logging.service.class</name>
