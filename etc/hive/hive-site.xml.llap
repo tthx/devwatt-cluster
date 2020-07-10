@@ -594,7 +594,7 @@
   
   <property>
     <name>hive.tez.container.size</name>
-    <value>3072</value>
+    <value>3584</value>
     <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
   </property>
   
@@ -783,7 +783,7 @@
   <property>
     <name>hive.llap.io.cache.orc.size</name>
     <value>1Gb</value>
-    <description>Maximum size for IO allocator or ORC low-level cache. Default: 1G</description>
+    <description>Maximum size for IO allocator or ORC low-level cache. Default: 1Gb</description>
   </property>
 
   <property>
