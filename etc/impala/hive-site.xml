@@ -602,7 +602,7 @@
   
   <property>
     <name>hive.tez.java.opts</name>
-    <value>-XX:+UseG1GC</value>
+    <value>-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB</value>
     <description>If this is not specified, the MapReduce java opts settings (mapreduce.map.java.opts) are used by default. Default: (empty)</description>
   </property>
 

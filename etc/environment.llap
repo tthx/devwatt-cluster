@@ -1,5 +1,5 @@
 JAVA_HOME="/opt/jdk"
-JAVA_OPTS="-XX:+UseG1GC"
+JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB"
 ZOOCFGDIR="/var/zookeeper/conf"
 ZOOBINDIR="/opt/zookeeper/bin"
 ZOO_LOG_DIR="/var/zookeeper/log"

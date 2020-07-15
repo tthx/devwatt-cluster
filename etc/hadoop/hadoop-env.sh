@@ -53,7 +53,7 @@
 # variable is REQUIRED on ALL platforms except OS X!
 # export JAVA_HOME=
 export JAVA_HOME="/opt/jdk"
-export JAVA_OPTS="-XX:+UseG1GC"
+export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Location of Hadoop.  By default, Hadoop will attempt to determine

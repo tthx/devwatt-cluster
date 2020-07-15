@@ -5,7 +5,7 @@ export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
 export JAVA_HOME="/opt/jdk";
 export PATH="${JAVA_HOME}/bin:${PATH}";
-export JAVA_OPTS="-XX:+UseG1GC";
+export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB";
 export M2_HOME="/opt/maven";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms256m -Xmx512m";
 export PATH="${M2_HOME}/bin:${PATH}";
