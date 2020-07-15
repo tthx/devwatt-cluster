@@ -594,7 +594,7 @@
   
   <property>
     <name>hive.tez.container.size</name>
-    <value>3072</value>
+    <value>2048</value>
     <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
   </property>
   
