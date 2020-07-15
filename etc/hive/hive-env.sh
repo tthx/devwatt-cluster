@@ -54,7 +54,7 @@
 # export HIVE_AUX_JARS_PATH=
 
 export JAVA_HOME="/opt/jdk"
-export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB"
+export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
 if [[ -n "${HADOOP_CLASSPATH+x}" ]];

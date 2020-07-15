@@ -28,7 +28,7 @@
 
   <property>
     <name>tez.am.launch.cluster-default.cmd-opts</name>
-    <value>-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB</value>
+    <value>-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB</value>
     <description>String value. Command line options which will be prepended to {@link #TEZ_AM_LAUNCH_CMD_OPTS} during the launch of the AppMaster process. This property will typically be configured to include default options meant to be used by all jobs in a cluster. If required, the values can be overridden per job. Default: -server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</description>
   </property>
 

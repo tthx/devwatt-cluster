@@ -11,7 +11,7 @@ export CXX="g++";
 export CXXFLAGS="-O2";
 export JAVA_HOME="/opt/jdk";
 export PATH="${JAVA_HOME}/bin:${PATH}";
-export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA  -XX:-ResizePLAB";
+export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB";
 export MAVEN_OPTS="${JAVA_OPTS} -Xms1g -Xmx2g";
 export HADOOP_COMMON_LIB_NATIVE_DIR="${HADOOP_HOME}/lib/native";
 if [[ -n "${LD_LIBRARY_PATH+x}" ]];
