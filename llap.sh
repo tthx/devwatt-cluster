@@ -1,0 +1,1 @@
+hive --service llap --instances 4 --executors 4 --args "-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB" --cache 1024m --xmx 7373m --size 8817m --loglevel DEBUG
