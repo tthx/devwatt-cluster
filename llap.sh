@@ -1,1 +1,13 @@
-hive --service llap --instances 4 --executors 4 --args "-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB" --cache 1024m --xmx 7373m --size 8817m --loglevel DEBUG
+hive \
+--service llap \
+--instances 4 \
+--executors 4 \
+--iothreads 4 \
+--args "-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB" \
+--loglevel DEBUG \
+--name llap-devwatt \
+--queue hive \
+--service-am-container-mb 2048 \
+--cache 1024m \
+--xmx 7424m \
+--size 8960m
