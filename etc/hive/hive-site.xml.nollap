@@ -173,7 +173,7 @@
   <!-- Queues -->
   <property>
     <name>hive.server2.tez.default.queues</name>
-    <value>hive</value>
+    <value>root.hive</value>
     <description>A list of comma separated values corresponding to YARN queues of the same name. When HiveServer2 is launched in Tez mode, this configuration needs to be set for multiple Tez sessions to run in parallel on the cluster. Default: (empty)</description>
   </property>
 
@@ -700,7 +700,7 @@
 
   <property>
     <name>hive.compactor.job.queue</name>
-    <value>hive</value>
+    <value>root.hive</value>
   </property>
 
   <!-- Locking -->
