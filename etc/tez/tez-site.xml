@@ -39,11 +39,13 @@
   </property>
 
   <!-- LLAP -->
+  <!--
   <property>
     <name>tez.am.resource.memory.mb</name>
     <value>2048</value>
     <description>Int value. The amount of memory in MB to be used by the AppMaster. It shoud be set to the value of yarn.scheduler.minimum-allocation-mb. Default: 1024</description>
   </property>
+  -->
 
   <!-- Tez UI
   <property>

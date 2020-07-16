@@ -60,7 +60,7 @@
 
   <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
-    <value>1024</value>
+    <value>256</value>
     <description>The minimum allocation for every container request at the RM in MBs. Memory requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have less memory than this value will be shut down by the resource manager. Default: 1024</description>
   </property>
 
@@ -97,13 +97,13 @@
   <!-- Configurations for NodeManager -->
   <property>
     <name>yarn.nodemanager.resource.detect-hardware-capabilities</name>
-    <value>true</value>
+    <value>false</value>
     <description>Enable auto-detection of node capabilities such as memory and CPU. Default: false</description>
   </property>
 
   <property>
     <name>yarn.nodemanager.resource.cpu-vcores</name>
-    <value>-1</value>
+    <value>4</value>
     <description>Number of vcores that can be allocated for containers. This is used by the RM scheduler when allocating resources for containers. This is not used to limit the number of CPUs used by YARN containers. If it is set to -1 and yarn.nodemanager.resource.detect-hardware-capabilities is true, it is automatically determined from the hardware in case of Windows and Linux. In other cases, number of vcores is 8 by default. Default: -1</description>
   </property>
 
