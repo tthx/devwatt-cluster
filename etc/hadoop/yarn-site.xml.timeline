@@ -60,7 +60,7 @@
 
   <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
-    <value>256</value>
+    <value>1024</value>
     <description>The minimum allocation for every container request at the RM in MBs. Memory requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have less memory than this value will be shut down by the resource manager. Default: 1024</description>
   </property>
 
