@@ -149,4 +149,15 @@
     <description>Specifies if the Application Master should emit timeline data to the timeline server. Individual jobs can override this value. Default: false</description>
   </property>
 
+  <!-- Application master -->
+  <property>
+    <name>yarn.app.mapreduce.am.resource.mb</name>
+    <value>1024</value>
+  </property>
+
+  <property>
+    <name>yarn.app.mapreduce.am.command-opts</name>
+    <value>-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB</value>
+  </property>
+
 </configuration>

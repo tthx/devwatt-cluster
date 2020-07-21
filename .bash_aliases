@@ -3,6 +3,7 @@ export CFLAGS="-O2";
 export CXX="g++";
 export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
+export PATH="${HOME}/k8s/bin:${PATH}";
 export JAVA_HOME="/opt/jdk";
 export PATH="${JAVA_HOME}/bin:${PATH}";
 export JAVA_OPTS="-XX:+UseG1GC -XX:+ResizeTLAB -XX:+UseNUMA -XX:-ResizePLAB";
