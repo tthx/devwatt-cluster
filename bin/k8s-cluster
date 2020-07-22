@@ -31,6 +31,10 @@ case "${1}" in
     #k8s-cmd "yarn --daemon start timelinereader" yarn ${master};
     #echo -e "}: timelinereader started.\n";
 
+    echo -e "Starting Hive LLAP: {...";
+    k8s-cmd "/home/hive/llap-yarn-22Jul2020/run.sh" hive ${master};
+    echo -e "}: Hive LLAP started.\n";
+
     echo -e "Starting metastore: {...";
     k8s-cmd "metastore_ctl start" hive ${master};
     echo -e "}: metastore started.\n";
