@@ -59,6 +59,14 @@
   </property>
 
   <property>
+    <name>yarn.scheduler.fair.preemption.cluster-utilization-threshold</name>
+    <value>0.8</value>
+    <description>The cluster utilization threshold above which preemption is triggered. If the cluster utilization is under this threshold, preemption is not triggered even if there are starved queues. The utilization is computed as the maximum ratio of usage to capacity among all resources.
+
+    Default: 0.8.</description>
+  </property>
+
+  <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>
     <value>1024</value>
     <description>The minimum allocation for every container request at the RM in MBs. Memory requests lower than this will be set to the value of this property. Additionally, a node manager that is configured to have less memory than this value will be shut down by the resource manager. Default: 1024</description>

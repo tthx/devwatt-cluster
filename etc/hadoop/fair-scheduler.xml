@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <allocations>
   <defaultQueueSchedulingPolicy>fair</defaultQueueSchedulingPolicy>
+  <defaultFairSharePreemptionThreshold>0.8</defaultFairSharePreemptionThreshold>
+  <defaultMinSharePreemptionTimeout>60</defaultMinSharePreemptionTimeout>
+  <defaultFairSharePreemptionTimeout>120</defaultFairSharePreemptionTimeout>
   <queue name="default">
     <weight>10</weight>
   </queue>
@@ -10,7 +13,9 @@
   </queue>
 
   <queuePlacementPolicy>
-    <rule name="specified" />
-    <rule name="default" />
+    <rule name="specified" create="false" />
+    <rule name="primaryGroup" create="false" />
+    <rule name="default" queue="default" />
   </queuePlacementPolicy>
+
 </allocations>

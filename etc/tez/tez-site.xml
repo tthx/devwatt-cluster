@@ -38,7 +38,18 @@
     <description>String value. Command line options provided during the launch of the Tez AppMaster process. Its recommended to not set any Xmx or Xms in these launch opts so that Tez can determine them automatically. Default: -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</description>
   </property>
 
-  <!-- LLAP -->
+  <property>
+    <name>tez.session.am.dag.submit.timeout.secs</name>
+    <value>-1</value>
+    <description>Int value. Time (in seconds) for which the Tez AM should wait for a DAG to be submitted before shutting down. Only relevant in session mode. Any negative value will disable this check and allow the AM to hang around forever in idle mode. Default: 300</description>
+  </property>
+
+  <property>
+    <name>tez.am.session.min.held-containers</name>
+    <value>4</value>
+    <description>Int value. The minimum number of containers that will be held in session mode. Not active in non-session mode. Enables an idle session (not running any DAG) to hold on to a minimum number of containers to provide fast response times for the next DAG. Default: 0</description>
+  </property>
+
   <property>
     <name>tez.am.resource.memory.mb</name>
     <value>2048</value>
