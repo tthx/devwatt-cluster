@@ -99,7 +99,7 @@ cd /opt \
 && sudo tar xf /opt/apache-impala-3.4.0-bin/shell/build/impala-shell-3.4.0-RELEASE.tar.gz -C /opt \
 && cd /opt \
 && sudo rm -f hive metastore hbase hbase impala impala-hive impala-shell hadoop tez \
-&& sudo ln -sf jdk1.8.0_251 jdk \
+&& sudo ln -sf jdk1.8.0_261 jdk \
 && sudo ln -sf apache-zookeeper-3.6.1-bin zookeeper \
 && sudo ln -sf apache-hive-3.1.3-bin hive \
 && sudo ln -sf apache-hive-metastore-3.1.3-bin metastore \
