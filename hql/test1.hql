@@ -146,6 +146,13 @@ GROUP BY
   u1.movieid,
   u1.rating,
   u1.unixtime,
+  u2.unixtime
+ORDER BY
+  u1.userid,
+  u2.userid,
+  u1.movieid,
+  u1.rating,
+  u1.unixtime,
   u2.unixtime;
 SELECT COUNT(*) FROM u_data_acid_join;
 ANALYZE TABLE u_data_acid_join COMPUTE STATISTICS FOR COLUMNS;

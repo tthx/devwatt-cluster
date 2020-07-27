@@ -739,6 +739,30 @@
   </property>
 
   <property>
+    <name>hive.server2.tez.interactive.queue</name>
+    <value>root.hive</value>
+    <description>The name of a YARN queue for workload management, required for managing workloads</description>
+  </property>
+  
+  <property>
+    <name>hive.tez.container.size</name>
+    <value>4096</value>
+    <description>If this is not specified, the memory settings from the MapReduce configurations (mapreduce.map.memory.mb) are used by default for map tasks. Default: -1</description>
+  </property>
+
+  <property>
+    <name>hive.llap.daemon.num.executors</name>
+    <value>2</value>
+    <description>The number of fragments a single LLAP daemon runs concurrently, generally equals yarn.scheduler.maximum-allocation-vcores.</description>
+  </property>
+
+  <property>
+    <name>hive.llap.daemon.yarn.container.mb</name>
+    <value>10240</value>
+    <description>Total memory used by LLAP daemons (YARN Container size), which includes memory for daemon cache and query execution (cache + heap + headroom = memory per daemon.) Recommendation: Set to yarn.scheduler.maximum-allocation-mb</description>
+  </property>
+
+  <property>
     <name>hive.llap.daemon.service.hosts</name>
     <value>@llap-devwatt</value>
     <description>Explicitly specified hosts to use for LLAP scheduling. Useful for testing. By default, YARN registry is used. Default: null</description>
@@ -764,7 +788,7 @@
 
   <property>
     <name>hive.llap.io.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>Whether the LLAP I/O layer is enabled. Remove property or set to false to disable LLAP I/O. Default: null</description>
   </property>
 

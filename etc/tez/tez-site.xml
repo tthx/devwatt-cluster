@@ -38,6 +38,7 @@
     <description>String value. Command line options provided during the launch of the Tez AppMaster process. Its recommended to not set any Xmx or Xms in these launch opts so that Tez can determine them automatically. Default: -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</description>
   </property>
 
+  <!--
   <property>
     <name>tez.session.am.dag.submit.timeout.secs</name>
     <value>-1</value>
@@ -49,11 +50,18 @@
     <value>4</value>
     <description>Int value. The minimum number of containers that will be held in session mode. Not active in non-session mode. Enables an idle session (not running any DAG) to hold on to a minimum number of containers to provide fast response times for the next DAG. Default: 0</description>
   </property>
+  -->
 
   <property>
     <name>tez.am.resource.memory.mb</name>
     <value>2048</value>
     <description>Int value. The amount of memory in MB to be used by the AppMaster. It shoud be set to the value of yarn.scheduler.minimum-allocation-mb. Default: 1024</description>
+  </property>
+
+  <property>
+    <name>tez.queue.name</name>
+    <value>root.hive</value>
+    <description>String value. The queue name for all jobs being submitted from a given client. Default: null</description>
   </property>
 
   <!-- Tez UI
