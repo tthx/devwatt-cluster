@@ -1,0 +1,17 @@
+<configuration>
+  
+  <!-- Standalone Metastore -->
+  <!-- Currently the following features have not been tested or are known not to work with the Metastore in standalone mode:
+    - The compactor (for use with ACID tables) cannot be run without Hive.  ACID tables can be read and written to, but they cannot compacted.
+    - Replication has not been tested outside of Hive. -->
+  <property>
+    <name>metastore.task.threads.always</name>
+    <value>org.apache.hadoop.hive.metastore.events.EventCleanerTask</value>
+  </property>
+
+  <property>
+    <name>metastore.expression.proxy</name>
+    <value>org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy</value>
+  </property>
+
+</configuration>
