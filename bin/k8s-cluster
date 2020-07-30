@@ -1,7 +1,24 @@
 #!/bin/bash
-master="10.171.46.145";
-workers="10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168";
-case "${1}" in
+plateform="${1:-"devwatt"}";
+action="${2:-"start"}";
+
+case "${plateform}" in
+  "devwatt")
+    master="10.171.46.145";
+    workers="10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168";
+    ;;
+  "fe")
+    master="72.24.137.246";
+    workers="172.24.137.50 172.24.137.17 172.24.137.219 172.24.137.214";
+    ;;
+  *)
+    echo -e "ERROR: Unknow plateform: \"${plateform}\"";
+    echo -e "Usage: ${0} [devwatt|fe] [start|stop]";
+    exit 1;
+    ;;
+esac
+
+case "${action}" in
   "start")
     echo -e "Cleaning logs: {...";
     k8s-cmd "sudo rm -rf /var/hive/log/* /var/metastore/log/* /var/hdfs/log/* /var/yarn/log/* /var/mapred/log/* /var/hbase/log/* /var/zookeeper/log/* /var/attu7372/log/* /var/ubuntu/log/* /var/impala/log/*";
@@ -103,5 +120,10 @@ case "${1}" in
     echo -e "Stopping zookeeper: {...";
     k8s-cmd "zkServer.sh stop" zookeeper;
     echo -e "}: zookeeper stopped.\n";
+    ;;
+  *)
+    echo -e "ERROR: Unknow action: \"${action}\"";
+    echo -e "Usage: ${0} [devwatt|fe] [start|stop]";
+    exit 1;
     ;;
 esac

@@ -1,9 +1,23 @@
 #!/bin/bash
-user="${2:-"attu7372"}";
-nodes="${3:-"master worker-1 worker-2 worker-3 worker-4"}";
-nodes="${3:-"10.171.46.145 10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168"}";
+plateform="${4:-"devwatt"}";
+case "${plateform}" in
+  "devwatt")
+    user="${2:-"ubuntu"}";
+    nodes="${3:-"10.171.46.145 10.171.46.120 10.171.46.149 10.171.46.166 10.171.46.168"}";
+    ;;
+  "fe")
+    user="${2:-"diod"}";
+    nodes="${3:-"172.24.137.246 172.24.137.50 172.24.137.17 172.24.137.219 172.24.137.214"}";
+    ;;
+  *)
+    echo -e "ERROR: Unknow plateform: \"${plateform}\"";
+    echo -e "Usage: ${0} {cmd} [user] [nodes] [devwatt|fe]";
+    exit 1;
+    ;;
+esac
+
 for i in ${nodes};
 do
   echo "-- node: ${i} --";
-	ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr "${user}@${i}" "${1}";
+	ssh -2XY4Cc aes128-ctr "${user}@${i}" "${1}";
 done
