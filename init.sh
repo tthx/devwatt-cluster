@@ -5,8 +5,8 @@ sudo timedatectl set-ntp true
 # purge
 sudo rm -rf /var/hdfs /var/mapred /var/yarn /var/hive /var/metastore /var/impala /var/spark /var/zookeeper /var/hbase \
 && sudo rm -rf /etc/hadoop /etc/hive /etc/metastore /etc/impala /etc/spark /etc/zookeeper /etc/hbase  /etc/tez /etc/profile.d/hadoop-env.sh /etc/profile.d/spark-env.sh \
-&& sudo rm -rf /opt/*hadoop* /opt/*hive* /opt/*metastore* /opt/*impala* /opt/*spark* /opt/*zookeeper* /opt/*hbase*  /opt/*tez* /opt/isa-l /opt/protobuf* \
-&& sudo rm -rf /data/hdfs /mnt/hdfs
+&& sudo rm -rf /data/hdfs /mnt/hdfs \
+&& sudo rm -rf /opt/*hadoop* /opt/*hive* /opt/*metastore* /opt/*impala* /opt/*spark* /opt/*zookeeper* /opt/*hbase*  /opt/*tez* /opt/isa-l /opt/protobuf*
 
 # yarn-ui compilation
 sudo -i
@@ -66,21 +66,6 @@ git config --global http.proxy http://devwatt-proxy.si.fr.intraorange:8080 \
 && cd /home/ubuntu/src \
 && git clone https://github.com/tthx/devwatt-cluster.git
 
-sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp /var/ubuntu/log /var/attu7372/log \
-&& sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
-&& sudo chown -R yarn:hadoop /var/yarn \
-&& sudo chown -R mapred:hadoop /var/mapred \
-&& sudo chown -R zookeeper:hadoop /var/zookeeper \
-&& sudo chown -R hbase:hadoop /var/hbase \
-&& sudo chown -R hive:hadoop /var/hive /var/metastore \
-&& sudo chown -R impala:hadoop /var/impala \
-&& sudo chown -R spark:hadoop /var/spark \
-&& sudo chown -R ubuntu:hadoop /var/ubuntu \
-&& sudo chown -R attu7372:hadoop /var/attu7372 \
-&& sudo chmod 775 /var/hive/tmp \
-&& sudo mkdir -p /mnt/hdfs \
-&& sudo chmod 755 /mnt/hdfs
-
 cd /opt \
 && sudo rm -rf ./apache-hive* ./hbase* ./apache-impala* ./impala-shell* ./hadoop* ./tez* \
 && cd /tmp \
@@ -124,7 +109,7 @@ sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar /opt/hive/lib/. \
 && sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar /opt/metastore/lib/. \
 && sudo ln -sf /usr/share/java/mysql-connector-java-8.0.19.jar /opt/impala-hive/lib/.
 
-cd /home/ubuntu/src/devwatt-cluster \
+cd ~/src/devwatt-cluster \
 && git pull \
 && sudo cp -r etc/* /etc/. \
 && sudo chown -R root:root ./hadoop ./hbase ./hive ./impala ./metastore ./spark ./tez \
@@ -142,6 +127,21 @@ sudo cp -R ~/src/devwatt-cluster/var /var/. \
 && sudo chown -R zookeeper:hadoop /var/zookeeper
 sudo -u zookeeper /opt/zookeeper/bin/zkCli.sh
 deleteall /hbase /hive
+
+sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp /var/ubuntu/log /var/attu7372/log \
+&& sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
+&& sudo chown -R yarn:hadoop /var/yarn \
+&& sudo chown -R mapred:hadoop /var/mapred \
+&& sudo chown -R zookeeper:hadoop /var/zookeeper \
+&& sudo chown -R hbase:hadoop /var/hbase \
+&& sudo chown -R hive:hadoop /var/hive /var/metastore \
+&& sudo chown -R impala:hadoop /var/impala \
+&& sudo chown -R spark:hadoop /var/spark \
+&& sudo chown -R ubuntu:hadoop /var/ubuntu \
+&& sudo chown -R attu7372:hadoop /var/attu7372 \
+&& sudo chmod 775 /var/hive/tmp \
+&& sudo mkdir -p /mnt/hdfs \
+&& sudo chmod 755 /mnt/hdfs
 
 # HDFS
 sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data /data/hdfs /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/* \
