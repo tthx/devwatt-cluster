@@ -1,0 +1,11 @@
+UUID=4b6223ad-6b55-48e4-b472-49516522d0a7 none swap sw 0 0
+UUID=124ff8f1-1e0e-413c-802c-5c8196fdb165 / ext4 defaults 0 0
+UUID=c3ba9a89-81ff-4343-a3f8-df93bb76619c /var ext4 defaults 0 0
+UUID=2c07a0fa-d18b-40bc-bf4d-3dce12531d1e /boot ext4 defaults 0 0
+/dev/mapper/rootvg-home_lv /home ext4 defaults,nodev 0 0
+UUID=d5fe3d80-b5ff-40fa-aa59-659685a488b2 /opt/application ext4 defaults 0 0
+
+/dev/vdb1 /data ext4  defaults  0 0
+/dev/datavg/log_vg /log ext4 defaults 0 0
+
+/dev/mapper/rootvg-swap_lv      none    swap    sw,comment=cloudconfig  0       0

@@ -4,7 +4,7 @@
 # GLOG_v=3 - Everything from the previous level plus logging of every row that is read. This level is only applicable for the most serious troubleshooting and tuning scenarios, because it can produce exceptionally large and detailed log files, potentially leading to its own set of performance and capacity problems.
 export GLOG_v=1
 
-export IMPALA_LOG_DIR=/var/impala/log
+export IMPALA_LOG_DIR=/log/impala/log
 export IMPALA_CATALOG_SERVICE_HOST=172.24.137.246
 export IMPALA_CATALOG_SERVICE_PORT=26000
 export IMPALA_STATE_STORE_HOST=172.24.137.246

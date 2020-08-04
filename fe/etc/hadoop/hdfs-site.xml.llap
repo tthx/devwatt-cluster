@@ -20,13 +20,13 @@
 
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>/var/hdfs/name-1,/var/hdfs/name-2</value>
+    <value>/log/hdfs/name-1,/log/hdfs/name-2</value>
     <description>Determines where on the local filesystem the DFS name node should store the name table(fsimage). If this is a comma-delimited list of directories then the name table is replicated in all of the directories, for redundancy.</description>
   </property>
 
   <property>
     <name>dfs.namenode.edits.dir</name>
-    <value>/var/hdfs/edit-1,/var/hdfs/edit-2</value>
+    <value>/log/hdfs/edit-1,/log/hdfs/edit-2</value>
     <description>Determines where on the local filesystem the DFS name node should store the transaction (edits) file. If this is a comma-delimited list of directories then the transaction file is replicated in all of the directories, for redundancy. Default value is same as dfs.namenode.name.dir</description>
   </property>
 
@@ -56,7 +56,7 @@
 
   <property>
     <name>dfs.namenode.checkpoint.dir</name>
-    <value>/var/hdfs/namesecondary</value>
+    <value>/log/hdfs/namesecondary</value>
     <description>Determines where on the local filesystem the DFS secondary name node should store the temporary images to merge. If this is a comma-delimited list of directories then the image is replicated in all of the directories for redundancy</description>
   </property>
 
@@ -68,7 +68,7 @@
 
   <property>
     <name>dfs.datanode.data.dir</name>
-    <value>[DISK]file:///data/hdfs,[DISK]file:///var/hdfs/data</value>
+    <value>[DISK]file:///data/hdfs,[DISK]file:///log/hdfs/data</value>
     <description>On each data node, the comma-separated storage locations should be tagged with their storage types. This allows storage policies to place the blocks on different storage types according to policy. For example:
     1. A datanode storage location /grid/dn/disk0 on DISK should be configured with [DISK]file:///grid/dn/disk0
     2. A datanode storage location /grid/dn/ssd0 on SSD can should configured with [SSD]file:///grid/dn/ssd0
@@ -92,7 +92,7 @@
 
   <property>
     <name>dfs.domain.socket.path</name>
-    <value>/var/hdfs/run/sc-socket</value>
+    <value>/log/hdfs/run/sc-socket</value>
     <description>This is a path to a UNIX domain socket that will be used for communication between the DataNode and local HDFS clients. If the string "_PORT" is present in this path, it will be replaced by the TCP port of the DataNode.</description>
   </property>
 

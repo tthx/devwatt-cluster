@@ -198,7 +198,7 @@
 
   <property>
     <name>hive.server2.logging.operation.log.location</name>
-    <value>/var/impala/tmp/${user.name}/operation_logs</value>
+    <value>/log/impala/tmp/${user.name}/operation_logs</value>
     <description>Top level directory where operation logs are stored if logging functionality is enabled. Default: ${java.io.tmpdir}/${user.name}/operation_logs.</description>
   </property>
 

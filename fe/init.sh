@@ -1,9 +1,13 @@
+# LVM
+sudo lvcreate -l 100%FREE -n log_vg datavg
+sudo mkfs -t ext4 /dev/datavg/log_vg
+
 # NTP
 sudo timedatectl set-timezone Europe/Paris
 sudo timedatectl set-ntp true
 
 # purge
-sudo rm -rf /var/hdfs /var/mapred /var/yarn /var/hive /var/metastore /var/impala /var/spark /var/zookeeper /var/hbase \
+sudo rm -rf /log/hdfs /log/mapred /log/yarn /log/hive /log/metastore /log/impala /log/spark /log/zookeeper /log/hbase \
 && sudo rm -rf /etc/hadoop /etc/hive /etc/metastore /etc/impala /etc/spark /etc/zookeeper /etc/hbase  /etc/tez /etc/profile.d/hadoop-env.sh /etc/profile.d/spark-env.sh \
 && sudo rm -rf /data/hdfs /mnt/hdfs \
 && sudo rm -rf /opt/*hadoop* /opt/*hive* /opt/*metastore* /opt/*impala* /opt/*spark* /opt/*zookeeper* /opt/*hbase*  /opt/*tez* /opt/isa-l /opt/protobuf*
@@ -123,30 +127,30 @@ cd ~/src/devwatt-cluster/fe \
 && sudo cp utils.sh catalogd_ctl impala-shell statestored_ctl impalad_ctl /opt/impala/bin/.
 
 # Zookeeper
-sudo cp -R ~/src/devwatt-cluster/fe/var /var/. \
-&& sudo chown -R zookeeper:hadoop /var/zookeeper
+sudo cp -R ~/src/devwatt-cluster/fe/var /log/. \
+&& sudo chown -R zookeeper:hadoop /log/zookeeper
 sudo -u zookeeper /opt/zookeeper/bin/zkCli.sh
 deleteall /hbase /hive
 
-sudo mkdir -p /var/hdfs/namesecondary /var/hdfs/data /data/hdfs /var/hdfs/edit-1 /var/hdfs/edit-2 /var/hdfs/log /var/hdfs/name-1 /var/hdfs/name-2 /var/hdfs/run /var/yarn/local /var/yarn/log /var/yarn/run /var/mapred/log /var/mapred/run /var/zookeeper/conf /var/zookeeper/log /var/zookeeper/data /var/hbase/log /var/hbase/run /var/spark/log /var/spark/run /var/hive/run /var/hive/log /var/hive/run /var/hive/tmp /var/metastore/run /var/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /var/impala/log /var/impala/run /var/impala/tmp /var/ubuntu/log /var/attu7372/log \
-&& sudo chown -R hdfs:hadoop /var/hdfs /data/hdfs \
-&& sudo chown -R yarn:hadoop /var/yarn \
-&& sudo chown -R mapred:hadoop /var/mapred \
-&& sudo chown -R zookeeper:hadoop /var/zookeeper \
-&& sudo chown -R hbase:hadoop /var/hbase \
-&& sudo chown -R hive:hadoop /var/hive /var/metastore \
-&& sudo chown -R impala:hadoop /var/impala \
-&& sudo chown -R spark:hadoop /var/spark \
-&& sudo chown -R ubuntu:hadoop /var/ubuntu \
-&& sudo chown -R attu7372:hadoop /var/attu7372 \
-&& sudo chmod 775 /var/hive/tmp \
+sudo mkdir -p /log/hdfs/namesecondary /log/hdfs/data /data/hdfs /log/hdfs/edit-1 /log/hdfs/edit-2 /log/hdfs/log /log/hdfs/name-1 /log/hdfs/name-2 /log/hdfs/run /log/yarn/local /log/yarn/log /log/yarn/run /log/mapred/log /log/mapred/run /log/zookeeper/conf /log/zookeeper/log /log/zookeeper/data /log/hbase/log /log/hbase/run /log/spark/log /log/spark/run /log/hive/run /log/hive/log /log/hive/run /log/hive/tmp /log/metastore/run /log/metastore/log /etc/hadoop /etc/hbase /etc/hive /etc/metastore /etc/tez /etc/spark /etc/impala /log/impala/log /log/impala/run /log/impala/tmp /log/ubuntu/log /log/attu7372/log \
+&& sudo chown -R hdfs:hadoop /log/hdfs /data/hdfs \
+&& sudo chown -R yarn:hadoop /log/yarn \
+&& sudo chown -R mapred:hadoop /log/mapred \
+&& sudo chown -R zookeeper:hadoop /log/zookeeper \
+&& sudo chown -R hbase:hadoop /log/hbase \
+&& sudo chown -R hive:hadoop /log/hive /log/metastore \
+&& sudo chown -R impala:hadoop /log/impala \
+&& sudo chown -R spark:hadoop /log/spark \
+&& sudo chown -R ubuntu:hadoop /log/ubuntu \
+&& sudo chown -R attu7372:hadoop /log/attu7372 \
+&& sudo chmod 775 /log/hive/tmp \
 && sudo mkdir -p /mnt/hdfs \
 && sudo chmod 755 /mnt/hdfs
 
 # HDFS
-sudo rm -rf /var/hdfs/namesecondary/* /var/hdfs/data /data/hdfs /mnt/hdfs/* /var/hdfs/edit-1/* /var/hdfs/edit-2/* /var/hdfs/log/* /var/hdfs/name-1/* /var/hdfs/name-2/* /var/yarn/local/* \
-&& sudo mkdir -p /data/hdfs /var/hdfs/data \
-&& sudo chown -R hdfs:hadoop /data/hdfs /var/hdfs/data
+sudo rm -rf /log/hdfs/namesecondary/* /log/hdfs/data /data/hdfs /mnt/hdfs/* /log/hdfs/edit-1/* /log/hdfs/edit-2/* /log/hdfs/log/* /log/hdfs/name-1/* /log/hdfs/name-2/* /log/yarn/local/* \
+&& sudo mkdir -p /data/hdfs /log/hdfs/data \
+&& sudo chown -R hdfs:hadoop /data/hdfs /log/hdfs/data
 
 sudo -u hdfs /opt/hadoop/bin/hdfs namenode -format tthx
 

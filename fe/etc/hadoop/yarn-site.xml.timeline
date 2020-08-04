@@ -129,12 +129,12 @@
 
   <property>
     <name>yarn.nodemanager.local-dirs</name>
-    <value>/var/yarn/local</value>
+    <value>/log/yarn/local</value>
   </property>
 
   <property>
     <name>yarn.nodemanager.log-dirs</name>
-    <value>/var/yarn/log</value>
+    <value>/log/yarn/log</value>
   </property>
 
   <property>

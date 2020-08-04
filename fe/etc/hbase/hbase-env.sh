@@ -102,7 +102,7 @@ export HBASE_OPTS="$HBASE_OPTS $JAVA_OPTS"
 # export HBASE_SSH_OPTS="-o ConnectTimeout=1 -o SendEnv=HBASE_CONF_DIR"
 
 # Where log files are stored.  $HBASE_HOME/logs by default.
-export HBASE_LOG_DIR="/var/$USER/log"
+export HBASE_LOG_DIR="/log/$USER/log"
 
 # Enable remote JDWP debugging of major HBase processes. Meant for Core Developers 
 # export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8070"
@@ -118,7 +118,7 @@ export HBASE_IDENT_STRING="$USER"
 # export HBASE_NICENESS=10
 
 # The directory where pid files are stored. /tmp by default.
-export HBASE_PID_DIR="/var/$USER/run"
+export HBASE_PID_DIR="/log/$USER/run"
 
 # Seconds to sleep between slave commands.  Unset by default.  This
 # can be useful in large clusters, where, e.g., slave rsyncs can

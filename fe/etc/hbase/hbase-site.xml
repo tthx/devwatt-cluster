@@ -44,7 +44,7 @@
   </property>
   <property>
     <name>dfs.domain.socket.path</name>
-    <value>/var/hdfs/run/sc-socket</value>
+    <value>/log/hdfs/run/sc-socket</value>
     <description> Optional. This is a path to a UNIX domain socket that will be used for communication between the DataNode and local HDFS clients. If the string "_PORT" is present in this path, it will be replaced by the TCP port of the DataNode.
     </description>
   </property>

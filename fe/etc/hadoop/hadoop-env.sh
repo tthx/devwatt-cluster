@@ -217,7 +217,7 @@ fi
 # ${HADOOP_HOME}/logs by default.
 # Java property: hadoop.log.dir
 # export HADOOP_LOG_DIR=${HADOOP_HOME}/logs
-export HADOOP_LOG_DIR="/var/${USER}/log"
+export HADOOP_LOG_DIR="/log/${USER}/log"
 
 # A string representing this instance of hadoop. $USER by default.
 # This is used in writing log and pid files, so keep that in mind!
@@ -230,7 +230,7 @@ export HADOOP_IDENT_STRING="${USER}"
 
 # Where pid files are stored.  /tmp by default.
 # export HADOOP_PID_DIR=/tmp
-export HADOOP_PID_DIR="/var/${USER}/run"
+export HADOOP_PID_DIR="/log/${USER}/run"
 
 # Default log4j setting for interactive commands
 # Java property: hadoop.root.logger
