@@ -44,9 +44,13 @@ alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
 alias yum-clean='sudo yum remove $(package-cleanup --leaves)'
 alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1'
 
-if [ -n "$(which git)" ];
+function parse_git_branch {
+  [ -d .git ] && git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+if [[ -n "$(which git)" ]];
 then
-  export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')\[\e[00m\]\n$ ";
+  export PS1='\u@\h:\[\e[32m\]\w \[\e[91m\]$(parse_git_branch)\[\e[00m\]'$'\n$ '
 else
-  export PS1="\[\e[32m\]\u@\h \[\e[35m\]\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n$ ";
+  export PS1='\u@\h:\[\e[32m\]\w \[\e[91m\]\[\e[00m\]'$'\n$ '
 fi
