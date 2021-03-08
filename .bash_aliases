@@ -23,6 +23,8 @@ export SBT_OPTS="-Dhttp.proxyHost=devwatt-proxy.si.fr.intraorange -Dhttp.proxyPo
 export PATH="${SBT_HOME}/bin:${PATH}";
 export GOROOT="/opt/go";
 export PATH="${GOROOT}/bin:${PATH}";
+export GOPATH="${HOME}/src/go";
+export PATH="${GOPATH}/bin:${PATH}";
 export NODEJS="/opt/node.js";
 export PATH="${NODEJS}/bin:${PATH}";
 
@@ -37,20 +39,20 @@ alias firefox='/usr/bin/firefox 2>/dev/null';
 alias sublime='/opt/sublime_text/sublime_text';
 alias docker-purge='containers="$(docker container ls -aq)" && if [ -n "${containers}" ]; then docker container stop ${containers}; fi && docker system prune -a -f --volumes';
 alias docker-clean='containers="$(docker container ls -aq)" && if [ -n "${containers}" ]; then docker container stop ${containers}; fi && docker container prune';
-alias python='/usr/bin/python3'
+alias python='/usr/bin/python3';
 alias clear-logs='journalctl --vacuum-time=1d';
 alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
 alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
-alias yum-clean='sudo yum remove $(package-cleanup --leaves)'
-alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1'
+alias yum-clean='sudo yum remove $(package-cleanup --leaves)';
+alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1';
 
 function parse_git_branch {
-  [ -d .git ] && git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+  [ -d .git ] && git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/';
 }
 
 if [[ -n "$(which git)" ]];
 then
-  export PS1='\u@\h:\[\e[32m\]\w \[\e[91m\]$(parse_git_branch)\[\e[00m\]'$'\n$ '
+  export PS1='\u@\h:\[\e[32m\]\w \[\e[91m\]$(parse_git_branch)\[\e[00m\]'$'\n$ ';
 else
-  export PS1='\u@\h:\[\e[32m\]\w \[\e[91m\]\[\e[00m\]'$'\n$ '
+  export PS1='\u@\h:\[\e[32m\]\w \[\e[91m\]\[\e[00m\]'$'\n$ ';
 fi
