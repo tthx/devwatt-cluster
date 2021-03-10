@@ -49,6 +49,11 @@ alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
 alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
 alias yum-clean='sudo yum remove $(package-cleanup --leaves)';
 alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1';
+alias master='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.145'
+alias worker-1='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.120'
+alias worker-2='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.149'
+alias worker-3='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.166'
+alias worker-4='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.168'
 
 function parse_git_branch {
   [ -d .git ] && git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/';
