@@ -3,6 +3,10 @@ export CFLAGS="-O2";
 export CXX="g++";
 export CXXFLAGS="-O2 -std=c++17 -Wall -pedantic";
 
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+
 export PATH="${HOME}/k8s/bin:${PATH}";
 export JAVA_HOME="/opt/jdk";
 export PATH="${JAVA_HOME}/bin:${PATH}";
