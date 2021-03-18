@@ -1,0 +1,6 @@
+[http]
+        proxy = http://devwatt-proxy.si.fr.intraorange:8080/
+[https]
+        proxy = http://devwatt-proxy.si.fr.intraorange:8080/
+[pull]
+        rebase = false
