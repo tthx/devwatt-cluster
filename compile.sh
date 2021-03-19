@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 x="${1:-"hadoop"}";
 shift 1;
 action="${*:-"clean package"}";

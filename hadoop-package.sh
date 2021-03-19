@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 k8s-cmd "sudo apt-get -y install openjdk-8-jdk apt-transport-https ca-certificates wget curl software-properties-common build-essential autoconf automake bison flex g++ git libevent-dev libtool cmake make zlib1g-dev pkg-config libssl-dev libsasl2-dev ubuntu-snappy libsnappy-dev bzip2 libbz2-dev libjansson-dev fuse libfuse-dev zstd libzstd-dev yasm libpostgresql-jdbc-java"
 
 # For Spark
