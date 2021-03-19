@@ -33,7 +33,8 @@ export NODEJS="/opt/node.js";
 export PATH="${NODEJS}/bin:${PATH}";
 
 alias h='history';
-alias dir='ls -laF';
+alias dir='ls -laF --color=auto';
+alias ll='ls -laF --color=auto';
 alias vi='vim';
 alias md='mkdir -p';
 alias cls='clear';
