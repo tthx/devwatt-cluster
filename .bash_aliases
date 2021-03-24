@@ -55,6 +55,7 @@ alias worker-1='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.4
 alias worker-2='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.149'
 alias worker-3='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.166'
 alias worker-4='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.168'
+alias calicoctl='kubectl exec -i -n kube-system calicoctl -- /calicoctl'
 
 function parse_git_branch {
   [ -d .git ] && git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/';
