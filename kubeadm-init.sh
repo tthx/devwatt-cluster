@@ -1,4 +1,10 @@
 #!/bin/sh
+sudo mkdir -p /etc/NetworkManager/conf.d
+sudo tee /etc/NetworkManager/conf.d/calico.conf <<EOF
+[keyfile]
+unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
+EOF
+
 sudo kubeadm init \
   --control-plane-endpoint="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
   --apiserver-advertise-address="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
