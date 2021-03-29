@@ -9,9 +9,10 @@ sudo kubeadm config images pull && \
 sudo kubeadm init \
   --control-plane-endpoint="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
   --apiserver-advertise-address="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
-  --pod-network-cidr=192.168.0.0/16 && \
+  --pod-network-cidr=172.18.0.0/16 \
+  --service-cidr=172.19.0.0/16 && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml && \
+kubectl apply -f ./calico.yaml && \
 kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml

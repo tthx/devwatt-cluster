@@ -18,3 +18,9 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 sudo apt-get update && \
 sudo apt-get install -y kubelet kubeadm kubectl && \
 sudo apt-mark hold kubelet kubeadm kubectl
+
+# Upgrade kubelet kubeadm kubectl
+sudo apt-mark unhold kubelet kubeadm kubectl && \
+sudo apt-get update && \
+sudo apt-get install -y kubelet kubeadm kubectl && \
+sudo apt-mark hold kubelet kubeadm kubectl
