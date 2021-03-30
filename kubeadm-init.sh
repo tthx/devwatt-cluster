@@ -15,4 +15,6 @@ mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
 kubectl apply -f ./calico.yaml && \
-kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml
+kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml && \
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml && \
+kubectl apply -f k8s-dashboard-admin-user.yml

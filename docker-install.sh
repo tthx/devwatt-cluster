@@ -36,6 +36,11 @@ sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf <<EOF
   Environment="NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
 EOF
 
+sudo tee /etc/systemd/system/docker.service.d/mount-propagation.conf <<EOF
+[Service]
+MountFlags=shared
+EOF
+
 mkdir $HOME/.docker
 tee $HOME/.docker/config.json <<EOF
 {
@@ -48,3 +53,6 @@ tee $HOME/.docker/config.json <<EOF
   }
 }
 EOF
+
+sudo systemctl daemon-reload && \
+sudo systemctl restart docker
