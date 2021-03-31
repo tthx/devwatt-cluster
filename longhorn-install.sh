@@ -12,6 +12,7 @@ metadata:
   name: longhorn-ingress
   namespace: longhorn-system
   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
     # type of authentication
     nginx.ingress.kubernetes.io/auth-type: basic
     # prevent the controller from redirecting (308) to HTTPS
