@@ -56,6 +56,7 @@ alias worker-2='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.4
 alias worker-3='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.166'
 alias worker-4='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.168'
 alias calicoctl='kubectl exec -i -n kube-system calicoctl -- /calicoctl'
+alias urxvt="urxvt -bg black -fg white -ls -sr -fn \"xft:Bitstream Vera Sans Mono:pixelsize=15\""
 
 function parse_git_branch {
   [ -d .git ] && git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/';
