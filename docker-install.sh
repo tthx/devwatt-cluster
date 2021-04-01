@@ -33,7 +33,7 @@ sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf <<EOF
 [Service]
   Environment="HTTP_PROXY=http://devwatt-proxy.si.fr.intraorange:8080"
   Environment="HTTPS_PROXY=http://devwatt-proxy.si.fr.intraorange:8080"
-  Environment="NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
+  Environment="NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,master,worker-1,worker-2,worker-3,worker-4,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
 EOF
 
 sudo tee /etc/systemd/system/docker.service.d/mount-propagation.conf <<EOF
@@ -48,7 +48,7 @@ tee $HOME/.docker/config.json <<EOF
     "default": {
       "httpProxy": "http://devwatt-proxy.si.fr.intraorange:8080",
       "httpsProxy": "http://devwatt-proxy.si.fr.intraorange:8080",
-      "noProxy": "127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
+      "noProxy": "127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,master,worker-1,worker-2,worker-3,worker-4,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
     }
   }
 }
