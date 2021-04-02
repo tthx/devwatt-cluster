@@ -4,7 +4,7 @@ name: ghost-0
 networking:
   apiServerAddress: "127.0.0.1"
   apiServerPort: 6443
-  podSubnet: "192.168.0.0/16"
+  podSubnet: "172.18.0.0/16"
   disableDefaultCNI: true
 nodes:
 - role: control-plane
