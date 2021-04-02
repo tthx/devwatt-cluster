@@ -44,11 +44,11 @@ EOF
 mkdir $HOME/.docker
 tee $HOME/.docker/config.json <<EOF
 {
- "proxies": {
-    "default": {
-      "httpProxy": "http://devwatt-proxy.si.fr.intraorange:8080",
-      "httpsProxy": "http://devwatt-proxy.si.fr.intraorange:8080",
-      "noProxy": "127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,master,worker-1,worker-2,worker-3,worker-4,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
+ \"proxies\": {
+    \"default\": {
+      \"httpProxy\": \"http://devwatt-proxy.si.fr.intraorange:8080\",
+      \"httpsProxy\": \"http://devwatt-proxy.si.fr.intraorange:8080\",
+      \"noProxy\": \"127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,master,worker-1,worker-2,worker-3,worker-4,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange\"
     }
   }
 }

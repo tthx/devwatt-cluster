@@ -6,15 +6,20 @@ unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan
 EOF
 
 sudo kubeadm config images pull && \
+POD_CIDR="172.18.0.0/16" && \
+SVR_CIDR="172.19.0.0/16" && \
 sudo kubeadm init \
   --control-plane-endpoint="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
   --apiserver-advertise-address="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
-  --pod-network-cidr=172.18.0.0/16 \
-  --service-cidr=172.19.0.0/16 && \
+  --pod-network-cidr="${POD_CIDR}" \
+  --service-cidr="${SVR_CIDR}" && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
-kubectl apply -f ./calico.yaml && \
+POD_CIDR="172.18.0.0\/16" && \
+curl -s https://docs.projectcalico.org/manifests/calico.yaml | \
+  sed -e '/CALICO_IPV4POOL_CIDR/s/\(^.*\)# \(-.*$\)/\1\2/g' -e '/"192.168.0.0\/16"/s/\(^.*\)#.*$/\1  value: "'$POD_CIDR'"/g' | \
+  kubectl apply -f - && \
 kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml && \
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml && \
 echo "
@@ -37,5 +42,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: admin-user
-  namespace: kubernetes-dashboard" | kubectl apply -f - && \
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.44.0/deploy/static/provider/baremetal/deploy.yaml
+  namespace: kubernetes-dashboard" | kubectl apply -f -
+  
