@@ -17,34 +17,50 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io && \
 sudo usermod -aG docker $USER
 
 sudo mkdir /etc/docker
-sudo tee /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
+echo \
+"{
+  \"registry-mirrors\": [\"https://dockerfactory-playground.tech.orange\", \"https://dockerfactory-playground-iva.si.francetelecom.fr\", \"https://dockerfactory.tech.orange\", \"https://dockerfactory-iva.si.francetelecom.fr\"],
+  \"exec-opts\": [\"native.cgroupdriver=systemd\"],
+  \"log-driver\": \"json-file\",
+  \"log-opts\": {
+    \"max-size\": \"100m\"
   },
-  "storage-driver": "overlay2"
+  \"storage-driver\": \"overlay2\"
 }
-EOF
+" > /tmp/toto && \
+sudo cp /tmp/toto /etc/docker/daemon.json && \
+sudo systemctl daemon-reload && \
+sudo systemctl restart docker && \
+rm /tmp/toto
+
+sudo systemctl daemon-reload && \
+sudo systemctl restart docker
 
 sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf <<EOF
-[Service]
-  Environment="HTTP_PROXY=http://devwatt-proxy.si.fr.intraorange:8080"
-  Environment="HTTPS_PROXY=http://devwatt-proxy.si.fr.intraorange:8080"
-  Environment="NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,master,worker-1,worker-2,worker-3,worker-4,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange"
-EOF
+echo \
+"[Service]
+  Environment=\"HTTP_PROXY=http://devwatt-proxy.si.fr.intraorange:8080\"
+  Environment=\"HTTPS_PROXY=http://devwatt-proxy.si.fr.intraorange:8080\"
+  Environment=\"NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,master,worker-1,worker-2,worker-3,worker-4,cattle-system.svc,.svc,.cluster.local,docker-mirror-orange-product-devops,ftgroup,intraorange,francetelecom.fr,orange-labs.fr,tech.orange\"
+" > /tmp/toto && \
+sudo cp /tmp/toto /etc/systemd/system/docker.service.d/http-proxy.conf && \
+sudo systemctl daemon-reload && \
+sudo systemctl restart docker && \
+rm /tmp/toto
 
-sudo tee /etc/systemd/system/docker.service.d/mount-propagation.conf <<EOF
-[Service]
+echo \
+"[Service]
 MountFlags=shared
-EOF
+" > /tmp/toto && \
+sudo cp /tmp/toto /etc/systemd/system/docker.service.d/mount-propagation.conf && \
+sudo systemctl daemon-reload && \
+sudo systemctl restart docker && \
+rm /tmp/toto
 
 mkdir $HOME/.docker
-tee $HOME/.docker/config.json <<EOF
-{
- \"proxies\": {
+echo \
+"{
+  \"proxies\": {
     \"default\": {
       \"httpProxy\": \"http://devwatt-proxy.si.fr.intraorange:8080\",
       \"httpsProxy\": \"http://devwatt-proxy.si.fr.intraorange:8080\",
@@ -52,7 +68,4 @@ tee $HOME/.docker/config.json <<EOF
     }
   }
 }
-EOF
-
-sudo systemctl daemon-reload && \
-sudo systemctl restart docker
+" > $HOME/.docker/config.json
