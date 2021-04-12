@@ -1,4 +1,11 @@
 #!/bin/sh
+# Remove snap: read: https://www.linuxtricks.fr/wiki/ubuntu-supprimer-et-bloquer-les-snaps
+sudo tee /etc/apt/preferences.d/nosnap <<EOF
+Package: snapd
+Pin: release *
+Pin-Priority: -1
+EOF
+
 sudo tee /etc/modules-load.d/k8s.conf <<EOF
 overlay
 br_netfilter
@@ -10,6 +17,16 @@ net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 EOF
 sudo sysctl --system
+
+sudo apt-get update && \
+sudo apt-get -y install network-manager && \
+sudo mkdir -p /etc/NetworkManager/conf.d && \
+sudo tee /etc/NetworkManager/conf.d/unmanaged-devices.conf << EOF
+[keyfile]
+unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico;interface-name:flannel*
+EOF
+
+sudo systemctl reload NetworkManager
 
 sudo apt-get update && \
 sudo apt-get install -y apt-transport-https ca-certificates open-iscsi nfs-common curl grep gawk jq && \

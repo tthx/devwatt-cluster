@@ -1,10 +1,4 @@
 #!/bin/sh
-sudo mkdir -p /etc/NetworkManager/conf.d
-sudo tee /etc/NetworkManager/conf.d/calico.conf <<EOF
-[keyfile]
-unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
-EOF
-
 sudo kubeadm config images pull && \
 POD_CIDR="172.18.0.0/16" && \
 SVR_CIDR="172.19.0.0/16" && \
@@ -20,7 +14,7 @@ POD_CIDR="172.18.0.0\/16" && \
 curl -s https://docs.projectcalico.org/manifests/calico.yaml | \
   sed -e '/CALICO_IPV4POOL_CIDR/s/\(^.*\)# \(-.*$\)/\1\2/g' \
     -e '/"192.168.0.0\/16"/s/\(^.*\)#.*$/\1  value: "'$POD_CIDR'"/g' \
-    -e '/image: docker.io\//s/\(^.*\)docker.io\/\(.*$\)/\1\2/g' | \
+    -e '/image:\([[:space:]].*\)docker.io\//s/\(^.*\)docker.io\/\(.*$\)/\1\2/g' | \
   kubectl apply -f - && \
 kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml && \
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml && \
