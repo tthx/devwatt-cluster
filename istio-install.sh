@@ -25,7 +25,7 @@ kubectl apply -f samples/addons && \
 kubectl rollout status deployment/kiali -n istio-system && \
 istioctl dashboard kiali
 
-# delete
+# delete demo
 kubectl delete -f samples/addons && \
 istioctl manifest generate --set profile=demo | \
   kubectl delete --ignore-not-found=true -f - && \
@@ -34,6 +34,8 @@ kubectl label namespace default istio-injection- && \
 kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml
 
 # default profile
-istioctl install --set profile=default -y
+istioctl install --set profile=default -y && \
+istioctl manifest generate --set profile=default | \
+  istioctl verify-install -f -
 istioctl manifest generate --set profile=default | \
   kubectl delete --ignore-not-found=true -f -
