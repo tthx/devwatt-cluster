@@ -1,11 +1,4 @@
 #!/bin/sh
-# Remove snap: read: https://www.linuxtricks.fr/wiki/ubuntu-supprimer-et-bloquer-les-snaps
-sudo tee /etc/apt/preferences.d/nosnap <<EOF
-Package: snapd
-Pin: release *
-Pin-Priority: -1
-EOF
-
 sudo tee /etc/modules-load.d/k8s.conf <<EOF
 overlay
 br_netfilter
