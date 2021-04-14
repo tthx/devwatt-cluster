@@ -34,8 +34,8 @@ kubectl label namespace default istio-injection- && \
 kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml
 
 # default profile
-istioctl install --set profile=default -y && \
+istioctl install --set profile=default --set hub=istio -y && \
 istioctl manifest generate --set profile=default | \
   istioctl verify-install -f -
-istioctl manifest generate --set profile=default | \
-  kubectl delete --ignore-not-found=true -f -
+
+istioctl x uninstall --purge

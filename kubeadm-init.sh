@@ -3,6 +3,7 @@ sudo kubeadm config images pull && \
 POD_CIDR="172.18.0.0/16" && \
 SVR_CIDR="172.19.0.0/16" && \
 sudo kubeadm init \
+  --image-repository="k8s.gcr.io" \
   --control-plane-endpoint="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
   --apiserver-advertise-address="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
   --pod-network-cidr="${POD_CIDR}" \
