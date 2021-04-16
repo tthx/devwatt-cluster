@@ -13,9 +13,9 @@ openssl genrsa -out ${PROXY_CLIENT}.key ${KEY_LENGTH} && \
 openssl req -new -key ${PROXY_CLIENT}.key -subj "/CN=${MASTER_IP}" -out ${PROXY_CLIENT}.csr && \
 openssl x509 -req -in ${PROXY_CLIENT}.csr -CA ${CLIENT_CA}.crt -CAkey ${CLIENT_CA}.key -CAcreateserial -out ${PROXY_CLIENT}.crt -days ${CERT_DURATION} && \
 sudo mkdir -p ${DEST_DIR} && \
-sudo mv ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key ${DEST_DIR}/.
+sudo mv ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key ${DEST_DIR}/. && \
 sudo chown -R root:root ${DEST_DIR} && \
-sudo chmod 600 ${CLIENT_CA}.key ${PROXY_CLIENT}.key
+sudo chmod 600 ${DEST_DIR}/${CLIENT_CA}.key ${DEST_DIR}/${PROXY_CLIENT}.key && \
 sudo kubeadm config images pull && \
 CLUSTER_NAME="ghost-0" && \
 sudo kubeadm init \
