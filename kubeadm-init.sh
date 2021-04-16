@@ -10,7 +10,7 @@ sudo kubeadm init \
   --apiserver-advertise-address="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" \
   --pod-network-cidr="${POD_CIDR}" \
   --service-cidr="${SVR_CIDR}" \
-  --config="${CLUSTER_NAME}-config.yml" && \
+  --config="kubeadm-${CLUSTER_NAME}-config.yml" && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
