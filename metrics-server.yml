@@ -132,9 +132,11 @@ spec:
         - --cert-dir=/tmp
         - --secure-port=4443
         - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP,Hostname
-        - --kubelet-insecure-tls
         - --metric-resolution=30s
         - --kubelet-use-node-status-port
+        - --kubelet-certificate-authority=/etc/kubernetes/pki/client-ca.crt
+        - --tls-cert-file=/etc/kubernetes/pki/metric-server.crt
+        - --tls-private-key-file=/etc/kubernetes/pki/metric-server.key
         image: k8s.gcr.io/metrics-server/metrics-server:v0.4.2
         imagePullPolicy: IfNotPresent
         livenessProbe:

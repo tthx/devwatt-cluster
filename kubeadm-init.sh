@@ -3,20 +3,24 @@ cd ${HOME}/src/devwatt-cluster && \
 MASTER_IP="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" && \
 KEY_LENGTH="2048" && \
 CERT_DURATION="365000" && \
-CLIENT_CA="agregator-client-ca" && \
-PROXY_CLIENT="agregator-proxy-client" && \
-DEST_DIR="/etc/kubernetes/pki" && \
+CLIENT_CA="client-ca" && \
+PROXY_CLIENT="proxy-client" && \
+PKI_DEST_DIR="/etc/kubernetes/pki" && \
 rm -f ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key && \
 openssl genrsa -out ${CLIENT_CA}.key ${KEY_LENGTH} && \
 openssl req -x509 -new -nodes -key ${CLIENT_CA}.key -subj "/CN=${MASTER_IP}" -days ${CERT_DURATION} -out ${CLIENT_CA}.crt && \
 openssl genrsa -out ${PROXY_CLIENT}.key ${KEY_LENGTH} && \
 openssl req -new -key ${PROXY_CLIENT}.key -subj "/CN=${MASTER_IP}" -out ${PROXY_CLIENT}.csr && \
 openssl x509 -req -in ${PROXY_CLIENT}.csr -CA ${CLIENT_CA}.crt -CAkey ${CLIENT_CA}.key -CAcreateserial -out ${PROXY_CLIENT}.crt -days ${CERT_DURATION} && \
-sudo mkdir -p ${DEST_DIR} && \
-sudo mv ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key ${DEST_DIR}/. && \
-sudo chown -R root:root ${DEST_DIR} && \
-sudo chmod 600 ${DEST_DIR}/${CLIENT_CA}.key ${DEST_DIR}/${PROXY_CLIENT}.key && \
-sudo kubeadm config images pull && \
+METRIC_SVR="metric-server" && \
+openssl genrsa -out ${METRIC_SVR}.key ${KEY_LENGTH} && \
+openssl req -new -key ${METRIC_SVR}.key -subj "/CN=${METRIC_SVR}" -out ${METRIC_SVR}.csr && \
+openssl x509 -req -in ${METRIC_SVR}.csr -CA ${CLIENT_CA}.crt -CAkey ${CLIENT_CA}.key -CAcreateserial -out ${METRIC_SVR}.crt -days ${CERT_DURATION} && \
+sudo mkdir -p ${PKI_DEST_DIR} && \
+sudo mv ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key ${METRIC_SVR}.csr ${METRIC_SVR}.key ${PKI_DEST_DIR}/. && \
+sudo chown -R root:root ${PKI_DEST_DIR} && \
+sudo chmod 600 ${PKI_DEST_DIR}/${CLIENT_CA}.key ${PKI_DEST_DIR}/${PROXY_CLIENT}.key ${PKI_DEST_DIR}/${METRIC_SVR}.key && \
+kubeadm config images pull && \
 CLUSTER_NAME="ghost-0" && \
 sudo kubeadm init \
   --config="kubeadm-${CLUSTER_NAME}-config.yml" && \
