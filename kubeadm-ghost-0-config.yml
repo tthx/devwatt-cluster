@@ -1,7 +1,14 @@
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
+networking:
+  serviceSubnet: 172.19.0.0/16
+  podSubnet: 172.18.0.0/16
+controlPlaneEndpoint: 192.168.0.49
+imageRepository: k8s.gcr.io
+clusterName: ghost-0
 apiServer:
   extraArgs:
+    advertise-address: 192.168.0.49
     requestheader-client-ca-file: /etc/kubernetes/agregator/pki/client-ca.crt
     requestheader-allowed-names: aggregator
     requestheader-extra-headers-prefix: X-Remote-Extra-
@@ -9,5 +16,4 @@ apiServer:
     requestheader-username-headers: X-Remote-User
     proxy-client-cert-file: /etc/kubernetes/agregator/pki/proxy-client.crt
     proxy-client-key-file: /etc/kubernetes/agregator/pki/proxy-client.key
-    enable-aggregator-routing: true
-clusterName: ghost-0
+    enable-aggregator-routing: "true"
