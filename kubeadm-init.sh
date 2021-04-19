@@ -1,33 +1,51 @@
 #!/bin/sh
+CONFIG_FILE="${1:-"kubeadm-ghost-0-config.yml"}";
+CLUSTER_NAME="$(awk '/clusterName:/{print $2}' ${CONFIG_FILE})";
+KEY_LENGTH="2048";
+CERT_DURATION="365000";
+CLIENT_CA_CRT_FILE="$(awk '/requestheader-client-ca-file:/{print $2}' ${CONFIG_FILE})";
+PROXY_CLIENT_CRT_FILE="$(awk '/proxy-client-cert-file:/{print $2}' ${CONFIG_FILE})";
+PROXY_CLIENT_KEY_FILE="$(awk '/proxy-client-key-file:/{print $2}' ${CONFIG_FILE})";
+METRIC_SVR="metric-server";
+CSR_FILE="/tmp/request.csr";
 cd ${HOME}/src/devwatt-cluster && \
-MASTER_IP="$(ifconfig ens3|awk '$1~/^inet$/{print $2}')" && \
-KEY_LENGTH="2048" && \
-CERT_DURATION="365000" && \
-CLIENT_CA="client-ca" && \
-PROXY_CLIENT="proxy-client" && \
-PKI_DEST_DIR="/etc/kubernetes/pki" && \
-rm -f ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key && \
-openssl genrsa -out ${CLIENT_CA}.key ${KEY_LENGTH} && \
-openssl req -x509 -new -nodes -key ${CLIENT_CA}.key -subj "/CN=${MASTER_IP}" -days ${CERT_DURATION} -out ${CLIENT_CA}.crt && \
-openssl genrsa -out ${PROXY_CLIENT}.key ${KEY_LENGTH} && \
-openssl req -new -key ${PROXY_CLIENT}.key -subj "/CN=${MASTER_IP}" -out ${PROXY_CLIENT}.csr && \
-openssl x509 -req -in ${PROXY_CLIENT}.csr -CA ${CLIENT_CA}.crt -CAkey ${CLIENT_CA}.key -CAcreateserial -out ${PROXY_CLIENT}.crt -days ${CERT_DURATION} && \
-METRIC_SVR="metric-server" && \
-openssl genrsa -out ${METRIC_SVR}.key ${KEY_LENGTH} && \
-openssl req -new -key ${METRIC_SVR}.key -subj "/CN=${METRIC_SVR}" -out ${METRIC_SVR}.csr && \
-openssl x509 -req -in ${METRIC_SVR}.csr -CA ${CLIENT_CA}.crt -CAkey ${CLIENT_CA}.key -CAcreateserial -out ${METRIC_SVR}.crt -days ${CERT_DURATION} && \
-sudo mkdir -p ${PKI_DEST_DIR} && \
-sudo mv ${CLIENT_CA}.crt ${CLIENT_CA}.key ${PROXY_CLIENT}.crt ${PROXY_CLIENT}.key ${METRIC_SVR}.csr ${METRIC_SVR}.key ${PKI_DEST_DIR}/. && \
-sudo chown -R root:root ${PKI_DEST_DIR} && \
-sudo chmod 600 ${PKI_DEST_DIR}/${CLIENT_CA}.key ${PKI_DEST_DIR}/${PROXY_CLIENT}.key ${PKI_DEST_DIR}/${METRIC_SVR}.key && \
+sudo rm -f ${CLIENT_CA_CRT_FILE} \
+  ${CLIENT_CA_CRT_FILE/%.crt/.key} \
+  ${PROXY_CLIENT_CRT_FILE} \
+  ${PROXY_CLIENT_KEY_FILE} && \
+# Generate aggregator CA
+sudo openssl genrsa \
+  -out ${CLIENT_CA_CRT_FILE/%.crt/.key} \
+  ${KEY_LENGTH} && \
+sudo openssl req \
+  -x509 -new -nodes \
+  -key ${CLIENT_CA_CRT_FILE/%.crt/.key} \
+  -subj "/CN=aggregator-ca" \
+  -days ${CERT_DURATION} \
+  -out ${CLIENT_CA_CRT_FILE} && \
+# Generate apiserver client's key and certificate
+sudo openssl genrsa \
+  -out ${PROXY_CLIENT_KEY_FILE} \
+    ${KEY_LENGTH} && \
+sudo openssl req \
+  -new -key ${PROXY_CLIENT_KEY_FILE} \
+  -subj "/CN=aggregator" \
+  -out ${CSR_FILE} && \
+sudo openssl x509 \
+  -req -in ${CSR_FILE} \
+  -CA ${CLIENT_CA_CRT_FILE} \
+  -CAkey ${CLIENT_CA_CRT_FILE/%.crt/.key} \
+  -CAcreateserial \
+  -out ${PROXY_CLIENT_CRT_FILE} \
+  -days ${CERT_DURATION} && \
+sudo rm -f ${CSR_FILE} && \
 kubeadm config images pull && \
-CLUSTER_NAME="ghost-0" && \
 sudo kubeadm init \
-  --config="kubeadm-${CLUSTER_NAME}-config.yml" && \
+  --config="${CONFIG_FILE}" && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
-POD_CIDR="$(awk '/podSubnet/{gsub("/", "\\/", $2);print $2}' kubeadm-${CLUSTER_NAME}-config.yml)" && \
+POD_CIDR="$(awk '/podSubnet/{gsub("/", "\\/", $2);print $2}' ${CONFIG_FILE})" && \
 curl -s https://docs.projectcalico.org/manifests/calico.yaml | \
   sed -e '/CALICO_IPV4POOL_CIDR/s/\(^.*\)# \(-.*$\)/\1\2/g' \
     -e '/"192.168.0.0\/16"/s/\(^.*\)#.*$/\1  value: "'$POD_CIDR'"/g' \
@@ -41,9 +59,7 @@ kind: ServiceAccount
 metadata:
   name: admin-user
   namespace: kubernetes-dashboard
-
 ---
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -56,4 +72,20 @@ subjects:
 - kind: ServiceAccount
   name: admin-user
   namespace: kubernetes-dashboard" | kubectl apply -f -
-  
+
+
+# Generate metrics server's key and certificate
+sudo openssl genrsa \
+  -out ${METRIC_SVR}.key \
+  ${KEY_LENGTH} && \
+sudo openssl req \
+  -new -key ${METRIC_SVR}.key \
+  -subj "/CN=${METRIC_SVR}" \
+  -out ${CSR_FILE} && \
+sudo openssl x509 \
+  -req -in ${CSR_FILE} \
+  -CA ${CLIENT_CA_CRT_FILE} \
+  -CAkey ${CLIENT_CA_CRT_FILE/%.crt/.key} \
+  -out ${METRIC_SVR}.crt \
+  -days ${CERT_DURATION} && \
+sudo rm -f ${CSR_FILE} && \
