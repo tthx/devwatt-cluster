@@ -2,11 +2,11 @@
 CA_KEY_LENGTH="4096";
 CERT_DURATION="365000";
 GHOST_CA="ghost-ca";
-K8S_CA="kubernetes-ca";
 ETCD_CA="etcd-ca";
+K8S_CA="kubernetes-ca";
 K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
 # Generate root CA
-rm -f ${GHOST_CA}.key ${GHOST_CA}.crt ${GHOST_CA}.txt && \
+rm -f ${GHOST_CA}.key ${GHOST_CA}.crt ${GHOST_CA}.srl && \
 openssl genrsa \
   -out ${GHOST_CA}.key \
   ${CA_KEY_LENGTH} && \
@@ -20,7 +20,7 @@ openssl req \
 # Generate k8s, etcd and k8s front proxy CA
 if [[ ${?} -eq 0 ]];
 then
-  for i in ${K8S_CA} ${ETCD_CA} ${K8S_FRONT_PROXY_CA};
+  for i in ${ETCD_CA} ${K8S_CA} ${K8S_FRONT_PROXY_CA};
   do
     rm -f ${i}.key ${i}.csr ${i}.crt && \
     openssl genrsa \
@@ -36,40 +36,150 @@ then
       -CA ${GHOST_CA}.crt \
       -CAkey ${GHOST_CA}.key \
       -CAcreateserial \
-      -CAserial ${GHOST_CA}.txt \
+      -CAserial ${GHOST_CA}.srl \
       -out ${i}.crt \
       -days ${CERT_DURATION}
+    if [[ ${?} -ne 0 ]];
+    then
+      exit 1;
+    fi
   done
 fi
-if [[ ${?} -eq 0 ]];
-then
-  cat ${GHOST_CA}.crt ${K8S_CA}.crt ${ETCD_CA}.crt ${K8S_FRONT_PROXY_CA}.crt > ${GHOST_CA}-bundle.crt && \
-  openssl verify -CAfile ${GHOST_CA}.crt ${GHOST_CA}-bundle.crt
-fi
 
-# Certificates from etcd CA
+cat ${GHOST_CA}.crt ${ETCD_CA}.crt ${K8S_CA}.crt ${K8S_FRONT_PROXY_CA}.crt > ${GHOST_CA}-bundle.crt && \
+openssl verify -CAfile ${GHOST_CA}.crt ${GHOST_CA}-bundle.crt
+
+# Generate CA configuration
+for i in ${ETCD_CA} ${K8S_CA} ${K8S_FRONT_PROXY_CA};
+do
+  touch ./${i}.txt && \
+  echo "01" > ./${i}.srl && \
+  tee ${i}.cfg <<EOF
+[ca]
+default_ca=my_ca
+[my_ca]
+serial=./${i}.srl
+database=./${i}.txt
+new_certs_dir=./
+certificate=./${i}.crt
+private_key=./${i}.key
+default_md=sha256
+default_days=${CERT_DURATION}
+policy=my_policy
+[my_policy]
+countryName=optional
+stateOrProvinceName=optional
+organizationName=optional
+commonName=supplied
+organizationalUnitName=optional
+EOF
+  if [[ ${?} -ne 0 ]];
+  then
+    exit 1;
+  fi
+done
+
+# Certificates signed by etcd CA
 KEY_LENGTH="2048";
 KUBE_ETCD="kube-etcd";
+tee ${KUBE_ETCD}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth,clientAuth
+subjectAltName=DNS:localhost,IP:127.0.0.1
+EOF
 KUBE_ETCD_PEER="kube-etcd-peer";
+tee ${KUBE_ETCD_PEER}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth,clientAuth
+subjectAltName=DNS:master,IP:192.168.0.49,DNS:localhost,IP:127.0.0.1
+EOF
+#subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS=localhost,IP:127.0.0.1
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
+tee ${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=clientAuth
+EOF
 KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
-rm -f ${KUBE_ETCD}.key ${KUBE_ETCD}.csr ${KUBE_ETCD}.crt && \
-openssl genrsa \
-  -out ${KUBE_ETCD}.key \
-  ${KEY_LENGTH} && \
-openssl req \
-  -new -key ${KUBE_ETCD}.key \
-  -subj "/CN=${KUBE_ETCD}" \
-  -addext "keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign" \
-  -addext "extendedKeyUsage=serverAuth,clientAuth" \
-  -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" \
-  -out ${KUBE_ETCD}.csr && \
-openssl x509 \
-  -req -in ${KUBE_ETCD}.csr \
-  -CA ${ETCD_CA}.crt \
-  -CAkey ${ETCD_CA}.key \
-  -CAcreateserial \
-  -CAserial ${ETCD_CA}.txt \
-  -out ${KUBE_ETCD}.crt \
-  -days ${CERT_DURATION} && \
-openssl x509 -in ${KUBE_ETCD}.crt -text
+tee ${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=clientAuth
+EOF
+for i in \
+  ${KUBE_ETCD} \
+  ${KUBE_ETCD_PEER} \
+  ${KUBE_ETCD_HEALTHCHECK_CLIENT} \
+  ${KUBE_APISERVER_ETCD_CLIENT};
+do
+  rm -f ${i}.key ${i}.csr ${i}.crt && \
+  openssl req -new -sha256 \
+    -nodes -newkey rsa:${KEY_LENGTH} \
+    -keyout ${i}.key \
+    -subj "/CN=${i}$(echo ${i}|awk '/kube-apiserver-etcd-client/{print "/O=system:masters"}')" \
+    -out ${i}.csr && \
+  yes yes | openssl ca \
+    -config ${ETCD_CA}.cfg \
+    -extfile ${i}.cfg \
+    -out ${i}.crt -infiles ${i}.csr && \
+  openssl x509 -in ${i}.crt -text
+  if [[ ${?} -ne 0 ]];
+  then
+    exit 1;
+  fi
+done
+
+KUBE_APISERVER="kube-apiserver";
+tee ${KUBE_APISERVER}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth
+subjectAltName=DNS:master,IP:192.168.0.49,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
+EOF
+KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
+tee ${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=clientAuth
+EOF
+for i in \
+  ${KUBE_APISERVER} \
+  ${KUBE_APISERVER_KUBELET_CLIENT};
+do
+  rm -f ${i}.key ${i}.csr ${i}.crt && \
+  openssl req -new -sha256 \
+    -nodes -newkey rsa:${KEY_LENGTH} \
+    -keyout ${i}.key \
+    -subj "/CN=${i}$(echo ${i}|awk '/kube-apiserver-kubelet-client/{print "/O=system:masters"}')" \
+    -out ${i}.csr && \
+  yes yes | openssl ca \
+    -config ${K8S_CA}.cfg \
+    -extfile ${i}.cfg \
+    -out ${i}.crt -infiles ${i}.csr && \
+  openssl x509 -in ${i}.crt -text
+  if [[ ${?} -ne 0 ]];
+  then
+    exit 1;
+  fi
+done
+
+FRONT_PROXY_CLIENT="front-proxy-client";
+tee ${FRONT_PROXY_CLIENT}.cfg <<EOF
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=clientAuth
+EOF
+for i in \
+  ${FRONT_PROXY_CLIENT};
+do
+  rm -f ${i}.key ${i}.csr ${i}.crt && \
+  openssl req -new -sha256 \
+    -nodes -newkey rsa:${KEY_LENGTH} \
+    -keyout ${i}.key \
+    -subj "/CN=${i}" \
+    -out ${i}.csr && \
+  yes yes | openssl ca \
+    -config ${K8S_FRONT_PROXY_CA}.cfg \
+    -extfile ${i}.cfg \
+    -out ${i}.crt -infiles ${i}.csr && \
+  openssl x509 -in ${i}.crt -text
+  if [[ ${?} -ne 0 ]];
+  then
+    exit 1;
+  fi
+done
