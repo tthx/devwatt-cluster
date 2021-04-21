@@ -150,7 +150,7 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth
-subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
+subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),IP:172.19.0.1,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
 KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
@@ -209,11 +209,6 @@ do
   fi
 done
 
-rm -f ./${CA_DIR}/*.csr \
-  ./${CERT_DIR}/*.csr \
-  ./${CERT_DIR}/*.cfg \
-  ./${CERT_DIR}/*.pem
-
 DEST_DIR="/etc/kubernetes/pki";
 sudo mkdir -p ${DEST_DIR}/etcd && \
 sudo mv ./${CA_DIR}/${ETCD_CA}.crt ${DEST_DIR}/etcd/ca.crt && \
@@ -239,3 +234,5 @@ sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${DEST_DIR}/front-proxy-client.k
 sudo chown -R root:root ${DEST_DIR} && \
 sudo chmod 600 ${DEST_DIR}/*.key ${DEST_DIR}/etcd/*.key && \
 sudo chmod 644 ${DEST_DIR}/*.crt ${DEST_DIR}/etcd/*.crt
+
+rm -f ./${CA_DIR} ./${CERT_DIR}

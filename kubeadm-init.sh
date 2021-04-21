@@ -26,6 +26,7 @@ EOF
 kubeadm config images pull && \
 sudo kubeadm init \
   --config=./${CLUSTER_NAME}.cfg && \
+rm -f ./${CLUSTER_NAME}.cfg && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
@@ -56,20 +57,3 @@ subjects:
 - kind: ServiceAccount
   name: admin-user
   namespace: kubernetes-dashboard")
-
-
-# Generate metrics server's key and certificate
-sudo openssl genrsa \
-  -out ${METRIC_SVR}.key \
-  ${KEY_LENGTH} && \
-sudo openssl req \
-  -new -key ${METRIC_SVR}.key \
-  -subj "/CN=${METRIC_SVR}" \
-  -out ${CSR_FILE} && \
-sudo openssl x509 \
-  -req -in ${CSR_FILE} \
-  -CA ${CLIENT_CA_CRT_FILE} \
-  -CAkey ${CLIENT_CA_CRT_FILE/%.crt/.key} \
-  -out ${METRIC_SVR}.crt \
-  -days ${CERT_DURATION} && \
-sudo rm -f ${CSR_FILE} && \
