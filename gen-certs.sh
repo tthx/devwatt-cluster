@@ -96,7 +96,7 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS:localhost,IP:127.0.0.1
+subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS:localhost,IP:127.0.0.1
 EOF
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
