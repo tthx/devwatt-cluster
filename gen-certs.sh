@@ -53,8 +53,10 @@ cat ./${CA_DIR}/${GHOST_CA}.crt \
   ./${CA_DIR}/${ETCD_CA}.crt \
   ./${CA_DIR}/${K8S_CA}.crt \
   ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt > \
-    ./${CA_DIR}/${GHOST_CA}-bundle.crt && \
-openssl verify -CAfile ${GHOST_CA}.crt ${GHOST_CA}-bundle.crt
+  ./${CA_DIR}/${GHOST_CA}-bundle.crt && \
+openssl verify \
+  -CAfile ./${CA_DIR}/${GHOST_CA}.crt \
+  ./${CA_DIR}/${GHOST_CA}-bundle.crt
 if [[ ${?} -ne 0 ]];
 then
   echo "ERROR: Unable to create CA bundle" >&2;
