@@ -43,6 +43,7 @@ then
       -days ${CERT_DURATION}
     if [[ ${?} -ne 0 ]];
     then
+      echo "ERROR: Unable to create certificate for ${i}" >&2;
       exit 1;
     fi
   done
@@ -54,6 +55,11 @@ cat ./${CA_DIR}/${GHOST_CA}.crt \
   ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt > \
     ./${CA_DIR}/${GHOST_CA}-bundle.crt && \
 openssl verify -CAfile ${GHOST_CA}.crt ${GHOST_CA}-bundle.crt
+if [[ ${?} -ne 0 ]];
+then
+  echo "ERROR: Unable to create CA bundle" >&2;
+  exit 1;
+fi
 
 # Generate CA configuration
 for i in ${ETCD_CA} ${K8S_CA} ${K8S_FRONT_PROXY_CA};
@@ -79,10 +85,6 @@ organizationName=optional
 commonName=supplied
 organizationalUnitName=optional
 EOF
-  if [[ ${?} -ne 0 ]];
-  then
-    exit 1;
-  fi
 done
 
 # Certificates signed by etcd CA
@@ -93,7 +95,7 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:localhost,IP:127.0.0.1
+subjectAltName=DNS:$(hostname),DNS:localhost,IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),IP:127.0.0.1,IP:::1
 EOF
 KUBE_ETCD_PEER="kube-etcd-peer";
 tee ./${CERT_DIR}/${KUBE_ETCD_PEER}.cfg <<EOF
@@ -101,7 +103,7 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS:localhost,IP:127.0.0.1
+subjectAltName=DNS:$(hostname),DNS:localhost,IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),IP:127.0.0.1,IP:::1
 EOF
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
@@ -135,6 +137,7 @@ do
     -infiles ./${CERT_DIR}/${i}.csr
   if [[ ${?} -ne 0 ]];
   then
+    echo "ERROR: Unable to create certificate for ${i}" >&2;
     exit 1;
   fi
 done
@@ -171,6 +174,7 @@ do
     -infiles ./${CERT_DIR}/${i}.csr
   if [[ ${?} -ne 0 ]];
   then
+    echo "ERROR: Unable to create certificate for ${i}" >&2;
     exit 1;
   fi
 done
@@ -198,8 +202,12 @@ do
     -infiles ./${CERT_DIR}/${i}.csr
   if [[ ${?} -ne 0 ]];
   then
+    echo "ERROR: Unable to create certificate for ${i}" >&2;
     exit 1;
   fi
 done
 
-rm -f ./${CA_DIR}/*.csr ./${CERT_DIR}/*.csr
+rm -f ./${CA_DIR}/*.csr \
+  ./${CERT_DIR}/*.csr \
+  ./${CERT_DIR}/*.cfg \
+  ./${CERT_DIR}/*.pem
