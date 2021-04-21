@@ -83,25 +83,32 @@ done
 KEY_LENGTH="2048";
 KUBE_ETCD="kube-etcd";
 tee ${KUBE_ETCD}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
 subjectAltName=DNS:localhost,IP:127.0.0.1
 EOF
 KUBE_ETCD_PEER="kube-etcd-peer";
 tee ${KUBE_ETCD_PEER}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:master,IP:192.168.0.49,DNS:localhost,IP:127.0.0.1
+subjectAltName=subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS=localhost,IP:127.0.0.1
 EOF
-#subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS=localhost,IP:127.0.0.1
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
 tee ${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -129,13 +136,17 @@ done
 
 KUBE_APISERVER="kube-apiserver";
 tee ${KUBE_APISERVER}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth
 subjectAltName=DNS:master,IP:192.168.0.49,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
 KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
 tee ${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -161,7 +172,9 @@ done
 
 FRONT_PROXY_CLIENT="front-proxy-client";
 tee ${FRONT_PROXY_CLIENT}.cfg <<EOF
-keyUsage=critical,digitalSignature,keyEncipherment
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
