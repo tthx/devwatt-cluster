@@ -47,6 +47,7 @@ then
 fi
 
 cat ${GHOST_CA}.crt ${ETCD_CA}.crt ${K8S_CA}.crt ${K8S_FRONT_PROXY_CA}.crt > ${GHOST_CA}-bundle.crt && \
+rm -f ${ETCD_CA}.csr ${K8S_CA}.csr ${K8S_FRONT_PROXY_CA}.csr && \
 openssl verify -CAfile ${GHOST_CA}.crt ${GHOST_CA}-bundle.crt
 
 # Generate CA configuration
@@ -95,7 +96,7 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS=localhost,IP:127.0.0.1
+subjectAltName=subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS:localhost,IP:127.0.0.1
 EOF
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
@@ -127,7 +128,7 @@ do
     -config ${ETCD_CA}.cfg \
     -extfile ${i}.cfg \
     -out ${i}.crt -infiles ${i}.csr && \
-  openssl x509 -in ${i}.crt -text
+  rm -f ${i}.csr
   if [[ ${?} -ne 0 ]];
   then
     exit 1;
@@ -163,7 +164,7 @@ do
     -config ${K8S_CA}.cfg \
     -extfile ${i}.cfg \
     -out ${i}.crt -infiles ${i}.csr && \
-  openssl x509 -in ${i}.crt -text
+  rm -f ${i}.csr
   if [[ ${?} -ne 0 ]];
   then
     exit 1;
@@ -190,7 +191,7 @@ do
     -config ${K8S_FRONT_PROXY_CA}.cfg \
     -extfile ${i}.cfg \
     -out ${i}.crt -infiles ${i}.csr && \
-  openssl x509 -in ${i}.crt -text
+  rm -f ${i}.csr
   if [[ ${?} -ne 0 ]];
   then
     exit 1;
