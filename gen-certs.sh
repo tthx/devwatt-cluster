@@ -5,7 +5,9 @@ GHOST_CA="ghost-ca";
 ETCD_CA="etcd-ca";
 K8S_CA="kubernetes-ca";
 K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
+CERTS_DIR="certs";
 # Generate root CA
+mkdir -p ${CERTS_DIR} && \
 rm -f ${GHOST_CA}.key ${GHOST_CA}.crt ${GHOST_CA}.srl && \
 openssl genrsa \
   -out ${GHOST_CA}.key \
@@ -61,7 +63,7 @@ default_ca=my_ca
 [my_ca]
 serial=./${i}.srl
 database=./${i}.txt
-new_certs_dir=./
+new_certs_dir=./${CERTS_DIR}
 certificate=./${i}.crt
 private_key=./${i}.key
 default_md=sha256
@@ -83,7 +85,7 @@ done
 # Certificates signed by etcd CA
 KEY_LENGTH="2048";
 KUBE_ETCD="kube-etcd";
-tee ${KUBE_ETCD}.cfg <<EOF
+tee ./${CERTS_DIR}/${KUBE_ETCD}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
@@ -91,7 +93,7 @@ extendedKeyUsage=serverAuth,clientAuth
 subjectAltName=DNS:localhost,IP:127.0.0.1
 EOF
 KUBE_ETCD_PEER="kube-etcd-peer";
-tee ${KUBE_ETCD_PEER}.cfg <<EOF
+tee ./${CERTS_DIR}/${KUBE_ETCD_PEER}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
@@ -99,14 +101,14 @@ extendedKeyUsage=serverAuth,clientAuth
 subjectAltName=DNS:$(hostname),IP:$(ifconfig ens3|awk '$1~/^inet$/{print $2}'),DNS:localhost,IP:127.0.0.1
 EOF
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
-tee ${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
+tee ./${CERTS_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
-tee ${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
+tee ./${CERTS_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
@@ -118,17 +120,18 @@ for i in \
   ${KUBE_ETCD_HEALTHCHECK_CLIENT} \
   ${KUBE_APISERVER_ETCD_CLIENT};
 do
-  rm -f ${i}.key ${i}.csr ${i}.crt && \
+  rm -f ./${CERTS_DIR}/${i}.key ./${CERTS_DIR}/${i}.csr ./${CERTS_DIR}/${i}.crt && \
   openssl req -new -sha256 \
     -nodes -newkey rsa:${KEY_LENGTH} \
-    -keyout ${i}.key \
+    -keyout ./${CERTS_DIR}/${i}.key \
     -subj "/CN=${i}$(echo ${i}|awk '/kube-apiserver-etcd-client/{print "/O=system:masters"}')" \
-    -out ${i}.csr && \
+    -out ./${CERTS_DIR}/${i}.csr && \
   yes yes | openssl ca \
     -config ${ETCD_CA}.cfg \
-    -extfile ${i}.cfg \
-    -out ${i}.crt -infiles ${i}.csr && \
-  rm -f ${i}.csr
+    -extfile ./${CERTS_DIR}/${i}.cfg \
+    -out ./${CERTS_DIR}/${i}.crt \
+    -infiles ./${CERTS_DIR}/${i}.csr && \
+  rm -f ./${CERTS_DIR}/${i}.csr
   if [[ ${?} -ne 0 ]];
   then
     exit 1;
@@ -136,7 +139,7 @@ do
 done
 
 KUBE_APISERVER="kube-apiserver";
-tee ${KUBE_APISERVER}.cfg <<EOF
+tee ./${CERTS_DIR}/${KUBE_APISERVER}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
@@ -144,7 +147,7 @@ extendedKeyUsage=serverAuth
 subjectAltName=DNS:master,IP:192.168.0.49,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
 KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
-tee ${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
+tee ./${CERTS_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
@@ -154,17 +157,18 @@ for i in \
   ${KUBE_APISERVER} \
   ${KUBE_APISERVER_KUBELET_CLIENT};
 do
-  rm -f ${i}.key ${i}.csr ${i}.crt && \
+  rm -f ./${CERTS_DIR}/${i}.key ./${CERTS_DIR}/${i}.csr ./${CERTS_DIR}/${i}.crt && \
   openssl req -new -sha256 \
     -nodes -newkey rsa:${KEY_LENGTH} \
-    -keyout ${i}.key \
+    -keyout ./${CERTS_DIR}/${i}.key \
     -subj "/CN=${i}$(echo ${i}|awk '/kube-apiserver-kubelet-client/{print "/O=system:masters"}')" \
-    -out ${i}.csr && \
+    -out ./${CERTS_DIR}/${i}.csr && \
   yes yes | openssl ca \
     -config ${K8S_CA}.cfg \
-    -extfile ${i}.cfg \
-    -out ${i}.crt -infiles ${i}.csr && \
-  rm -f ${i}.csr
+    -extfile ./${CERTS_DIR}/${i}.cfg \
+    -out ./${CERTS_DIR}/${i}.crt \
+    -infiles ./${CERTS_DIR}/${i}.csr && \
+  rm -f ./${CERTS_DIR}/${i}.csr
   if [[ ${?} -ne 0 ]];
   then
     exit 1;
@@ -172,7 +176,7 @@ do
 done
 
 FRONT_PROXY_CLIENT="front-proxy-client";
-tee ${FRONT_PROXY_CLIENT}.cfg <<EOF
+tee ./${CERTS_DIR}/${FRONT_PROXY_CLIENT}.cfg <<EOF
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
@@ -181,17 +185,18 @@ EOF
 for i in \
   ${FRONT_PROXY_CLIENT};
 do
-  rm -f ${i}.key ${i}.csr ${i}.crt && \
+  rm -f ./${CERTS_DIR}/${i}.key ./${CERTS_DIR}/${i}.csr ./${CERTS_DIR}/${i}.crt && \
   openssl req -new -sha256 \
     -nodes -newkey rsa:${KEY_LENGTH} \
-    -keyout ${i}.key \
+    -keyout ./${CERTS_DIR}/${i}.key \
     -subj "/CN=${i}" \
-    -out ${i}.csr && \
+    -out ./${CERTS_DIR}/${i}.csr && \
   yes yes | openssl ca \
     -config ${K8S_FRONT_PROXY_CA}.cfg \
-    -extfile ${i}.cfg \
-    -out ${i}.crt -infiles ${i}.csr && \
-  rm -f ${i}.csr
+    -extfile ./${CERTS_DIR}/${i}.cfg \
+    -out ./${CERTS_DIR}/${i}.crt \
+    -infiles ./${CERTS_DIR}/${i}.csr && \
+  rm -f ./${CERTS_DIR}/${i}.csr
   if [[ ${?} -ne 0 ]];
   then
     exit 1;
