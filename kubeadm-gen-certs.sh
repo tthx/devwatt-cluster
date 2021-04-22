@@ -21,7 +21,7 @@ openssl req \
   -subj "/CN=${GHOST_CA}" \
   -addext "keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign" \
   -days ${CERT_DURATION} \
-  -out ./${CA_DIR}/${GHOST_CA}.crt
+  -out ./${CA_DIR}/${GHOST_CA}.crt;
 # Generate k8s, etcd and k8s front proxy CA
 if [[ ${?} -eq 0 ]];
 then
@@ -42,7 +42,7 @@ then
       -CAcreateserial \
       -CAserial ./${CA_DIR}/${GHOST_CA}.srl \
       -out ./${CA_DIR}/${i}.crt \
-      -days ${CERT_DURATION}
+      -days ${CERT_DURATION};
     if [[ ${?} -ne 0 ]];
     then
       echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -58,7 +58,7 @@ cat ./${CA_DIR}/${GHOST_CA}.crt \
   ./${CA_DIR}/${GHOST_CA}-bundle.crt && \
 openssl verify \
   -CAfile ./${CA_DIR}/${GHOST_CA}.crt \
-  ./${CA_DIR}/${GHOST_CA}-bundle.crt
+  ./${CA_DIR}/${GHOST_CA}-bundle.crt;
 if [[ ${?} -ne 0 ]];
 then
   echo "ERROR: Unable to create CA bundle" >&2;
@@ -66,7 +66,10 @@ then
 fi
 
 # Generate CA configuration
-for i in ${ETCD_CA} ${K8S_CA} ${K8S_FRONT_PROXY_CA};
+for i in \
+  ${ETCD_CA} \
+  ${K8S_CA} \
+  ${K8S_FRONT_PROXY_CA};
 do
   touch ./${CA_DIR}/${i}.txt && \
   echo "01" > ./${CA_DIR}/${i}.srl && \
@@ -138,7 +141,7 @@ do
     -config ./${CA_DIR}/${ETCD_CA}.cfg \
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
-    -infiles ./${CERT_DIR}/${i}.csr
+    -infiles ./${CERT_DIR}/${i}.csr;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -175,7 +178,7 @@ do
     -config ./${CA_DIR}/${K8S_CA}.cfg \
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
-    -infiles ./${CERT_DIR}/${i}.csr
+    -infiles ./${CERT_DIR}/${i}.csr;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -203,7 +206,7 @@ do
     -config ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.cfg \
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
-    -infiles ./${CERT_DIR}/${i}.csr
+    -infiles ./${CERT_DIR}/${i}.csr;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -215,26 +218,26 @@ if [[ "${1}" == "install" ]];
 then
   DEST_DIR="/etc/kubernetes/pki";
   sudo mkdir -p ${DEST_DIR}/etcd && \
-  sudo mv ./${CA_DIR}/${ETCD_CA}.crt ${DEST_DIR}/etcd/ca.crt && \
-  sudo mv ./${CA_DIR}/${ETCD_CA}.key ${DEST_DIR}/etcd/ca.key && \
-  sudo mv ./${CERT_DIR}/${KUBE_ETCD}.crt ${DEST_DIR}/etcd/server.crt && \
-  sudo mv ./${CERT_DIR}/${KUBE_ETCD}.key ${DEST_DIR}/etcd/server.key && \
-  sudo mv ./${CERT_DIR}/${KUBE_ETCD_PEER}.crt ${DEST_DIR}/etcd/peer.crt && \
-  sudo mv ./${CERT_DIR}/${KUBE_ETCD_PEER}.key ${DEST_DIR}/etcd/peer.key && \
-  sudo mv ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.crt ${DEST_DIR}/etcd/healthcheck-client.crt && \
-  sudo mv ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.key ${DEST_DIR}/etcd/healthcheck-client.key && \
-  sudo mv ./${CA_DIR}/${K8S_CA}.crt ${DEST_DIR}/ca.crt && \
-  sudo mv ./${CA_DIR}/${K8S_CA}.key ${DEST_DIR}/ca.key && \
-  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.crt ${DEST_DIR}/apiserver-etcd-client.crt && \
-  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.key ${DEST_DIR}/apiserver-etcd-client.key && \
-  sudo mv ./${CERT_DIR}/${KUBE_APISERVER}.crt ${DEST_DIR}/apiserver.crt && \
-  sudo mv ./${CERT_DIR}/${KUBE_APISERVER}.key ${DEST_DIR}/apiserver.key && \
-  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.crt ${DEST_DIR}/apiserver-kubelet-client.crt && \
-  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.key ${DEST_DIR}/apiserver-kubelet-client.key && \
-  sudo mv ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt ${DEST_DIR}/front-proxy-ca.crt && \
-  sudo mv ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.key ${DEST_DIR}/front-proxy-ca.key && \
-  sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.crt ${DEST_DIR}/front-proxy-client.crt && \
-  sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${DEST_DIR}/front-proxy-client.key && \
+  sudo cp -f ./${CA_DIR}/${ETCD_CA}.crt ${DEST_DIR}/etcd/ca.crt && \
+  sudo cp -f ./${CA_DIR}/${ETCD_CA}.key ${DEST_DIR}/etcd/ca.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.crt ${DEST_DIR}/etcd/server.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.key ${DEST_DIR}/etcd/server.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_PEER}.crt ${DEST_DIR}/etcd/peer.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_PEER}.key ${DEST_DIR}/etcd/peer.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.crt ${DEST_DIR}/etcd/healthcheck-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.key ${DEST_DIR}/etcd/healthcheck-client.key && \
+  sudo cp -f ./${CA_DIR}/${K8S_CA}.crt ${DEST_DIR}/ca.crt && \
+  sudo cp -f ./${CA_DIR}/${K8S_CA}.key ${DEST_DIR}/ca.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.crt ${DEST_DIR}/apiserver-etcd-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.key ${DEST_DIR}/apiserver-etcd-client.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER}.crt ${DEST_DIR}/apiserver.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER}.key ${DEST_DIR}/apiserver.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.crt ${DEST_DIR}/apiserver-kubelet-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.key ${DEST_DIR}/apiserver-kubelet-client.key && \
+  sudo cp -f ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt ${DEST_DIR}/front-proxy-ca.crt && \
+  sudo cp -f ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.key ${DEST_DIR}/front-proxy-ca.key && \
+  sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.crt ${DEST_DIR}/front-proxy-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${DEST_DIR}/front-proxy-client.key && \
   sudo chown -R root:root ${DEST_DIR} && \
   sudo chmod 600 ${DEST_DIR}/*.key ${DEST_DIR}/etcd/*.key && \
   sudo chmod 644 ${DEST_DIR}/*.crt ${DEST_DIR}/etcd/*.crt
