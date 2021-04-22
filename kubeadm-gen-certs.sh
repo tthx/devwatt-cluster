@@ -214,7 +214,7 @@ do
   fi
 done
 
-if [[ "${1}" == "install" ]];
+if [[ -n "${1}" ]];
 then
   DEST_DIR="/etc/kubernetes/pki";
   sudo mkdir -p ${DEST_DIR}/etcd && \
