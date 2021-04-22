@@ -50,9 +50,7 @@ openssl req \
   -newkey rsa:${CA_KEY_LENGTH} \
   -keyout ./${CA_DIR}/${GHOST_CA}.key \
   -subj "/CN=${GHOST_CA}" \
-  -addext "authorityKeyIdentifier=keyid,issuer:always" \
-  -addext "keyUsage=critical,digitalSignature,nonRepudiation,keyEncipherment,dataEncipherment,keyAgreement,keyCertSign,cRLSign" \
-  -addext "basicConstraints=critical,CA:TRUE,pathlen:1" \
+  -addext "keyUsage=critical,digitalSignature,keyCertSign,cRLSign" \
   -addext "subjectAltName=DNS:${GHOST_CA}" \
   -days ${CERT_DURATION} \
   -out ./${CA_DIR}/${GHOST_CA}.crt;
@@ -70,13 +68,15 @@ then
     yes yes | openssl ca \
       -config ./${CA_DIR}/${GHOST_CA}.cfg \
       -extfile <(echo "
-authorityKeyIdentifier=keyid,issuer:always
-keyUsage=critical,digitalSignature,nonRepudiation,keyEncipherment,dataEncipherment,keyAgreement,keyCertSign,cRLSign
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer
 basicConstraints=critical,CA:TRUE,pathlen:0
+keyUsage=critical,digitalSignature,keyCertSign,cRLSign
 subjectAltName=DNS:${i}
 ") \
       -out ./${CERT_DIR}/${i}.crt \
       -infiles ./${CERT_DIR}/${i}.csr && \
+    openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}.crt ./${CERT_DIR}/${i}.crt && \
     mv ./${CERT_DIR}/${i}.key ./${CERT_DIR}/${i}.crt ./${CA_DIR}/.;
     if [[ ${?} -ne 0 ]];
     then
@@ -104,32 +104,36 @@ fi
 KEY_LENGTH="2048";
 KUBE_ETCD="kube-etcd";
 tee ./${CERT_DIR}/${KUBE_ETCD}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
 subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:::1
 EOF
 KUBE_ETCD_PEER="kube-etcd-peer";
 tee ./${CERT_DIR}/${KUBE_ETCD_PEER}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth,clientAuth
 subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:::1
 EOF
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -147,7 +151,8 @@ do
     -config ./${CA_DIR}/${ETCD_CA}.cfg \
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
-    -infiles ./${CERT_DIR}/${i}.csr;
+    -infiles ./${CERT_DIR}/${i}.csr && \
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -157,17 +162,19 @@ done
 
 KUBE_APISERVER="kube-apiserver";
 tee ./${CERT_DIR}/${KUBE_APISERVER}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth
 subjectAltName=DNS:${HOST_NAME},IP:${HOST_IP},IP:${FIRST_SRV_IP},DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
 KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -184,7 +191,8 @@ do
     -config ./${CA_DIR}/${K8S_CA}.cfg \
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
-    -infiles ./${CERT_DIR}/${i}.csr;
+    -infiles ./${CERT_DIR}/${i}.csr && \
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -194,9 +202,10 @@ done
 
 FRONT_PROXY_CLIENT="front-proxy-client";
 tee ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.cfg <<EOF
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
+keyUsage=critical,keyEncipherment,dataEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -212,7 +221,8 @@ do
     -config ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.cfg \
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
-    -infiles ./${CERT_DIR}/${i}.csr;
+    -infiles ./${CERT_DIR}/${i}.csr && \
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
