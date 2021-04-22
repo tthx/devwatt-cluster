@@ -9,6 +9,8 @@ CA_DIR="ca";
 CERT_DIR="cert";
 HOST_NAME="$(hostname)";
 HOST_IP="$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print x[1]}')";
+# We assume that service CIDR is 172.19.0.1/16
+FIRST_SRV_IP="172.19.0.1";
 # Generate root CA
 rm -rf ./${CA_DIR} ./${CERT_DIR} && \
 mkdir -p ./${CA_DIR} ./${CERT_DIR} && \
@@ -155,7 +157,7 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=CA:FALSE
 keyUsage=keyEncipherment,dataEncipherment
 extendedKeyUsage=serverAuth
-subjectAltName=DNS:${HOST_NAME},IP:${HOST_IP},IP:172.19.0.1,DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
+subjectAltName=DNS:${HOST_NAME},IP:${HOST_IP},IP:${FIRST_SRV_IP},DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
 KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF

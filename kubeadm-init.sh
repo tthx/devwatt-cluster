@@ -31,10 +31,9 @@ rm -f ./${CLUSTER_NAME}.cfg && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
-POD_CIDR="172.18.0.0\/16" && \
 curl -s https://docs.projectcalico.org/manifests/calico.yaml | \
   sed -e '/CALICO_IPV4POOL_CIDR/s/\(^.*\)# \(-.*$\)/\1\2/g' \
-    -e '/"192.168.0.0\/16"/s/\(^.*\)#.*$/\1  value: "'$POD_CIDR'"/g' \
+    -e '/"192.168.0.0\/16"/s/\(^.*\)#.*$/\1  value: "'${POD_CIDR/\//\\\/}'"/g' \
     -e '/image:\([[:space:]].*\)docker.io\//s/\(^.*\)docker.io\/\(.*$\)/\1\2/g' | \
   kubectl apply -f - && \
 kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml && \
