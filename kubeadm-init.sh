@@ -1,4 +1,5 @@
 #!/bin/sh
+HOST_IP="$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print x[1]}')";
 CLUSTER_NAME="ghost-0";
 POD_CIDR="172.18.0.0/16";
 SRV_CIDR="172.19.0.0/16";
@@ -8,12 +9,12 @@ kind: ClusterConfiguration
 networking:
   serviceSubnet: ${SRV_CIDR}
   podSubnet: ${POD_CIDR}
-controlPlaneEndpoint: $(ifconfig ens3|awk '$1~/^inet$/{print $2}')
+controlPlaneEndpoint: ${HOST_IP}
 imageRepository: k8s.gcr.io
 clusterName: ${CLUSTER_NAME}
 apiServer:
   extraArgs:
-    advertise-address: $(ifconfig ens3|awk '$1~/^inet$/{print $2}')
+    advertise-address: ${HOST_IP}
     requestheader-client-ca-file: /etc/kubernetes/pki/front-proxy-ca.crt
     requestheader-allowed-names: ""
     requestheader-extra-headers-prefix: X-Remote-Extra-
