@@ -69,6 +69,7 @@ then
     yes yes | openssl ca \
       -config ./${CA_DIR}/${GHOST_CA}.cfg \
       -extfile <(echo "
+authorityKeyIdentifier=keyid,issuer:always
 keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign
 basicConstraints=CA:TRUE
 subjectAltName=DNS:${i}
