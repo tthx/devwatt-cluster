@@ -211,30 +211,33 @@ do
   fi
 done
 
-DEST_DIR="/etc/kubernetes/pki";
-sudo mkdir -p ${DEST_DIR}/etcd && \
-sudo mv ./${CA_DIR}/${ETCD_CA}.crt ${DEST_DIR}/etcd/ca.crt && \
-sudo mv ./${CA_DIR}/${ETCD_CA}.key ${DEST_DIR}/etcd/ca.key && \
-sudo mv ./${CERT_DIR}/${KUBE_ETCD}.crt ${DEST_DIR}/etcd/server.crt && \
-sudo mv ./${CERT_DIR}/${KUBE_ETCD}.key ${DEST_DIR}/etcd/server.key && \
-sudo mv ./${CERT_DIR}/${KUBE_ETCD_PEER}.crt ${DEST_DIR}/etcd/peer.crt && \
-sudo mv ./${CERT_DIR}/${KUBE_ETCD_PEER}.key ${DEST_DIR}/etcd/peer.key && \
-sudo mv ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.crt ${DEST_DIR}/etcd/healthcheck-client.crt && \
-sudo mv ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.key ${DEST_DIR}/etcd/healthcheck-client.key && \
-sudo mv ./${CA_DIR}/${K8S_CA}.crt ${DEST_DIR}/ca.crt && \
-sudo mv ./${CA_DIR}/${K8S_CA}.key ${DEST_DIR}/ca.key && \
-sudo mv ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.crt ${DEST_DIR}/apiserver-etcd-client.crt && \
-sudo mv ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.key ${DEST_DIR}/apiserver-etcd-client.key && \
-sudo mv ./${CERT_DIR}/${KUBE_APISERVER}.crt ${DEST_DIR}/apiserver.crt && \
-sudo mv ./${CERT_DIR}/${KUBE_APISERVER}.key ${DEST_DIR}/apiserver.key && \
-sudo mv ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.crt ${DEST_DIR}/apiserver-kubelet-client.crt && \
-sudo mv ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.key ${DEST_DIR}/apiserver-kubelet-client.key && \
-sudo mv ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt ${DEST_DIR}/front-proxy-ca.crt && \
-sudo mv ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.key ${DEST_DIR}/front-proxy-ca.key && \
-sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.crt ${DEST_DIR}/front-proxy-client.crt && \
-sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${DEST_DIR}/front-proxy-client.key && \
-sudo chown -R root:root ${DEST_DIR} && \
-sudo chmod 600 ${DEST_DIR}/*.key ${DEST_DIR}/etcd/*.key && \
-sudo chmod 644 ${DEST_DIR}/*.crt ${DEST_DIR}/etcd/*.crt
+if [[ "${1}" == "install" ]];
+then
+  DEST_DIR="/etc/kubernetes/pki";
+  sudo mkdir -p ${DEST_DIR}/etcd && \
+  sudo mv ./${CA_DIR}/${ETCD_CA}.crt ${DEST_DIR}/etcd/ca.crt && \
+  sudo mv ./${CA_DIR}/${ETCD_CA}.key ${DEST_DIR}/etcd/ca.key && \
+  sudo mv ./${CERT_DIR}/${KUBE_ETCD}.crt ${DEST_DIR}/etcd/server.crt && \
+  sudo mv ./${CERT_DIR}/${KUBE_ETCD}.key ${DEST_DIR}/etcd/server.key && \
+  sudo mv ./${CERT_DIR}/${KUBE_ETCD_PEER}.crt ${DEST_DIR}/etcd/peer.crt && \
+  sudo mv ./${CERT_DIR}/${KUBE_ETCD_PEER}.key ${DEST_DIR}/etcd/peer.key && \
+  sudo mv ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.crt ${DEST_DIR}/etcd/healthcheck-client.crt && \
+  sudo mv ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.key ${DEST_DIR}/etcd/healthcheck-client.key && \
+  sudo mv ./${CA_DIR}/${K8S_CA}.crt ${DEST_DIR}/ca.crt && \
+  sudo mv ./${CA_DIR}/${K8S_CA}.key ${DEST_DIR}/ca.key && \
+  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.crt ${DEST_DIR}/apiserver-etcd-client.crt && \
+  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.key ${DEST_DIR}/apiserver-etcd-client.key && \
+  sudo mv ./${CERT_DIR}/${KUBE_APISERVER}.crt ${DEST_DIR}/apiserver.crt && \
+  sudo mv ./${CERT_DIR}/${KUBE_APISERVER}.key ${DEST_DIR}/apiserver.key && \
+  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.crt ${DEST_DIR}/apiserver-kubelet-client.crt && \
+  sudo mv ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.key ${DEST_DIR}/apiserver-kubelet-client.key && \
+  sudo mv ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt ${DEST_DIR}/front-proxy-ca.crt && \
+  sudo mv ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.key ${DEST_DIR}/front-proxy-ca.key && \
+  sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.crt ${DEST_DIR}/front-proxy-client.crt && \
+  sudo mv ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${DEST_DIR}/front-proxy-client.key && \
+  sudo chown -R root:root ${DEST_DIR} && \
+  sudo chmod 600 ${DEST_DIR}/*.key ${DEST_DIR}/etcd/*.key && \
+  sudo chmod 644 ${DEST_DIR}/*.crt ${DEST_DIR}/etcd/*.crt
+fi
 
-rm -f ./${CA_DIR} ./${CERT_DIR}
+exit 0;
