@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/v1.1.0/uninstall/uninstall.yaml && \
 kubectl get job/longhorn-uninstall -w
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo \
 "{
   \"registry-mirrors\": [\"https://dockerfactory-playground.tech.orange\", \"https://dockerfactory-playground-iva.si.francetelecom.fr\", \"https://dockerfactory.tech.orange\", \"https://dockerfactory-iva.si.francetelecom.fr\"]

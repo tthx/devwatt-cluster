@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.1.0/deploy/longhorn.yaml && \
 longhorn_user='longhorn-basic'; \
 longhorn_passwd='D@$#H0le99*'; \

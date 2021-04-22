@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 sudo kubeadm join \
   --token "$(kubeadm token list|awk 'NR!=1 {print $1}')" \
   "$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print x[1]}')":6443 \

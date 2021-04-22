@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 curl -L https://istio.io/downloadIstio | sh - && \
 cd istio* && \
 export PATH=$PWD/bin:$PATH && \

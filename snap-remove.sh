@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 snap list
 
 sudo snap remove gnome-3-28-1804 && \

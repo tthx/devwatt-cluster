@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 docker run -d --restart=unless-stopped \
   -p 80:80 -p 443:443 \
   -e HTTP_PROXY="http://devwatt-proxy.si.fr.intraorange:8080" \

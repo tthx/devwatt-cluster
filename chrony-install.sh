@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 sudo apt-get -y autopurge ntp ntpdate &&\
 sudo systemctl stop systemd-timesyncd.service && \
 sudo systemctl disable systemd-timesyncd.service && \

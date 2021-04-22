@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 docker pull ubuntu:18.04
 # SYS_TIME is required for kudu to work. The container will be able to change the time of the host.
 # -p options expose the container's ports to the host. You can add more in need.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 HOST_IP="$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print x[1]}')";
 CLUSTER_NAME="ghost-0";
 POD_CIDR="172.18.0.0/16";

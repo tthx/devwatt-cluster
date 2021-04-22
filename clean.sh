@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 sudo umount /mnt/hdfs && \
 sudo rm -rf /mnt/hdfs /var/hdfs /var/yarn /var/mapred && \
 sudo apt-get -y autoremove --purge && \
