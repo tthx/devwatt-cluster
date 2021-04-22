@@ -50,8 +50,9 @@ openssl req \
   -newkey rsa:${CA_KEY_LENGTH} \
   -keyout ./${CA_DIR}/${GHOST_CA}.key \
   -subj "/CN=${GHOST_CA}" \
-  -addext "keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign" \
-  -addext "basicConstraints=CA:TRUE" \
+  -addext "authorityKeyIdentifier=keyid,issuer:always" \
+  -addext "keyUsage=critical,digitalSignature,nonRepudiation,keyEncipherment,dataEncipherment,keyAgreement,keyCertSign,cRLSign" \
+  -addext "basicConstraints=critical,CA:TRUE,pathlen:1" \
   -addext "subjectAltName=DNS:${GHOST_CA}" \
   -days ${CERT_DURATION} \
   -out ./${CA_DIR}/${GHOST_CA}.crt;
@@ -70,8 +71,8 @@ then
       -config ./${CA_DIR}/${GHOST_CA}.cfg \
       -extfile <(echo "
 authorityKeyIdentifier=keyid,issuer:always
-keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign
-basicConstraints=CA:TRUE
+keyUsage=critical,digitalSignature,nonRepudiation,keyEncipherment,dataEncipherment,keyAgreement,keyCertSign,cRLSign
+basicConstraints=critical,CA:TRUE,pathlen:0
 subjectAltName=DNS:${i}
 ") \
       -out ./${CERT_DIR}/${i}.crt \
