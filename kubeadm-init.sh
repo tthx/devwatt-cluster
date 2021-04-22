@@ -3,6 +3,7 @@ HOST_IP="$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print
 CLUSTER_NAME="ghost-0";
 POD_CIDR="172.18.0.0/16";
 SRV_CIDR="172.19.0.0/16";
+DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
 tee ./${CLUSTER_NAME}.cfg <<EOF
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
@@ -10,7 +11,7 @@ networking:
   serviceSubnet: ${SRV_CIDR}
   podSubnet: ${POD_CIDR}
 controlPlaneEndpoint: ${HOST_IP}
-imageRepository: k8s.gcr.io
+imageRepository: ${DOCKER_IMAGE_REPO}
 clusterName: ${CLUSTER_NAME}
 apiServer:
   extraArgs:
@@ -24,7 +25,7 @@ apiServer:
     proxy-client-key-file: /etc/kubernetes/pki/front-proxy-client.key
     enable-aggregator-routing: "true"
 EOF
-kubeadm config images pull && \
+kubeadm config images pull --image-repository ${DOCKER_IMAGE_REPO} && \
 sudo kubeadm init \
   --config=./${CLUSTER_NAME}.cfg && \
 rm -f ./${CLUSTER_NAME}.cfg && \
