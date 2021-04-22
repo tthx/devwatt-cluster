@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 CA_KEY_LENGTH="4096";
 CERT_DURATION="365000";
 GHOST_CA="ghost-ca";
