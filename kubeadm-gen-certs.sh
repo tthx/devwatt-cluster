@@ -46,7 +46,7 @@ done
 
 # Generate root CA
 openssl req \
-  -x509 -new -nodes \
+  -x509 -new -sha256 -nodes \
   -newkey rsa:${CA_KEY_LENGTH} \
   -keyout ./${CA_DIR}/${GHOST_CA}.key \
   -subj "/CN=${GHOST_CA}" \
@@ -63,9 +63,9 @@ then
   do
     openssl req -new -sha256 \
       -nodes -newkey rsa:${CA_KEY_LENGTH} \
-      -keyout ./${CA_DIR}/${i}.key \
+      -keyout ./${CERT_DIR}/${i}.key \
       -subj "/CN=${i}" \
-      -out ./${CA_DIR}/${i}.csr && \
+      -out ./${CERT_DIR}/${i}.csr && \
     yes yes | openssl ca \
       -config ./${CA_DIR}/${GHOST_CA}.cfg \
       -extfile <(echo "
@@ -73,8 +73,9 @@ keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign
 basicConstraints=CA:TRUE
 subjectAltName=DNS:${i}
 ") \
-      -out ./${CA_DIR}/${i}.crt \
-      -infiles ./${CA_DIR}/${i}.csr;
+      -out ./${CERT_DIR}/${i}.crt \
+      -infiles ./${CERT_DIR}/${i}.csr && \
+    mv ./${CERT_DIR}/${i}.key ./${CERT_DIR}/${i}.crt ./${CA_DIR}/.;
     if [[ ${?} -ne 0 ]];
     then
       echo "ERROR: Unable to create certificate for ${i}" >&2;
