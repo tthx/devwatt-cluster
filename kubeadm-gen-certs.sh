@@ -3,8 +3,12 @@ CA_KEY_LENGTH="4096";
 CERT_DURATION="365000";
 GHOST_CA="ghost-ca";
 ETCD_CA="etcd-ca";
+# from https://kubernetes.io/docs/setup/best-practices/certificates/:
 K8S_CA="kubernetes-ca";
 K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
+# from kubeadm init command:
+K8S_CA="kubernetes";
+K8S_FRONT_PROXY_CA="front-proxy-ca";
 CA_DIR="ca";
 CERT_DIR="cert";
 HOST_NAME="$(hostname)";
@@ -50,7 +54,7 @@ openssl req \
   -newkey rsa:${CA_KEY_LENGTH} \
   -keyout ./${CA_DIR}/${GHOST_CA}.key \
   -subj "/CN=${GHOST_CA}" \
-  -addext "keyUsage=critical,digitalSignature,keyCertSign,cRLSign" \
+  -addext "keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign" \
   -addext "subjectAltName=DNS:${GHOST_CA}" \
   -days ${CERT_DURATION} \
   -out ./${CA_DIR}/${GHOST_CA}.crt;
@@ -70,8 +74,8 @@ then
       -extfile <(echo "
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid:always,issuer
-basicConstraints=critical,CA:TRUE,pathlen:0
-keyUsage=critical,digitalSignature,keyCertSign,cRLSign
+basicConstraints=critical,CA:TRUE
+keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign
 subjectAltName=DNS:${i}
 ") \
       -out ./${CERT_DIR}/${i}.crt \
@@ -106,34 +110,34 @@ KUBE_ETCD="kube-etcd";
 tee ./${CERT_DIR}/${KUBE_ETCD}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:::1
+subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:0:0:0:0:0:0:0:1
 EOF
 KUBE_ETCD_PEER="kube-etcd-peer";
 tee ./${CERT_DIR}/${KUBE_ETCD_PEER}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:::1
+subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:0:0:0:0:0:0:0:1
 EOF
 KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=clientAuth
 EOF
 KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -145,7 +149,7 @@ do
   openssl req -new -sha256 \
     -nodes -newkey rsa:${KEY_LENGTH} \
     -keyout ./${CERT_DIR}/${i}.key \
-    -subj "/CN=${i}$(echo ${i}|awk '/kube-apiserver-etcd-client/{print "/O=system:masters"}')" \
+    -subj "/CN=${i}$(echo ${i}|awk '/kube-apiserver-etcd-client|kube-etcd-healthcheck-client/{print "/O=system:masters"}')" \
     -out ./${CERT_DIR}/${i}.csr && \
   yes yes | openssl ca \
     -config ./${CA_DIR}/${ETCD_CA}.cfg \
@@ -164,8 +168,8 @@ KUBE_APISERVER="kube-apiserver";
 tee ./${CERT_DIR}/${KUBE_APISERVER}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth
 subjectAltName=DNS:${HOST_NAME},IP:${HOST_IP},IP:${FIRST_SRV_IP},DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
@@ -173,8 +177,8 @@ KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
@@ -204,8 +208,8 @@ FRONT_PROXY_CLIENT="front-proxy-client";
 tee ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=critical,keyEncipherment,dataEncipherment
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=clientAuth
 EOF
 for i in \
