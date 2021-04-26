@@ -19,7 +19,7 @@ apiServer:
     requestheader-client-ca-file: /etc/kubernetes/pki/front-proxy-ca.crt
     proxy-client-cert-file: /etc/kubernetes/pki/front-proxy-client.crt
     proxy-client-key-file: /etc/kubernetes/pki/front-proxy-client.key
-    requestheader-allowed-names: "front-proxy-client"
+    requestheader-allowed-names: front-proxy-client
     requestheader-group-headers: X-Remote-Group
     requestheader-username-headers: X-Remote-User
     requestheader-extra-headers-prefix: X-Remote-Extra-
