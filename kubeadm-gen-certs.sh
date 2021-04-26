@@ -81,7 +81,8 @@ subjectAltName=DNS:${i}
       -out ./${CERT_DIR}/${i}.crt \
       -infiles ./${CERT_DIR}/${i}.csr && \
     openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}.crt ./${CERT_DIR}/${i}.crt && \
-    mv ./${CERT_DIR}/${i}.key ./${CERT_DIR}/${i}.crt ./${CA_DIR}/.;
+    mv ./${CERT_DIR}/${i}.key ./${CERT_DIR}/${i}.crt ./${CA_DIR}/. && \
+    rm -f ./${CERT_DIR}/${i}.csr;
     if [[ ${?} -ne 0 ]];
     then
       echo "ERROR: Unable to create certificate for ${i}" >&2;
