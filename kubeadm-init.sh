@@ -4,7 +4,9 @@ CLUSTER_NAME="ghost-0";
 POD_CIDR="172.18.0.0/16";
 SRV_CIDR="172.19.0.0/16";
 DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
-tee ./${CLUSTER_NAME}.cfg <<EOF
+kubeadm config images pull --image-repository ${DOCKER_IMAGE_REPO} && \
+sudo kubeadm init \
+  --config=<(echo "
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 networking:
@@ -17,18 +19,13 @@ apiServer:
   extraArgs:
     advertise-address: ${HOST_IP}
     requestheader-client-ca-file: /etc/kubernetes/pki/front-proxy-ca.crt
-    requestheader-allowed-names: ""
+    requestheader-allowed-names: \"\"
     requestheader-extra-headers-prefix: X-Remote-Extra-
     requestheader-group-headers: X-Remote-Group
     requestheader-username-headers: X-Remote-User
     proxy-client-cert-file: /etc/kubernetes/pki/front-proxy-client.crt
     proxy-client-key-file: /etc/kubernetes/pki/front-proxy-client.key
-    enable-aggregator-routing: "true"
-EOF
-kubeadm config images pull --image-repository ${DOCKER_IMAGE_REPO} && \
-sudo kubeadm init \
-  --config=./${CLUSTER_NAME}.cfg && \
-rm -f ./${CLUSTER_NAME}.cfg && \
+    enable-aggregator-routing: \"true\"") && \
 mkdir -p $HOME/.kube && \
 sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
