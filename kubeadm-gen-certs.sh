@@ -3,12 +3,12 @@ CA_KEY_LENGTH="4096";
 CERT_DURATION="365000";
 GHOST_CA="ghost-ca";
 ETCD_CA="etcd-ca";
-# from https://kubernetes.io/docs/setup/best-practices/certificates/:
-K8S_CA="kubernetes-ca";
-K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
 # from kubeadm init command:
 K8S_CA="kubernetes";
 K8S_FRONT_PROXY_CA="front-proxy-ca";
+# from https://kubernetes.io/docs/setup/best-practices/certificates/:
+K8S_CA="kubernetes-ca";
+K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
 CA_DIR="ca";
 CERT_DIR="cert";
 HOST_NAME="$(hostname)";
@@ -156,7 +156,8 @@ do
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
     -infiles ./${CERT_DIR}/${i}.csr && \
-  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt;
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt && \
+  rm -f ./${CERT_DIR}/${i}.cfg ./${CERT_DIR}/${i}.csr;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -196,7 +197,8 @@ do
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
     -infiles ./${CERT_DIR}/${i}.csr && \
-  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt;
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt && \
+  rm -f ./${CERT_DIR}/${i}.cfg ./${CERT_DIR}/${i}.csr;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
@@ -226,7 +228,8 @@ do
     -extfile ./${CERT_DIR}/${i}.cfg \
     -out ./${CERT_DIR}/${i}.crt \
     -infiles ./${CERT_DIR}/${i}.csr && \
-  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt;
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${i}.crt && \
+  rm -f ./${CERT_DIR}/${i}.cfg ./${CERT_DIR}/${i}.csr;
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${i}" >&2;
