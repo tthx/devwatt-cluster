@@ -240,31 +240,31 @@ done
 
 if [[ -n "${1}" ]];
 then
-  DEST_DIR="/etc/kubernetes/pki";
-  sudo mkdir -p ${DEST_DIR}/etcd && \
-  sudo cp -f ./${CA_DIR}/${ETCD_CA}.crt ${DEST_DIR}/etcd/ca.crt && \
-  sudo cp -f ./${CA_DIR}/${ETCD_CA}.key ${DEST_DIR}/etcd/ca.key && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.crt ${DEST_DIR}/etcd/server.crt && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.key ${DEST_DIR}/etcd/server.key && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_PEER}.crt ${DEST_DIR}/etcd/peer.crt && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_PEER}.key ${DEST_DIR}/etcd/peer.key && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.crt ${DEST_DIR}/etcd/healthcheck-client.crt && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.key ${DEST_DIR}/etcd/healthcheck-client.key && \
-  sudo cp -f ./${CA_DIR}/${K8S_CA}.crt ${DEST_DIR}/ca.crt && \
-  sudo cp -f ./${CA_DIR}/${K8S_CA}.key ${DEST_DIR}/ca.key && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.crt ${DEST_DIR}/apiserver-etcd-client.crt && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.key ${DEST_DIR}/apiserver-etcd-client.key && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER}.crt ${DEST_DIR}/apiserver.crt && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER}.key ${DEST_DIR}/apiserver.key && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.crt ${DEST_DIR}/apiserver-kubelet-client.crt && \
-  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.key ${DEST_DIR}/apiserver-kubelet-client.key && \
-  sudo cp -f ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt ${DEST_DIR}/front-proxy-ca.crt && \
-  sudo cp -f ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.key ${DEST_DIR}/front-proxy-ca.key && \
-  sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.crt ${DEST_DIR}/. && \
-  sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${DEST_DIR}/. && \
-  sudo chown -R root:root ${DEST_DIR} && \
-  sudo chmod 600 ${DEST_DIR}/*.key ${DEST_DIR}/etcd/*.key && \
-  sudo chmod 644 ${DEST_DIR}/*.crt ${DEST_DIR}/etcd/*.crt
+  K8S_PKI_DIR="/etc/kubernetes/pki";
+  sudo mkdir -p ${K8S_PKI_DIR}/etcd && \
+  sudo cp -f ./${CA_DIR}/${ETCD_CA}.crt ${K8S_PKI_DIR}/etcd/ca.crt && \
+  sudo cp -f ./${CA_DIR}/${ETCD_CA}.key ${K8S_PKI_DIR}/etcd/ca.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.crt ${K8S_PKI_DIR}/etcd/server.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.key ${K8S_PKI_DIR}/etcd/server.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_PEER}.crt ${K8S_PKI_DIR}/etcd/peer.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_PEER}.key ${K8S_PKI_DIR}/etcd/peer.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.crt ${K8S_PKI_DIR}/etcd/healthcheck-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.key ${K8S_PKI_DIR}/etcd/healthcheck-client.key && \
+  sudo cp -f ./${CA_DIR}/${K8S_CA}.crt ${K8S_PKI_DIR}/ca.crt && \
+  sudo cp -f ./${CA_DIR}/${K8S_CA}.key ${K8S_PKI_DIR}/ca.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.crt ${K8S_PKI_DIR}/apiserver-etcd-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.key ${K8S_PKI_DIR}/apiserver-etcd-client.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER}.crt ${K8S_PKI_DIR}/apiserver.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER}.key ${K8S_PKI_DIR}/apiserver.key && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.crt ${K8S_PKI_DIR}/apiserver-kubelet-client.crt && \
+  sudo cp -f ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.key ${K8S_PKI_DIR}/apiserver-kubelet-client.key && \
+  sudo cp -f ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.crt ${K8S_PKI_DIR}/front-proxy-ca.crt && \
+  sudo cp -f ./${CA_DIR}/${K8S_FRONT_PROXY_CA}.key ${K8S_PKI_DIR}/front-proxy-ca.key && \
+  sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.crt ${K8S_PKI_DIR}/. && \
+  sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${K8S_PKI_DIR}/. && \
+  sudo chown -R root:root ${K8S_PKI_DIR} && \
+  sudo chmod 600 ${K8S_PKI_DIR}/*.key ${K8S_PKI_DIR}/etcd/*.key && \
+  sudo chmod 644 ${K8S_PKI_DIR}/*.crt ${K8S_PKI_DIR}/etcd/*.crt
 fi
 
 exit 0;
