@@ -4,6 +4,24 @@ CLUSTER_NAME="ghost-0";
 POD_CIDR="172.18.0.0/16";
 SRV_CIDR="172.19.0.0/16";
 DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
+K8S_CONF_DIR="/etc/kubernetes";
+REST_ENCRYPTION_CONF="${K8S_CONF_DIR}/rest-encryption.yml";
+sudo mkdir -p ${K8S_CONF_DIR};
+sudo tee ${REST_ENCRYPTION_CONF} <<EOF
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+    - secrets
+    providers:
+    - aescbc:
+        keys:
+        - name: key1
+          secret: $(head -c 32 /dev/urandom | base64)
+    - identity: {}
+EOF
+sudo chown -R root:root ${K8S_CONF_DIR};
+sudo chmod 600 ${REST_ENCRYPTION_CONF};
 tee /tmp/${CLUSTER_NAME}.cfg <<EOF
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
@@ -16,14 +34,15 @@ clusterName: ${CLUSTER_NAME}
 apiServer:
   extraArgs:
     advertise-address: ${HOST_IP}
-    requestheader-client-ca-file: /etc/kubernetes/pki/front-proxy-ca.crt
-    proxy-client-cert-file: /etc/kubernetes/pki/front-proxy-client.crt
-    proxy-client-key-file: /etc/kubernetes/pki/front-proxy-client.key
+    requestheader-client-ca-file: ${K8S_CONF_DIR}/pki/front-proxy-ca.crt
+    proxy-client-cert-file: ${K8S_CONF_DIR}/pki/front-proxy-client.crt
+    proxy-client-key-file: ${K8S_CONF_DIR}/pki/front-proxy-client.key
     requestheader-allowed-names: front-proxy-client
     requestheader-group-headers: X-Remote-Group
     requestheader-username-headers: X-Remote-User
     requestheader-extra-headers-prefix: X-Remote-Extra-
     enable-aggregator-routing: "true"
+    encryption-provider-config: ${REST_ENCRYPTION_CONF}
 EOF
 tee /tmp/dashboard.yml <<EOF
 apiVersion: v1
@@ -50,7 +69,7 @@ sudo kubeadm init \
   --config=/tmp/${CLUSTER_NAME}.cfg && \
 rm -f /tmp/${CLUSTER_NAME}.cfg && \
 mkdir -p $HOME/.kube && \
-sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config && \
+sudo cp -f ${K8S_CONF_DIR}/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
 curl -Ls https://docs.projectcalico.org/manifests/calico.yaml | \
   sed -e '/CALICO_IPV4POOL_CIDR/s/\(^.*\)# \(-.*$\)/\1\2/g' \
