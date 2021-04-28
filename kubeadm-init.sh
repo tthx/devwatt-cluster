@@ -1,10 +1,12 @@
 #!/bin/bash
-HOST_IP="$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print x[1]}')";
+NET_INTERFACE="ens3";
+HOST_IP="$(ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
 CLUSTER_NAME="ghost-0";
 POD_CIDR="172.18.0.0/16";
 SRV_CIDR="172.19.0.0/16";
 DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
-K8S_PKI_DIR="/etc/kubernetes/pki";
+K8S_CONF_DIR="/etc/kubernetes";
+K8S_PKI_DIR="${K8S_CONF_DIR}/pki";
 REST_ENCRYPTION_CONF="${K8S_PKI_DIR}/rest-encryption.yml";
 sudo mkdir -p ${K8S_PKI_DIR};
 sudo tee ${REST_ENCRYPTION_CONF} <<EOF
@@ -69,7 +71,7 @@ sudo kubeadm init \
   --config=/tmp/${CLUSTER_NAME}.cfg && \
 rm -f /tmp/${CLUSTER_NAME}.cfg && \
 mkdir -p $HOME/.kube && \
-sudo cp -f ${K8S_PKI_DIR}/admin.conf $HOME/.kube/config && \
+sudo cp -f ${K8S_CONF_DIR}/admin.conf $HOME/.kube/config && \
 sudo chown $(id -u):$(id -g) $HOME/.kube/config && \
 curl -Ls https://docs.projectcalico.org/manifests/calico.yaml | \
   sed -e '/CALICO_IPV4POOL_CIDR/s/\(^.*\)# \(-.*$\)/\1\2/g' \
