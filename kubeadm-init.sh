@@ -7,6 +7,7 @@ SRV_CIDR="172.19.0.0/16";
 DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
 K8S_CONF_DIR="/etc/kubernetes";
 K8S_PKI_DIR="${K8S_CONF_DIR}/pki";
+# NOTE: we put the following file in ${K8S_CONF_DIR}/pki because it is mounted by default in docker container
 REST_ENCRYPTION_CONF="${K8S_PKI_DIR}/rest-encryption.yml";
 sudo mkdir -p ${K8S_PKI_DIR};
 sudo tee ${REST_ENCRYPTION_CONF} <<EOF
