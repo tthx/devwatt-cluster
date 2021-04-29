@@ -67,9 +67,63 @@ then
   exit 1;
 fi
 
-tee ${CERT_CN/.*/}.yml <<EOF
-$(curl -Ls https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml|\
-  sed -e '/image:\([[:space:]].*\)k8s.gcr.io\//s/\(^.*\)k8s.gcr.io\/\(.*$\)/\1'${DOCKER_IMAGE_REPO}'\/\2/g')
+OUT_DIR="manifests";
+METRICS_SVR_DEPLOY_FILE="components.yaml";
+DEPLOY_PATCH_FILE="deployment-patch.yaml";
+APISERVICE_PATCH_FILE="apiservice-patch.yaml";
+METRICS_SRV_SECRET="metrics-server-tls";
+METRICS_SRV_CERT_PATH="/etc/kubernetes/metrics-server/certs/";
+mkdir ./${OUT_DIR} && \
+mv -f ./${CA_DIR}/${CA_CN}.crt ./${CERT_DIR}/${CERT_CN/.*/}.crt ./${CERT_DIR}/${CERT_CN/.*/}.key ${OUT_DIR}/. && \
+curl -Ls https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml|\
+  sed -e '/image:\([[:space:]].*\)k8s.gcr.io\//s/\(^.*\)k8s.gcr.io\/\(.*$\)/\1'${DOCKER_IMAGE_REPO}'\/\2/g' > \
+  ./${OUT_DIR}/${METRICS_SVR_DEPLOY_FILE}
+
+tee ./${OUT_DIR}/${DEPLOY_PATCH_FILE} <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-server
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      containers:
+      - name: metrics-server
+        args:
+        - --tls-cert-file=${METRICS_SRV_CERT_PATH}/${CERT_CN/.*/}.crt
+        - --tls-private-key-file=${METRICS_SRV_CERT_PATH}/${CERT_CN/.*/}.key
+        volumeMounts:
+        - name: secret-volume
+          readOnly: true
+          mountPath: "${METRICS_SRV_CERT_PATH}"
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: ${METRICS_SRV_SECRET}
+EOF
+
+tee ./${OUT_DIR}/${APISERVICE_PATCH_FILE} <<EOF
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1beta1.metrics.k8s.io
+spec:
   insecureSkipTLSVerify: false
-  caBundle: $(base64 --wrap=0 ./${CA_DIR}/${CA_CN}.crt)
+  caBundle: $(base64 --wrap=0 ${CA_CN}.crt)
+EOF
+
+tee ./${OUT_DIR}/kustomization.yaml <<EOF
+namespace: kube-system
+secretGenerator:
+- name: ${METRICS_SRV_SECRET}
+  files:
+    - ${CERT_CN/.*/}.crt
+    - ${CERT_CN/.*/}.key
+  type: "kubernetes.io/tls"
+resources:
+- ${METRICS_SVR_DEPLOY_FILE}
+patchesStrategicMerge:
+- deployment-additions.yaml
+- ${APISERVICE_PATCH_FILE}
 EOF
