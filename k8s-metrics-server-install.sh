@@ -72,7 +72,7 @@ METRICS_DEPLOY_FILE="components.yaml";
 DEPLOY_PATCH_FILE="deployment-patch.yaml";
 APISERVICE_PATCH_FILE="apiservice-patch.yaml";
 METRICS_SECRET="metrics-server-tls";
-METRICS_CERT_PATH="/etc/kubernetes/metrics-server/certs/";
+METRICS_CERT_PATH="/etc/kubernetes/metrics-server/certs";
 mkdir ./${MANIFESTS_DIR} && \
 mv -f ./${CA_DIR}/${METRICS_CA_CN}.crt ./${CERT_DIR}/${METRICS_CERT_CN/.*/}.crt ./${CERT_DIR}/${METRICS_CERT_CN/.*/}.key ${MANIFESTS_DIR}/. && \
 curl -Ls https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml|\
@@ -91,6 +91,9 @@ spec:
       containers:
       - name: metrics-server
         args:
+        - --secure-port=4443
+        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+        - --kubelet-use-node-status-port
         - --tls-cert-file=${METRICS_CERT_PATH}/${METRICS_CERT_CN/.*/}.crt
         - --tls-private-key-file=${METRICS_CERT_PATH}/${METRICS_CERT_CN/.*/}.key
         volumeMounts:
@@ -110,7 +113,7 @@ metadata:
   name: v1beta1.metrics.k8s.io
 spec:
   insecureSkipTLSVerify: false
-  caBundle: $(base64 --wrap=0 ${METRICS_CA_CN}.crt)
+  caBundle: $(base64 --wrap=0 ./${MANIFESTS_DIR}/${METRICS_CA_CN}.crt)
 EOF
 
 tee ./${MANIFESTS_DIR}/kustomization.yaml <<EOF
@@ -124,6 +127,9 @@ secretGenerator:
 resources:
 - ${METRICS_DEPLOY_FILE}
 patchesStrategicMerge:
-- deployment-additions.yaml
+- ${DEPLOY_PATCH_FILE}
 - ${APISERVICE_PATCH_FILE}
 EOF
+
+#kubectl kustomize ./${MANIFESTS_DIR} && \
+#kubectl apply -k ./${MANIFESTS_DIR}
