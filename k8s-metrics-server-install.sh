@@ -94,8 +94,8 @@ spec:
         - --secure-port=4443
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-use-node-status-port
-        - --tls-cert-file=${METRICS_CERT_PATH}/${METRICS_CERT_CN/.*/}.crt
-        - --tls-private-key-file=${METRICS_CERT_PATH}/${METRICS_CERT_CN/.*/}.key
+        - --tls-cert-file=${METRICS_CERT_PATH}/tls.crt
+        - --tls-private-key-file=${METRICS_CERT_PATH}/tls.key
         volumeMounts:
         - name: secret-volume
           readOnly: true
@@ -121,8 +121,8 @@ namespace: kube-system
 secretGenerator:
 - name: ${METRICS_SECRET}
   files:
-    - ${METRICS_CERT_CN/.*/}.crt
-    - ${METRICS_CERT_CN/.*/}.key
+  - tls.crt=${METRICS_CERT_CN/.*/}.crt
+  - tls.key=${METRICS_CERT_CN/.*/}.key
   type: "kubernetes.io/tls"
 resources:
 - ${METRICS_DEPLOY_FILE}
