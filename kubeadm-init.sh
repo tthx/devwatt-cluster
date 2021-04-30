@@ -36,6 +36,7 @@ imageRepository: ${DOCKER_IMAGE_REPO}
 clusterName: ${CLUSTER_NAME}
 apiServer:
   extraArgs:
+    runtime-config: v1=true,api/all=true
     advertise-address: ${HOST_IP}
     requestheader-client-ca-file: ${K8S_PKI_DIR}/front-proxy-ca.crt
     proxy-client-cert-file: ${K8S_PKI_DIR}/front-proxy-client.crt
