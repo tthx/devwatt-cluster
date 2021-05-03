@@ -235,7 +235,9 @@ subjectAltName=DNS:${worker_hostname},IP:${worker_ip}
     -out ./${CERT_DIR}/${worker_hostname}.crt \
     -infiles ./${CERT_DIR}/${worker_hostname}.csr && \
   openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${worker_hostname}.crt && \
-  rm -f ./${CERT_DIR}/${worker_hostname}.csr;
+  rm -f ./${CERT_DIR}/${worker_hostname}.csr && \
+  ssh ${WORKERS_USER}@${i} "rm -rf /tmp/certs && mkdir -p /tmp/certs && chown ${WORKERS_USER}:${WORKERS_USER} /tmp/certs && chmod 700 /tmp/certs" && \
+  scp ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.crt ${WORKERS_USER}@${i}:/tmp/certs/.
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${worker_hostname}" >&2;
