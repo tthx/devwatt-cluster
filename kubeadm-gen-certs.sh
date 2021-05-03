@@ -223,7 +223,7 @@ do
     -subj "/CN=system:node:${worker_hostname}/O=system:nodes" \
     -out ./${CERT_DIR}/${worker_hostname}.csr && \
   yes yes | openssl ca \
-    -config ./${CA_DIR}/${worker_hostname}.cfg \
+    -config ./${CA_DIR}/${K8S_CA}.cfg \
     -extfile <(echo "
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
