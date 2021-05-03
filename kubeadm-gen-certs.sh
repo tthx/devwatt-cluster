@@ -11,8 +11,20 @@ K8S_CA="kubernetes-ca";
 K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
 CA_DIR="ca";
 CERT_DIR="cert";
-HOST_NAME="$(hostname)";
-HOST_IP="$(ip -f inet -4 address show dev ens3|awk '/inet/{split($2,x,"/");print x[1]}')";
+KEY_LENGTH="2048";
+KUBE_ETCD="kube-etcd";
+KUBE_ETCD_PEER="kube-etcd-peer";
+KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
+KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
+KUBE_APISERVER="kube-apiserver";
+KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
+FRONT_PROXY_CLIENT="front-proxy-client";
+K8S_PKI_DIR="/etc/kubernetes/pki";
+NET_INTERFACE="ens3";
+CTRL_PLANE_HOST_NAME="$(hostname)";
+CTRL_PLANE_HOST_IP="$(ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
+WORKERS_USER="ubuntu";
+WORKERS_HOST_NAME="worker-1 worker-2 worker-3 worker-4";
 FIRST_SRV_IP="172.19.0.1"; # We assume that service CIDR is 172.19.0.1/16
 
 rm -rf ./${CA_DIR} ./${CERT_DIR} && \
@@ -106,26 +118,22 @@ then
 fi
 
 # Certificates signed by etcd CA
-KEY_LENGTH="2048";
-KUBE_ETCD="kube-etcd";
 tee ./${CERT_DIR}/${KUBE_ETCD}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=critical,CA:FALSE
 keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:0:0:0:0:0:0:0:1
+subjectAltName=DNS:${CTRL_PLANE_HOST_NAME},DNS:localhost,IP:${CTRL_PLANE_HOST_IP},IP:127.0.0.1,IP:0:0:0:0:0:0:0:1
 EOF
-KUBE_ETCD_PEER="kube-etcd-peer";
 tee ./${CERT_DIR}/${KUBE_ETCD_PEER}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=critical,CA:FALSE
 keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=DNS:${HOST_NAME},DNS:localhost,IP:${HOST_IP},IP:127.0.0.1,IP:0:0:0:0:0:0:0:1
+subjectAltName=DNS:${CTRL_PLANE_HOST_NAME},DNS:localhost,IP:${CTRL_PLANE_HOST_IP},IP:127.0.0.1,IP:0:0:0:0:0:0:0:1
 EOF
-KUBE_ETCD_HEALTHCHECK_CLIENT="kube-etcd-healthcheck-client";
 tee ./${CERT_DIR}/${KUBE_ETCD_HEALTHCHECK_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
@@ -133,7 +141,6 @@ basicConstraints=critical,CA:FALSE
 keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=clientAuth
 EOF
-KUBE_APISERVER_ETCD_CLIENT="kube-apiserver-etcd-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_ETCD_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
@@ -166,16 +173,14 @@ do
   fi
 done
 
-KUBE_APISERVER="kube-apiserver";
 tee ./${CERT_DIR}/${KUBE_APISERVER}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
 basicConstraints=critical,CA:FALSE
 keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth
-subjectAltName=DNS:${HOST_NAME},IP:${HOST_IP},IP:${FIRST_SRV_IP},DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
+subjectAltName=DNS:${CTRL_PLANE_HOST_NAME},IP:${CTRL_PLANE_HOST_IP},IP:${FIRST_SRV_IP},DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster,DNS:kubernetes.default.svc.cluster.local
 EOF
-KUBE_APISERVER_KUBELET_CLIENT="kube-apiserver-kubelet-client";
 tee ./${CERT_DIR}/${KUBE_APISERVER_KUBELET_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
@@ -207,7 +212,37 @@ do
   fi
 done
 
-FRONT_PROXY_CLIENT="front-proxy-client";
+for i in ${WORKERS_HOST_NAME};
+do
+  worker_hostname="$(ssh ${WORKERS_USER}@${i} hostname)";
+  worker_ip="$(ssh ${WORKERS_USER}@${i} ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
+  rm -f ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.csr ./${CERT_DIR}/${worker_hostname}.crt && \
+  openssl req -new -sha256 \
+    -nodes -newkey rsa:${KEY_LENGTH} \
+    -keyout ./${CERT_DIR}/${worker_hostname}.key \
+    -subj "/CN=system:node:${worker_hostname}/O=system:nodes" \
+    -out ./${CERT_DIR}/${worker_hostname}.csr && \
+  yes yes | openssl ca \
+    -config ./${CA_DIR}/${worker_hostname}.cfg \
+    -extfile <(echo "
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=clientAuth
+subjectAltName=DNS:${worker_hostname},IP:${worker_ip}
+") \
+    -out ./${CERT_DIR}/${worker_hostname}.crt \
+    -infiles ./${CERT_DIR}/${worker_hostname}.csr && \
+  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${worker_hostname}.crt && \
+  rm -f ./${CERT_DIR}/${worker_hostname}.csr;
+  if [[ ${?} -ne 0 ]];
+  then
+    echo "ERROR: Unable to create certificate for ${worker_hostname}" >&2;
+    exit 1;
+  fi
+done
+
 tee ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer:always
@@ -240,7 +275,6 @@ done
 
 if [[ -n "${1}" ]];
 then
-  K8S_PKI_DIR="/etc/kubernetes/pki";
   sudo mkdir -p ${K8S_PKI_DIR}/etcd && \
   sudo cp -f ./${CA_DIR}/${ETCD_CA}.crt ${K8S_PKI_DIR}/etcd/ca.crt && \
   sudo cp -f ./${CA_DIR}/${ETCD_CA}.key ${K8S_PKI_DIR}/etcd/ca.key && \
