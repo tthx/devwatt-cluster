@@ -47,6 +47,9 @@ apiServer:
     requestheader-extra-headers-prefix: X-Remote-Extra-
     enable-aggregator-routing: "true"
     encryption-provider-config: ${REST_ENCRYPTION_CONF}
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
 EOF
 tee /tmp/dashboard.yml <<EOF
 apiVersion: v1
