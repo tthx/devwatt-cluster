@@ -72,7 +72,7 @@ METRICS_DEPLOY_FILE="components.yaml";
 DEPLOY_PATCH_FILE="deployment-patch.yaml";
 APISERVICE_PATCH_FILE="apiservice-patch.yaml";
 METRICS_SECRET="metrics-server-tls";
-METRICS_CERT_PATH="/etc/kubernetes/metrics-server/certs";
+K8S_PKI_DIR="/etc/kubernetes/pki";
 mkdir ./${MANIFESTS_DIR} && \
 mv -f ./${CA_DIR}/${METRICS_CA_CN}.crt ./${CERT_DIR}/${METRICS_CERT_CN/.*/}.crt ./${CERT_DIR}/${METRICS_CERT_CN/.*/}.key ${MANIFESTS_DIR}/. && \
 curl -Ls https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml|\
@@ -92,18 +92,29 @@ spec:
       - name: metrics-server
         args:
         - --secure-port=4443
-        - --kubelet-preferred-address-types=Hostname,ExternalIP,InternalIP
-        - --kubelet-use-node-status-port
-        - --tls-cert-file=${METRICS_CERT_PATH}/tls.crt
-        - --tls-private-key-file=${METRICS_CERT_PATH}/tls.key
+        - --kubelet-certificate-authority=${K8S_PKI_DIR}/ca.crt
+        - --tls-cert-file=${K8S_PKI_DIR}/metrics/tls.crt
+        - --tls-private-key-file=${K8S_PKI_DIR}/metrics/tls.key
         volumeMounts:
-        - name: secret-volume
+        - name: kubernetes-ca
+          mountPath: ${K8S_PKI_DIR}/ca.crt
           readOnly: true
-          mountPath: "${METRICS_CERT_PATH}"
+        - name: metrics-secrets
+          mountPath: ${K8S_PKI_DIR}/metrics
+          readOnly: true
       volumes:
-      - name: secret-volume
+      - name: kubernetes-ca
+        hostPath:
+          type: File
+          path: ${K8S_PKI_DIR}/ca.crt
+      - name: metrics-secrets
         secret:
           secretName: ${METRICS_SECRET}
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      - operator: Exists
+        key: CriticalAddonsOnly
 EOF
 
 tee ./${MANIFESTS_DIR}/${APISERVICE_PATCH_FILE} <<EOF
