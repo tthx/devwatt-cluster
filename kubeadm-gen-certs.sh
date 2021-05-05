@@ -237,7 +237,9 @@ subjectAltName=DNS:${worker_hostname},IP:${worker_ip}
   openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${worker_hostname}.crt && \
   rm -f ./${CERT_DIR}/${worker_hostname}.csr && \
   ssh ${WORKERS_USER}@${i} "rm -rf /tmp/certs && mkdir -p /tmp/certs && chown ${WORKERS_USER}:${WORKERS_USER} /tmp/certs && chmod 700 /tmp/certs" && \
-  scp ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.crt ${WORKERS_USER}@${i}:/tmp/certs/.
+  scp ./${CA_DIR}/${K8S_CA}.crt ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.crt ${WORKERS_USER}@${i}:/tmp/certs/. && \
+  ssh ${WORKERS_USER}@${i} "sudo mkdir -p ${K8S_PKI_DIR} && sudo cp -f /tmp/certs/${K8S_CA}.crt ${K8S_PKI_DIR}/ca.crt" && \
+  ssh ${WORKERS_USER}@${i} "sudo cp /tmp/certs/${worker_hostname}.key /tmp/certs/${worker_hostname}.crt ${K8S_PKI_DIR}/. && sudo chown -R root:root ${K8S_PKI_DIR} && sudo chmod 600 ${K8S_PKI_DIR}/${worker_hostname}.key"
   if [[ ${?} -ne 0 ]];
   then
     echo "ERROR: Unable to create certificate for ${worker_hostname}" >&2;

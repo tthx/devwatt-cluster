@@ -92,6 +92,7 @@ spec:
       - name: metrics-server
         args:
         - --secure-port=4443
+        - --kubelet-preferred-address-types="Hostname,InternalDNS,InternalIP,ExternalDNS,ExternalIP"
         - --kubelet-certificate-authority=${K8S_PKI_DIR}/ca.crt
         - --tls-cert-file=${K8S_PKI_DIR}/metrics/tls.crt
         - --tls-private-key-file=${K8S_PKI_DIR}/metrics/tls.key

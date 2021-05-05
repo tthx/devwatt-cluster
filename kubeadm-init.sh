@@ -50,6 +50,11 @@ apiServer:
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
+tlsCertFile:
+tlsPrivateKeyFile:
+authentication:
+  x509:
+    clientCAFile:
 EOF
 tee /tmp/dashboard.yml <<EOF
 apiVersion: v1
