@@ -23,8 +23,6 @@ K8S_PKI_DIR="/etc/kubernetes/pki";
 NET_INTERFACE="ens3";
 CTRL_PLANE_HOST_NAME="$(hostname)";
 CTRL_PLANE_HOST_IP="$(ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
-WORKERS_USER="ubuntu";
-WORKERS_HOST_NAME="worker-1 worker-2 worker-3 worker-4";
 FIRST_SRV_IP="172.19.0.1"; # We assume that service CIDR is 172.19.0.1/16
 
 rm -rf ./${CA_DIR} ./${CERT_DIR} && \
@@ -212,40 +210,42 @@ do
   fi
 done
 
-for i in ${WORKERS_HOST_NAME};
-do
-  worker_hostname="$(ssh ${WORKERS_USER}@${i} hostname)";
-  worker_ip="$(ssh ${WORKERS_USER}@${i} ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
-  rm -f ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.csr ./${CERT_DIR}/${worker_hostname}.crt && \
-  openssl req -new -sha256 \
-    -nodes -newkey rsa:${KEY_LENGTH} \
-    -keyout ./${CERT_DIR}/${worker_hostname}.key \
-    -subj "/CN=system:node:${worker_hostname}/O=system:nodes" \
-    -out ./${CERT_DIR}/${worker_hostname}.csr && \
-  yes yes | openssl ca \
-    -config ./${CA_DIR}/${K8S_CA}.cfg \
-    -extfile <(echo "
-subjectKeyIdentifier=hash
-authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=critical,CA:FALSE
-keyUsage=critical,digitalSignature,keyEncipherment
-extendedKeyUsage=clientAuth
-subjectAltName=DNS:${worker_hostname},IP:${worker_ip}
-") \
-    -out ./${CERT_DIR}/${worker_hostname}.crt \
-    -infiles ./${CERT_DIR}/${worker_hostname}.csr && \
-  openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${worker_hostname}.crt && \
-  rm -f ./${CERT_DIR}/${worker_hostname}.csr && \
-  ssh ${WORKERS_USER}@${i} "rm -rf /tmp/certs && mkdir -p /tmp/certs && chown ${WORKERS_USER}:${WORKERS_USER} /tmp/certs && chmod 700 /tmp/certs" && \
-  scp ./${CA_DIR}/${K8S_CA}.crt ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.crt ${WORKERS_USER}@${i}:/tmp/certs/. && \
-  ssh ${WORKERS_USER}@${i} "sudo mkdir -p ${K8S_PKI_DIR} && sudo cp -f /tmp/certs/${K8S_CA}.crt ${K8S_PKI_DIR}/ca.crt" && \
-  ssh ${WORKERS_USER}@${i} "sudo cp /tmp/certs/${worker_hostname}.key /tmp/certs/${worker_hostname}.crt ${K8S_PKI_DIR}/. && sudo chown -R root:root ${K8S_PKI_DIR} && sudo chmod 600 ${K8S_PKI_DIR}/${worker_hostname}.key"
-  if [[ ${?} -ne 0 ]];
-  then
-    echo "ERROR: Unable to create certificate for ${worker_hostname}" >&2;
-    exit 1;
-  fi
-done
+# WORKERS_USER="ubuntu";
+# WORKERS_HOST_NAME="worker-1 worker-2 worker-3 worker-4";
+# for i in ${WORKERS_HOST_NAME};
+# do
+#   worker_hostname="$(ssh ${WORKERS_USER}@${i} hostname)";
+#   worker_ip="$(ssh ${WORKERS_USER}@${i} ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
+#   rm -f ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.csr ./${CERT_DIR}/${worker_hostname}.crt && \
+#   openssl req -new -sha256 \
+#     -nodes -newkey rsa:${KEY_LENGTH} \
+#     -keyout ./${CERT_DIR}/${worker_hostname}.key \
+#     -subj "/CN=system:node:${worker_hostname}/O=system:nodes" \
+#     -out ./${CERT_DIR}/${worker_hostname}.csr && \
+#   yes yes | openssl ca \
+#     -config ./${CA_DIR}/${K8S_CA}.cfg \
+#     -extfile <(echo "
+# subjectKeyIdentifier=hash
+# authorityKeyIdentifier=keyid,issuer:always
+# basicConstraints=critical,CA:FALSE
+# keyUsage=critical,digitalSignature,keyEncipherment
+# extendedKeyUsage=clientAuth
+# subjectAltName=DNS:${worker_hostname},IP:${worker_ip}
+# ") \
+#     -out ./${CERT_DIR}/${worker_hostname}.crt \
+#     -infiles ./${CERT_DIR}/${worker_hostname}.csr && \
+#   openssl verify -CAfile ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${CERT_DIR}/${worker_hostname}.crt && \
+#   rm -f ./${CERT_DIR}/${worker_hostname}.csr && \
+#   ssh ${WORKERS_USER}@${i} "rm -rf /tmp/certs && mkdir -p /tmp/certs && chown ${WORKERS_USER}:${WORKERS_USER} /tmp/certs && chmod 700 /tmp/certs" && \
+#   scp ./${CA_DIR}/${K8S_CA}.crt ./${CERT_DIR}/${worker_hostname}.key ./${CERT_DIR}/${worker_hostname}.crt ${WORKERS_USER}@${i}:/tmp/certs/. && \
+#   ssh ${WORKERS_USER}@${i} "sudo mkdir -p ${K8S_PKI_DIR} && sudo cp -f /tmp/certs/${K8S_CA}.crt ${K8S_PKI_DIR}/ca.crt" && \
+#   ssh ${WORKERS_USER}@${i} "sudo cp /tmp/certs/${worker_hostname}.key /tmp/certs/${worker_hostname}.crt ${K8S_PKI_DIR}/. && sudo chown -R root:root ${K8S_PKI_DIR} && sudo chmod 600 ${K8S_PKI_DIR}/${worker_hostname}.key"
+#   if [[ ${?} -ne 0 ]];
+#   then
+#     echo "ERROR: Unable to create certificate for ${worker_hostname}" >&2;
+#     exit 1;
+#   fi
+# done
 
 tee ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.cfg <<EOF
 subjectKeyIdentifier=hash
@@ -302,7 +302,9 @@ then
   sudo cp -f ./${CERT_DIR}/${FRONT_PROXY_CLIENT}.key ${K8S_PKI_DIR}/. && \
   sudo chown -R root:root ${K8S_PKI_DIR} && \
   sudo chmod 600 ${K8S_PKI_DIR}/*.key ${K8S_PKI_DIR}/etcd/*.key && \
-  sudo chmod 644 ${K8S_PKI_DIR}/*.crt ${K8S_PKI_DIR}/etcd/*.crt
+  sudo chmod 644 ${K8S_PKI_DIR}/*.crt ${K8S_PKI_DIR}/etcd/*.crt && \
+  echo "Generated certificates are copied in ${K8S_PKI_DIR}";
 fi
 
+echo "Generated certificates completed.";
 exit 0;

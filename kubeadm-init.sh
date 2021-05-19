@@ -9,6 +9,7 @@ K8S_CONF_DIR="/etc/kubernetes";
 K8S_PKI_DIR="${K8S_CONF_DIR}/pki";
 # NOTE: we put the following file in ${K8S_CONF_DIR}/pki because it is mounted by default in docker container
 REST_ENCRYPTION_CONF="${K8S_PKI_DIR}/rest-encryption.yml";
+DEBUG_LEVEL="10";
 sudo mkdir -p ${K8S_PKI_DIR};
 sudo tee ${REST_ENCRYPTION_CONF} <<EOF
 apiVersion: apiserver.config.k8s.io/v1
@@ -36,25 +37,27 @@ imageRepository: ${DOCKER_IMAGE_REPO}
 clusterName: ${CLUSTER_NAME}
 apiServer:
   extraArgs:
-    runtime-config: v1=true,api/all=true
-    advertise-address: ${HOST_IP}
-    requestheader-client-ca-file: ${K8S_PKI_DIR}/front-proxy-ca.crt
-    proxy-client-cert-file: ${K8S_PKI_DIR}/front-proxy-client.crt
-    proxy-client-key-file: ${K8S_PKI_DIR}/front-proxy-client.key
-    requestheader-allowed-names: front-proxy-client
-    requestheader-group-headers: X-Remote-Group
-    requestheader-username-headers: X-Remote-User
-    requestheader-extra-headers-prefix: X-Remote-Extra-
-    enable-aggregator-routing: "true"
-    encryption-provider-config: ${REST_ENCRYPTION_CONF}
+    insecure-port: '0'
+    enable-bootstrap-token-auth: 'true'
+    allow-privileged: 'true'
+    enable-admission-plugins: 'NamespaceLifecycle,LimitRanger,ResourceQuota,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction'
+    kubelet-preferred-address-types: 'InternalIP,ExternalIP,Hostname'
+    runtime-config: 'v1=true,api/all=true'
+    advertise-address: '${HOST_IP}'
+    requestheader-allowed-names: 'front-proxy-client'
+    requestheader-extra-headers-prefix: 'X-Remote-Extra-'
+    requestheader-group-headers: 'X-Remote-Group'
+    requestheader-username-headers: 'X-Remote-User'
+    requestheader-client-ca-file: '${K8S_PKI_DIR}/front-proxy-ca.crt'
+    proxy-client-cert-file: '${K8S_PKI_DIR}/front-proxy-client.crt'
+    proxy-client-key-file: '${K8S_PKI_DIR}/front-proxy-client.key'
+    enable-aggregator-routing: 'true'
+    encryption-provider-config: '${REST_ENCRYPTION_CONF}'
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
-tlsCertFile:
-tlsPrivateKeyFile:
-authentication:
-  x509:
-    clientCAFile:
+readOnlyPort: 0
+serverTLSBootstrap: true
 EOF
 tee /tmp/dashboard.yml <<EOF
 apiVersion: v1
@@ -78,6 +81,7 @@ subjects:
 EOF
 kubeadm config images pull --image-repository ${DOCKER_IMAGE_REPO} && \
 sudo kubeadm init \
+  --v=${DEBUG_LEVEL} \
   --config=/tmp/${CLUSTER_NAME}.cfg && \
 rm -f /tmp/${CLUSTER_NAME}.cfg && \
 mkdir -p $HOME/.kube && \
