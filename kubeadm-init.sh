@@ -9,7 +9,7 @@ K8S_CONF_DIR="/etc/kubernetes";
 K8S_PKI_DIR="${K8S_CONF_DIR}/pki";
 # NOTE: we put the following file in ${K8S_CONF_DIR}/pki because it is mounted by default in docker container
 REST_ENCRYPTION_CONF="${K8S_PKI_DIR}/rest-encryption.yml";
-DEBUG_LEVEL="10";
+DEBUG_LEVEL="9"; # 0 to 9
 sudo mkdir -p ${K8S_PKI_DIR};
 sudo tee ${REST_ENCRYPTION_CONF} <<EOF
 apiVersion: apiserver.config.k8s.io/v1
@@ -96,3 +96,5 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl.yaml && \
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml && \
 kubectl apply -f /tmp/dashboard.yml && \
 rm -f /tmp/dashboard.yml
+
+exit ${?};

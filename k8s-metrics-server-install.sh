@@ -7,7 +7,7 @@ CERT_DIR="cert";
 KEY_LENGTH="2048";
 METRICS_CERT_CN="metrics-server.kube-system.svc";
 DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
-DEBUG_LEVEL=10;
+DEBUG_LEVEL="0"; # 0 to 9
 
 rm -rf ./${CA_DIR} ./${CERT_DIR} && \
 mkdir -p ./${CA_DIR} ./${CERT_DIR} && \
@@ -93,7 +93,7 @@ spec:
       - name: metrics-server
         args:
         - --secure-port=4443
-        - --kubelet-preferred-address-types="InternalIP,ExternalIP,Hostname"
+        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-certificate-authority=${K8S_PKI_DIR}/ca.crt
         - --tls-cert-file=${K8S_PKI_DIR}/metrics/tls.crt
         - --tls-private-key-file=${K8S_PKI_DIR}/metrics/tls.key
@@ -149,3 +149,5 @@ EOF
 
 kubectl kustomize ./${MANIFESTS_DIR} && \
 kubectl apply -k ./${MANIFESTS_DIR}
+
+exit ${?};
