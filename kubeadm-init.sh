@@ -38,6 +38,8 @@ clusterName: ${CLUSTER_NAME}
 apiServer:
   extraArgs:
     insecure-port: '0'
+    # Anonymous authorization must be enable to allow kubelet join
+    # anonymous-auth: 'false'
     enable-bootstrap-token-auth: 'true'
     allow-privileged: 'true'
     enable-admission-plugins: 'NamespaceLifecycle,LimitRanger,ResourceQuota,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction'
@@ -53,11 +55,21 @@ apiServer:
     proxy-client-key-file: '${K8S_PKI_DIR}/front-proxy-client.key'
     enable-aggregator-routing: 'true'
     encryption-provider-config: '${REST_ENCRYPTION_CONF}'
+controllerManager:
+  extraArgs:
+    root-ca-file: '${K8S_PKI_DIR}/ca-bundle.crt'
+    # For memo
+    cluster-signing-duration: '8760h0m0s'
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 readOnlyPort: 0
 serverTLSBootstrap: true
+# For memo
+authentication:
+  anonymous:
+    enabled: false
+rotateCertificates: true
 EOF
 tee /tmp/dashboard.yml <<EOF
 apiVersion: v1

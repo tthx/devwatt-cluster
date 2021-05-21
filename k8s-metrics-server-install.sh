@@ -2,8 +2,8 @@
 CA_KEY_LENGTH="4096";
 CERT_DURATION="365000";
 METRICS_CA_CN="metrics-server-ca";
-CA_DIR="ca";
-CERT_DIR="cert";
+CA_DIR="metrics-server/ca";
+CERT_DIR="metrics-server/cert";
 KEY_LENGTH="2048";
 METRICS_CERT_CN="metrics-server.kube-system.svc";
 DOCKER_IMAGE_REPO="dockerfactory-playground.tech.orange";
@@ -68,7 +68,7 @@ then
   exit 1;
 fi
 
-MANIFESTS_DIR="manifests";
+MANIFESTS_DIR="metrics-server/manifests";
 METRICS_DEPLOY_FILE="components.yaml";
 DEPLOY_PATCH_FILE="deployment-patch.yaml";
 APISERVICE_PATCH_FILE="apiservice-patch.yaml";

@@ -9,8 +9,8 @@ K8S_FRONT_PROXY_CA="front-proxy-ca";
 # from https://kubernetes.io/docs/setup/best-practices/certificates/:
 K8S_CA="kubernetes-ca";
 K8S_FRONT_PROXY_CA="kubernetes-front-proxy-ca";
-CA_DIR="ca";
-CERT_DIR="cert";
+CA_DIR="${GHOST_CA}/ca";
+CERT_DIR="${GHOST_CA}/cert";
 KEY_LENGTH="2048";
 KUBE_ETCD="kube-etcd";
 KUBE_ETCD_PEER="kube-etcd-peer";
@@ -24,6 +24,42 @@ NET_INTERFACE="ens3";
 CTRL_PLANE_HOST_NAME="$(hostname)";
 CTRL_PLANE_HOST_IP="$(ip -f inet -4 address show dev ${NET_INTERFACE}|awk '/inet/{split($2,x,"/");print x[1]}')";
 FIRST_SRV_IP="172.19.0.1"; # We assume that service CIDR is 172.19.0.1/16
+RENEW="";
+INSTALL="";
+
+while [[ ${#} -gt 0 ]]
+do
+  case "${1}" in
+    r|renew)
+      RENEW="x";
+      shift 1;
+      ;;
+    i|install)
+      INSTALL="x";
+      shift 1;
+      ;;
+    *)
+      if [[ -n "${1}" ]];
+      then
+        echo "ERROR: Option \"${1}\" is unknown";
+        echo "Usage: ${0} [r|renew] [i|install]";
+        exit 1;
+      fi
+      shift 1;
+      ;;
+  esac
+done
+
+if [[ -n "${RENEW}" ]];
+then
+  if [[ -f ./${CA_DIR}/${GHOST_CA}-bundle.crt ]];
+  then
+    mv -f ./${CA_DIR}/${GHOST_CA}-bundle.crt ./${GHOST_CA}-bundle-previous.crt
+  else
+    echo "ERROR: File ./${CA_DIR}/${GHOST_CA}-bundle.crt does not exist";
+    exit 1;
+  fi
+fi
 
 rm -rf ./${CA_DIR} ./${CERT_DIR} && \
 mkdir -p ./${CA_DIR} ./${CERT_DIR};
@@ -277,9 +313,17 @@ do
   fi
 done
 
-if [[ -n "${1}" ]];
+if [[ -n "${RENEW}" ]];
+then
+  cat ./${GHOST_CA}-bundle-previous.crt >> ./${CA_DIR}/${GHOST_CA}-bundle.crt && \
+  rm -f ./${GHOST_CA}-bundle-previous.crt && \
+  echo "Old CAs was appended";
+fi
+
+if [[ -n "${INSTALL}" ]];
 then
   sudo mkdir -p ${K8S_PKI_DIR}/etcd && \
+  sudo cp -f ./${CA_DIR}/${GHOST_CA}-bundle.crt ${K8S_PKI_DIR}/ca-bundle.crt && \
   sudo cp -f ./${CA_DIR}/${ETCD_CA}.crt ${K8S_PKI_DIR}/etcd/ca.crt && \
   sudo cp -f ./${CA_DIR}/${ETCD_CA}.key ${K8S_PKI_DIR}/etcd/ca.key && \
   sudo cp -f ./${CERT_DIR}/${KUBE_ETCD}.crt ${K8S_PKI_DIR}/etcd/server.crt && \
