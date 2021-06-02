@@ -31,6 +31,7 @@ export GOPATH="${HOME}/src/go";
 export PATH="${GOPATH}/bin:${PATH}";
 export NODEJS="/opt/node.js";
 export PATH="${NODEJS}/bin:${PATH}";
+export SSH_OPTS="-i ${HOME}/.ssh/devwatt1024";
 
 alias h='history';
 alias dir='ls -laF --color=auto';
@@ -50,11 +51,11 @@ alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
 alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
 alias yum-clean='sudo yum remove $(package-cleanup --leaves)';
 alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1';
-alias master='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.145'
-alias worker-1='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.120'
-alias worker-2='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.149'
-alias worker-3='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.166'
-alias worker-4='ssh -i $HOME/.ssh/devwatt1024 -2XY4Cc aes128-ctr ubuntu@10.171.46.168'
+alias master='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.145'
+alias worker-1='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.120'
+alias worker-2='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.149'
+alias worker-3='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.166'
+alias worker-4='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.168'
 alias calicoctl='kubectl exec -i -n kube-system calicoctl -- /calicoctl'
 alias urxvt="urxvt -bg black -fg white -ls -sr -fn \"xft:Bitstream Vera Sans Mono:pixelsize=15\""
 
