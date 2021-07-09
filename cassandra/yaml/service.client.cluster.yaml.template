@@ -1,0 +1,20 @@
+# The Client Service, called cassandra.client,
+# is a normal Service with its own cluster IP that distributes
+# connections across all Cassandra Pods that report being Ready
+# in all data center.
+apiVersion: v1
+kind: Service
+metadata:
+  name: <prefix>-<cluserDNS>
+  labels:
+    app: cassandra
+    cassandra.cluster: <cluster>
+spec:
+  type:
+    LoadBalancer
+  ports:
+    - name: cassandra
+      port: 9042
+  selector:
+    app: cassandra
+    cassandra.cluster: <cluster>

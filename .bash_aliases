@@ -51,6 +51,7 @@ alias eclipse='$HOME/eclipse/eclipse 2>/dev/null';
 alias idea='$HOME/idea/bin/idea.sh 2>/dev/null';
 alias yum-clean='sudo yum remove $(package-cleanup --leaves)';
 alias yum-clean-kernel='sudo package-cleanup --oldkernels --count=1';
+alias running_services='systemctl list-units  --type=service  --state=running'
 alias master='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.145'
 alias worker-1='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.120'
 alias worker-2='ssh ${SSH_OPTS} -2XY4Cc aes128-ctr ubuntu@10.171.46.149'

@@ -1,0 +1,174 @@
+# StatefulSet for Pods in rack <rack> in data center
+# <dataCenter> in cluster <cluster>
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: <clusterDNS>-<dataCenterDNS>-<rackDNS>
+  labels:
+    app: cassandra
+    cassandra.cluster: <cluster>
+    cassandra.dataCenter: <dataCenter>
+    cassandra.rack: <rack>
+spec:
+  serviceName: <clusterDNS>-<dataCenterDNS>
+  replicas: <replicas>
+  selector:
+    matchLabels:
+      app: cassandra
+      cassandra.cluster: <cluster>
+      cassandra.dataCenter: <dataCenter>
+      cassandra.rack: <rack>
+  # These are converted to volume claims by the controller
+  # and mounted at the paths mentioned above.
+  volumeClaimTemplates:
+  - metadata:
+      name: local-data
+      labels:
+        app: cassandra
+        cassandra.cluster: <cluster>
+        cassandra.dataCenter: <dataCenter>
+        cassandra.rack: <rack>
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: <storageClassName>
+      resources:
+        requests:
+          storage: <storageCapacity>
+      selector:
+        matchLabels:
+          app: cassandra
+          cassandra.cluster: <cluster>
+          cassandra.dataCenter: <dataCenter>
+          cassandra.rack: <rack>
+  template:
+    metadata:
+      labels:
+        app: cassandra
+        cassandra.cluster: <cluster>
+        cassandra.dataCenter: <dataCenter>
+        cassandra.rack: <rack>
+    spec:
+      affinity:
+        # To schedule a Pod on a Kubernes node with label
+        # cassandra.cluster and
+        # cassandra.dataCenter and
+        # cassandra.rack
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: cassandra.cluster
+                operator: In
+                values:
+                - <cluster>
+              - key: cassandra.dataCenter
+                operator: In
+                values:
+                - <dataCenter>
+              - key: cassandra.rack
+                operator: In
+                values:
+                - <rack>
+        # To avoid to schedule a Pod on a node where a Pod with label
+        # cassandra is running
+        #podAntiAffinity:
+        #  preferredDuringSchedulingIgnoredDuringExecution:
+        #  - weight: 100
+        #    podAffinityTerm:
+        #      labelSelector:
+        #        matchExpressions:
+        #        - key: app
+        #          operator: In
+        #          values:
+        #          - cassandra
+        #      topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 1800
+      containers:
+        - name: cassandra
+          image: gcr.io/google-samples/cassandra:v13
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 7000
+            name: intra-node
+          - containerPort: 7001
+            name: tls-intra-node
+          - containerPort: 7199
+            name: jmx
+          - containerPort: 9042
+            name: cql
+          resources:
+            limits:
+              cpu: "<limitCPU>"
+              memory: <limitMemory>
+            requests:
+              cpu: "<requestCPU>"
+              memory: <requestMemory>
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          lifecycle:
+            # If we 'drain' only, when the IP change on the next start,
+            # the old IP still remain in Cassandra cluster with a 'down'
+            # status; so we must 'decommission' instead.
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - nodetool decommission
+          env:
+            - name: MAX_HEAP_SIZE
+              value: <maxHeapSize>
+            - name: HEAP_NEWSIZE
+              value: <heapNewSize>
+            - name: CASSANDRA_SEEDS
+              value: <seeds>
+            - name: CASSANDRA_CLUSTER_NAME
+              # This variable sets the name of the cluster and
+              # must be the same for all nodes in the cluster.
+              # It will set the cluster_name option of cassandra.yaml.
+              value: "<cluster>"
+            - name: CASSANDRA_DC
+              # This variable sets the datacenter name of this node.
+              # It will set the dc option of cassandra-rackdc.properties.
+              # You must set CASSANDRA_ENDPOINT_SNITCH to use the
+              # "GossipingPropertyFileSnitch" in order for Cassandra
+              # to apply cassandra-rackdc.properties, otherwise this
+              # variable will have no effect.
+              value: "<dataCenter>"
+            - name: CASSANDRA_RACK
+              # This variable sets the rack name of this node.
+              # It will set the rack option of cassandra-rackdc.properties.
+              # You must set CASSANDRA_ENDPOINT_SNITCH to use the
+              # "GossipingPropertyFileSnitch" in order for Cassandra
+              # to apply cassandra-rackdc.properties, otherwise this
+              # variable will have no effect.
+              value: "<rack>"
+            - name: CASSANDRA_ENDPOINT_SNITCH
+              # This variable sets the snitch implementation
+              # this node will use. It will set the endpoint_snitch
+              # option of cassandra.yml.
+              value: GossipingPropertyFileSnitch
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+          # We comment readinessProbe beacause the script ready-probe.sh is
+          # buggy
+          #readinessProbe:
+          #  exec:
+          #    command:
+          #    - /bin/bash
+          #    - -c
+          #    - /ready-probe.sh
+          #  initialDelaySeconds: 15
+          #  timeoutSeconds: 5
+
+          # These volume mounts are persistent. They are like inline claims,
+          # but not exactly because the names need to match exactly one of
+          # the stateful pod volumes.
+          volumeMounts:
+          - name: local-data
+            mountPath: /var/lib/cassandra
