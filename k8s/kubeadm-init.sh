@@ -52,10 +52,10 @@ featureGates:
   PublicKeysECDSA: true
   IPv6DualStack: true
 # }
-#etcd:
-  #local:
-    #extraArgs:
-      #cipher-suites: '${ciphers_suite}'
+etcd:
+  local:
+    extraArgs:
+      cipher-suites: '${ciphers_suite}'
 apiServer:
   extraArgs:
     tls-min-version: '${TLS_MIN_VERSION}'
