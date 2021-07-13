@@ -178,7 +178,9 @@ etcd use by default TLS v1.2. In go 1.12, TLS v1.3 is available but is not activ
 
 By default, `kubeadm` generate and manage RSA certificates. We can't set neither certificate's key size nor duration. This is a minor security issue because it is relatively easy to renew certificates in Kubernetes. But this is not the case for certificates authorities. However, CAs are the key points of the TLS protocol...
 
-Certificates created by `kubeadm` are RSA 2048 bit. `kubeadm` can generate ECDSA certificates using `prime256v1` elliptic curve.
+Certificates created by `kubeadm` are RSA 2048 bit.
+
+At the time we write, the latest `kubeadm` can generate ECDSA certificates using `prime256v1` elliptic curve.
 
 #### Rotation
 
