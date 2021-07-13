@@ -46,7 +46,10 @@ Parameters of the previous scripts are set in [`k8s-env.sh`](https://gitlab.tech
 |`K8S_PKI_DIR`|String|`${K8S_CONF_DIR}/pki`|Directory where PKI materials (e.g. certificates, keys) of Kubernetes cluster to build will be stored.|
 |`POD_CIDR`|CIDR|`172.18.0.0/16`|Specify range of IP addresses for the pod network. The control plane will automatically allocate CIDRs for every node. Take care that your Pod network must not overlap with any of the node networks|
 |`SRV_CIDR`|CIDR|`172.19.0.0/16`|A CIDR notation IP range from which to assign service cluster IPs. This must not overlap with any IP ranges assigned to nodes or pods.|
-|`KEY_TYPE`|String|`ecdsa`|Type of certificate. Two values are supported: `ecdsa` and `rsa`.|
+|`TLS_MIN_VERSION`|String|`VersionTLS13`|TLS protocol's version. Read [TLS Best Practices](#tls-best-practices) for details. Supported values: `VersionTLS12` and `VersionTLS13`.|
+|`CIPHERS_SUITE_TLS12`|String|`TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`|Cipher suites used with TLS v1.2. Read [TLS Best Practices](#tls-best-practices) for details.|
+|`CIPHERS_SUITE_TLS13`|String|`TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256`|Cipher suites used with TLS v1.3. Read [TLS Best Practices](#tls-best-practices) for details.|
+|`KEY_TYPE`|String|`ecdsa`|Type of certificate. Supported values: `ecdsa` and `rsa`.|
 |`ECDSA_CA_KEY_CURVE`|String|`secp384r1`|The elliptic curve used to generate a certificate authority key. As we use `openssl` to manage certificates, supported elliptic curves are display with the command: `openssl ecparam -list_curves`. |
 |`ECDSA_KEY_CURVE`|String|`prime256v1`|The elliptic curve used to generate a certificate key.|
 |`RSA_CA_KEY_LENGTH`|Integer|`4096`|Certificate authorities key length, in bit.|
@@ -123,7 +126,7 @@ As Kubernetes use TLS to secure communications inside and outside a Kubernetes c
 
   - **TLS v1.3** should be set for:
 
-    - [etcd](https://etcd.io/). But etcd provide no way to set the TLS protocol... **Note**: The etcd version used in k8s - which is 1.21.2, at the time (29/6/2021) we write - is 3.4.x and the current etcd is 3.5.x,
+    - [etcd](https://etcd.io/). But etcd provides no way to set the TLS protocol and imposes limitations on the ciphers to be used,
     - [kube-apiserver](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/),
     - [kube-scheduler](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/),
     - [kube-controller-manager](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/),
@@ -135,17 +138,17 @@ As Kubernetes use TLS to secure communications inside and outside a Kubernetes c
       >  - Improved security
       >  - Removed obsolete/insecure features like cipher suites, compression etc.
 
-- Cipher suites approved for TLS v1.3 are:
+- Ciphers for kube-apiserver, kube-scheduler, kube-controller-manager and kubelet are:
 
-  - TLS_AES_128_GCM_SHA256,
-  - TLS_AES_256_GCM_SHA384,
-  - TLS_CHACHA20_POLY1305_SHA256.
+  - `TLS_AES_128_GCM_SHA256`,
+  - `TLS_AES_256_GCM_SHA384`,
+  - `TLS_CHACHA20_POLY1305_SHA256`,
+  - `TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256`,
+  - `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256`,
+  - `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`,
+  - `TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`.
 
-- etcd
-
-[Specifying TLS ciphers for etcd and Kubernetes](https://www.ibm.com/docs/en/cloud-private/3.2.x?topic=installation-specifying-tls-ciphers-etcd-kubernetes)
-
-The etcd shipped with Kubernetes 1.21.2 (the latest version at the time we write) is 3.4.13 compiled with go 1.12.17:
+We use Mozilla's recommanded TLS v1.2 and v1.3 ciphers because etcd limitations: The etcd shipped with Kubernetes 1.21.2 (the latest version at the time we write) is 3.4.13 compiled with go 1.12.17:
 
 ```
 $ /var/lib/docker/overlay2/.../merged/usr/local/bin/etcd --version
@@ -155,36 +158,53 @@ Go Version: go1.12.17
 Go OS/Arch: linux/amd64
 ```
 
-etcd use by default TLS v1.2. In go 1.12, TLS v1.3 is available but is not activated by default: [Go 1.12 Release Notes](https://golang.org/doc/go1.12#tls_1_3). 
+etcd use by default TLS v1.2. In go 1.12, TLS v1.3 is available but is not activated by default: [Go 1.12 Release Notes](https://golang.org/doc/go1.12#tls_1_3). Despite applying procedure to activate TLS v1.3 (i.e. we add the environment variable `GODEBUG` with `tls13=1` in etcd's manifest), etcd don't work with Mozilla's recommanded ciphers for TLS v1.3. So ciphers for etcd are:
+
+  - `TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256`,
+  - `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256`,
+  - `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`,
+  - `TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`.
 
 ### Certificates Management
 
-#### References
+#### Creation
+
+##### References
 
 - [PKI certificates and requirements](https://kubernetes.io/docs/setup/best-practices/certificates/),
-- [Certificate Management with kubeadm](https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/),
-- [Configure Certificate Rotation for the Kubelet](https://kubernetes.io/docs/tasks/tls/certificate-rotation/)
-- [Manual Rotation of CA Certificates](https://kubernetes.io/docs/tasks/tls/manual-rotation-of-ca-certificates/),
-- [Certificate Signing Requests](https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/),
 - [ECDSA: The digital signature algorithm of a better internet](https://blog.cloudflare.com/ecdsa-the-digital-signature-algorithm-of-a-better-internet/),
 - [SafeCurves: choosing safe curves for elliptic-curve cryptography](http://safecurves.cr.yp.to/),
 - [Keylength - Cryptographic Key Length Recommendation](https://www.keylength.com/en/).
 
-By default, `kubeadm` generate and manage RSA certificates. We can't set neither certificate's key size nor duration. This is a minor security issue because it is relatively easy to renew certificates in Kubernetes. But this is not the case for certificates authorities. However, CAs are the key points of the TLS protocol ...
-
-#### Creation
+By default, `kubeadm` generate and manage RSA certificates. We can't set neither certificate's key size nor duration. This is a minor security issue because it is relatively easy to renew certificates in Kubernetes. But this is not the case for certificates authorities. However, CAs are the key points of the TLS protocol...
 
 Certificates created by `kubeadm` are RSA 2048 bit. `kubeadm` can generate ECDSA certificates using `prime256v1` elliptic curve.
 
 #### Rotation
 
+##### References
+
+- [Certificate Management with kubeadm](https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/).
+
 ##### Certificate Authorities
+
+###### References
+
+- [Manual Rotation of CA Certificates](https://kubernetes.io/docs/tasks/tls/manual-rotation-of-ca-certificates/).
 
 As any request to a Kubernetes component that presents a valid certificate signed by a Kubernetes cluster's certificate authority (CA) is considered authenticated, CA is a key point in the Kubernetes security scheme.
 
 ##### Certificate
 
-### TLS Bootstrap
+###### References
+
+- [Configure Certificate Rotation for the Kubelet](https://kubernetes.io/docs/tasks/tls/certificate-rotation/)
+- [Certificate Signing Requests](https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/),
+- [TLS bootstrapping](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/)
+
+### Checking TLS settings
+
+[Specifying TLS ciphers for etcd and Kubernetes](https://www.ibm.com/docs/en/cloud-private/3.2.x?topic=installation-specifying-tls-ciphers-etcd-kubernetes)
 
 ## Authorization
 

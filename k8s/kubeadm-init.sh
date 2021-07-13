@@ -10,7 +10,7 @@ function kubeadm_init {
   local ciphers_suite;
   case "${TLS_MIN_VERSION}" in
     "VersionTLS12")
-      ciphers_suite="${CIPHERS_SUITE_TLS12}";
+      ciphers_suite="${CIPHERS_SUITE_TLS13},${CIPHERS_SUITE_TLS12}";
       ;;
     "VersionTLS13")
       ciphers_suite="${CIPHERS_SUITE_TLS13}";
@@ -55,11 +55,11 @@ featureGates:
 etcd:
   local:
     extraArgs:
-      cipher-suites: '${ciphers_suite}'
+      cipher-suites: '${CIPHERS_SUITE_TLS12}'
 apiServer:
   extraArgs:
     tls-min-version: '${TLS_MIN_VERSION}'
-    tls-cipher-suites: '${ciphers_suite}'
+    tls-cipher-suites: '${CIPHERS_SUITE_TLS13},${CIPHERS_SUITE_TLS12}'
     insecure-port: '0'
     # Anonymous authorization must be enable to allow kubelet join {
     #anonymous-auth: 'false' # Default: 'true'
@@ -83,7 +83,7 @@ apiServer:
 controllerManager:
   extraArgs:
     tls-min-version: '${TLS_MIN_VERSION}'
-    tls-cipher-suites: '${ciphers_suite}'
+    tls-cipher-suites: '${CIPHERS_SUITE_TLS13},${CIPHERS_SUITE_TLS12}'
     root-ca-file: '${K8S_PKI_DIR}/ca-bundle.crt'
     # For memo {
     cluster-signing-duration: '8760h0m0s'
@@ -91,12 +91,12 @@ controllerManager:
 scheduler:
   extraArgs:
     tls-min-version: '${TLS_MIN_VERSION}'
-    tls-cipher-suites: '${ciphers_suite}'
+    tls-cipher-suites: '${CIPHERS_SUITE_TLS13},${CIPHERS_SUITE_TLS12}'
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 tlsMinVersion: ${TLS_MIN_VERSION}
-tlsCipherSuites: [${ciphers_suite}]
+tlsCipherSuites: [${CIPHERS_SUITE_TLS13},${CIPHERS_SUITE_TLS12}]
 readOnlyPort: 0
 serverTLSBootstrap: true
 # For memo {
